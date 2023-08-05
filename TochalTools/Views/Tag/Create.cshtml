@@ -1,0 +1,113 @@
+﻿@model TagCreateViewModel
+@{
+    ViewBag.Title = "ایجاد برچسب";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+
+<!-- Container-fluid starts -->
+<div class="container-fluid">
+    <div class="page-header">
+        <div class="row">
+            <div class="col-lg-6">
+                <h3>
+                    @ViewBag.Title
+                    <small>ایجاد برجسب جدید</small>
+                </h3>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- Container-fluid Ends -->
+
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-sm-12 col-xl-12">
+            <div class="row">
+                <div class="col-sm-12">
+                    @using (Html.BeginForm("Create", "Tag", FormMethod.Post, new { @class = "theme-form", enctype="multipart/form-data" }))
+                    {
+                        @Html.AntiForgeryToken()
+                        <div class="card">
+                            <div class="card-header">
+                                <h5>اطلاعات برچسب</h5>
+                                <span>اطلاعات برچسب را در این قسمت وارد نمایید.</span>
+                            </div>
+                            <div class="card-body">
+                                <div class="form-row">
+                                    <div class="col-md-3">
+                                        <div class="form-group">
+                                            @Html.LabelFor(m => m.Title, new { @class = "col-form-label pt-0" })
+                                            @Html.ValidationMessageFor(m => m.Title, "", new { @class = "text-danger" })
+                                            @Html.EditorFor(m => m.Title, new { htmlAttributes = new { @class = "form-control input-air-primary" } })
+                                        </div>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <div class="form-group">
+                                            @Html.LabelFor(m => m.Group, new { @class = "col-form-label pt-0" })
+                                            @Html.ValidationMessageFor(m => m.Group, "", new { @class = "text-danger" })
+                                            @Html.DropDownListFor(m => m.Group, TagHelper.ReadAllGroupsForSelect(), "انتخاب کنید", new { @class = "form-control input-air-primary" })
+                                        </div>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <div class="form-group">
+                                            @Html.LabelFor(m => m.Language, new { @class = "col-form-label pt-0" })
+                                            @Html.ValidationMessageFor(m => m.Language, "", new { @class = "text-danger" })
+                                            @Html.DropDownListFor(m => m.Language, LanguageHelper.ReadAllLanguagesForSelect(), new { @class = "form-control input-air-primary" })
+                                        </div>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <div class="form-group">
+                                            <label class="col-form-label pt-0">تصویر</label>
+                                            <input class="form-control input-air-primary" id="File" name="File" type="file">
+                                        </div>
+                                    </div>
+                                    <div class="col-md-12">
+                                        <div class="form-group">
+                                            @Html.LabelFor(m => m.Description, new { @class = "col-form-label pt-0" })
+                                            @Html.ValidationMessageFor(m => m.Description, "", new { @class = "text-danger" })
+                                            @Html.TextAreaFor(m => m.Description, new { @class = "form-control input-air-primary", @rows = "4" })
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="card">
+                            <div class="card-header">
+                                <h5>بهینه سازی</h5>
+                                <span>اطلاعات بهینه سازی برچسب را در این قسمت وارد نمایید.</span>
+                            </div>
+                            <div class="card-body">
+                                <div class="form-row">
+                                    <div class="col-md-4">
+                                        <div class="form-group">
+                                            @Html.LabelFor(m => m.OptimizationTitle, new { @class = "col-form-label pt-0" })
+                                            @Html.ValidationMessageFor(m => m.OptimizationTitle, "", new { @class = "text-danger" })
+                                            @Html.EditorFor(m => m.OptimizationTitle, new { htmlAttributes = new { @class = "form-control input-air-primary" } })
+                                        </div>
+                                    </div>
+                                    <div class="col-md-8">
+                                        <div class="form-group">
+                                            @Html.LabelFor(m => m.OptimizationKeywords, new { @class = "col-form-label pt-0" })
+                                            @Html.ValidationMessageFor(m => m.OptimizationKeywords, "", new { @class = "text-danger" })
+                                            @Html.EditorFor(m => m.OptimizationKeywords, new { htmlAttributes = new { @class = "form-control tagsinput-boxshadow-primary", @data_role = "tagsinput" } })
+                                        </div>
+                                    </div>
+                                    <div class="col-md-12">
+                                        <div class="form-group">
+                                            @Html.LabelFor(m => m.OptimizationDescription, new { @class = "col-form-label pt-0" })
+                                            @Html.ValidationMessageFor(m => m.OptimizationDescription, "", new { @class = "text-danger" })
+                                            @Html.TextAreaFor(m => m.OptimizationDescription, new { @class = "form-control input-air-primary", @rows = "4" })
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="btn-div">
+                            <button type="submit" class="btn btn-success">ایجاد</button>
+                        </div>
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

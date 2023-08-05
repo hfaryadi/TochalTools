@@ -1,0 +1,711 @@
+﻿@{
+    BaseService baseService = new BaseService();
+    var profileInfo = baseService.ReadProfileInfo();
+    var websiteInfo = baseService.ReadWebsiteInfo("fa");
+    var blogComments = baseService.GetAllUnConfirmedCommentsCountByGroup("Blog");
+    var productComments = baseService.GetAllUnConfirmedCommentsCountByGroup("Product");
+    var allComments = blogComments + productComments;
+    var orderCount = baseService.GetAllUnConfirmedOrdersCount();
+    var inboxCount = baseService.GetAllUnReadInboxCount();
+    var profileId = "notAuthenticated";
+    var profileName = "کاربر میهمان";
+    var websiteTell = "";
+    if (profileInfo != null)
+    {
+        profileId = profileInfo.Id;
+        if (profileInfo.Name != null && profileInfo.Name != "")
+        {
+            profileName = profileInfo.Name;
+        }
+        else
+        {
+            profileName = "بدون نام";
+        }
+    }
+    if (websiteInfo != null && websiteInfo.FirstTell != null)
+    {
+        websiteTell = websiteInfo.FirstTell;
+    }
+}
+
+<!DOCTYPE html>
+<html lang="en" dir="rtl">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="وباسا - طراحی وب سایت، نرم افزار و اپلیکیشن موبایل">
+    <meta name="author" content="TochalTools">
+    <link rel="icon" href="/Content/Layouts/AdminLayout/assets/images/favicon.png" type="image/x-icon" />
+    <link rel="shortcut icon" href="/Content/Layouts/AdminLayout/assets/images/favicon.png" type="image/x-icon" />
+    <title>وباسا - @ViewBag.Title</title>
+
+    @RenderSection("head", required: false)
+
+    @RenderSection("topStyleSheets", required: false)
+
+    <!-- latest jquery-->
+    <script src="/Content/Layouts/AdminLayout/assets/scripts/jquery-3.3.1.min.js"></script>
+    <script src="/Content/Layouts/AdminLayout/assets/scripts/jquery.validate.min.js"></script>
+    <script src="/Content/Layouts/AdminLayout/assets/scripts/jquery.validate.unobtrusive.min.js"></script>
+
+    <!--Google font-->
+    <link href="/Content/Layouts/AdminLayout/assets/css/googleOpenSans.css" rel="stylesheet">
+    <link href="/Content/Layouts/AdminLayout/assets/css/googleRaleway.css" rel="stylesheet">
+
+    <!-- Font Awesome -->
+    <link rel="stylesheet" type="text/css" href="/Content/Layouts/AdminLayout/assets/css/fontawesome.css">
+
+    <!-- ico-font -->
+    <link rel="stylesheet" type="text/css" href="/Content/Layouts/AdminLayout/assets/css/icofont.css">
+
+    <!-- Themify icon -->
+    <link rel="stylesheet" type="text/css" href="/Content/Layouts/AdminLayout/assets/css/themify.css">
+
+    <!--JSGrid css-->
+    <link rel="stylesheet" type="text/css" href="/Content/Layouts/AdminLayout/assets/css/datatables.css" />
+
+    <!-- Flag icon -->
+    <link rel="stylesheet" type="text/css" href="/Content/Layouts/AdminLayout/assets/css/flag-icon.css">
+
+    <!-- prism css -->
+    <link rel="stylesheet" type="text/css" href="/Content/Layouts/AdminLayout/assets/css/prism.css">
+
+    <!-- Bootstrap css -->
+    <link rel="stylesheet" type="text/css" href="/Content/Layouts/AdminLayout/assets/css/bootstrap.css">
+
+    <!-- App css -->
+    <link rel="stylesheet" type="text/css" href="/Content/Layouts/AdminLayout/assets/css/style.css">
+
+    <!-- Print css -->
+    <link rel="stylesheet" type="text/css" href="/Content/Layouts/AdminLayout/assets/css/print.css">
+
+    <!--Select2 css-->
+    <link rel="stylesheet" type="text/css" href="/Content/Layouts/AdminLayout/assets/css/select2.css" />
+
+    <!--Tags Input css-->
+    <link rel="stylesheet" type="text/css" href="/Content/Layouts/AdminLayout/assets/css/tagsinput.css" />
+
+    <!-- Responsive css -->
+    <link rel="stylesheet" type="text/css" href="/Content/Layouts/AdminLayout/assets/css/responsive.css">
+
+    <!-- datepicker css -->
+    <link type="text/css" rel="stylesheet" href="/Content/Layouts/AdminLayout/assets/css/kamadatepicker.min.css" />
+
+    <!-- timepicker css -->
+    <link type="text/css" rel="stylesheet" href="/Content/Layouts/AdminLayout/assets/js/timepicker/wickedpicker.min.css" />
+
+    @RenderSection("bottomStyleSheets", required: false)
+
+</head>
+<body main-theme-layout="main-theme-layout-1" class="rtl">
+
+    <!-- Loader starts -->
+    <div class="loader-wrapper">
+        <div class="loader bg-white">
+            <div class="line"></div>
+            <div class="line"></div>
+            <div class="line"></div>
+            <div class="line"></div>
+        </div>
+    </div>
+    <!-- Loader ends -->
+    <!--page-wrapper Start-->
+    <div class="page-wrapper">
+
+        <!--Page Header Start-->
+        <div class="page-main-header">
+            <div class="main-header-left">
+                <div class="logo-wrapper">
+                    <a href="#">
+                        <img src="/Content/Layouts/AdminLayout/assets/images/logo-light.png" class="image-dark" alt="" />
+                        <img src="/Content/Layouts/AdminLayout/assets/images/logo-light-dark-layout.png" class="image-light" alt="" />
+                    </a>
+                </div>
+            </div>
+            <div class="main-header-right row">
+                <div class="mobile-sidebar">
+                    <div class="media-body text-right switch-sm">
+                        <label class="switch">
+                            <input type="checkbox" id="sidebar-toggle" checked>
+                            <span class="switch-state"></span>
+                        </label>
+                    </div>
+                </div>
+                <div class="nav-right col">
+                    <ul class="nav-menus">
+                        @*<li>
+                                <form class="form-inline search-form">
+                                    <div class="form-group">
+                                        <label class="sr-only">جستجو</label>
+                                        <input type="search" class="form-control-plaintext" placeholder="جستجو">
+                                        <span class="d-sm-none mobile-search">
+                                        </span>
+                                    </div>
+                                </form>
+                            </li>*@
+                        <li>
+                            <a href="#!" onclick="javascript:toggleFullScreen()" class="text-dark">
+                                <img class="align-self-center pull-right mr-2" src="/Content/Layouts/AdminLayout/assets/images/dashboard/browser.png" alt="header-browser">
+                            </a>
+                        </li>
+                        @*<li class="onhover-dropdown">
+                                <a href="#!" class="txt-dark">
+                                    <img class="align-self-center pull-right mr-2" src="/Content/Layouts/AdminLayout/assets/images/dashboard/notification.png" alt="header-notification">
+                                    <span class="badge badge-pill badge-primary notification">3</span>
+                                </a>
+                                <ul class="notification-dropdown onhover-show-div">
+                                    <li>اعلان ها <span class="badge badge-pill badge-secondary text-white text-uppercase pull-right">3 جدید</span></li>
+                                    <li>
+                                        <div class="media">
+                                            <i class="align-self-center notification-icon icofont icofont-shopping-cart bg-primary"></i>
+                                            <div class="media-body">
+                                                <h6 class="mt-0">سفارش شما آماده ارسال می باشد...!</h6>
+                                                <p class="mb-0">لورم ایپسوم متن ساختگی با تولید سادگی.</p>
+                                                <span><i class="icofont icofont-clock-time p-r-5"></i>هم اکنون</span>
+                                            </div>
+                                        </div>
+                                    </li>
+                                    <li>
+                                        <div class="media">
+                                            <i class="align-self-center notification-icon icofont icofont-download-alt bg-success"></i>
+                                            <div class="media-body">
+                                                <h6 class="mt-0 txt-success">دانلود کامل شد</h6>
+                                                <p class="mb-0">لورم ایپسوم متن ساختگی با تولید سادگی.</p>
+                                                <span><i class="icofont icofont-clock-time p-r-5"></i>5 دقیقه قبل</span>
+                                            </div>
+                                        </div>
+                                    </li>
+                                    <li>
+                                        <div class="media">
+                                            <i class="align-self-center notification-icon icofont icofont-recycle bg-danger"></i>
+                                            <div class="media-body">
+                                                <h6 class="mt-0 txt-danger">250 مگابایت فایل بی مورد</h6>
+                                                <p class="mb-0">لورم ایپسوم متن ساختگی با تولید سادگی.</p>
+                                                <span><i class="icofont icofont-clock-time p-r-5"></i>25 دقیقه قبل</span>
+                                            </div>
+                                        </div>
+                                    </li>
+                                    <li class="text-center">نمایش <a href="#">تمام</a> اعلان ها</li>
+                                </ul>
+
+                            </li>*@
+                        <li class="onhover-dropdown">
+                            <div class="media  align-items-center">
+                                <img class="align-self-center pull-right mr-2" src="/Content/Layouts/AdminLayout/assets/images/dashboard/user.png" alt="header-user" />
+                                @if (inboxCount > 0)
+                                {
+                                    <span class="badge badge-pill badge-danger notification">@inboxCount</span>
+                                }
+                                <div class="media-body">
+                                    <h6 class="m-0 txt-dark f-16">
+                                        حساب من
+                                        <i class="fa fa-angle-down pull-right ml-2"></i>
+                                    </h6>
+                                </div>
+                            </div>
+                            <ul class="profile-dropdown onhover-show-div p-20">
+                                <li>
+                                    <a href="/Profile/Edit">
+                                        <i class="icon-user"></i>
+                                        ویرایش پروفایل
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="/Manage/ChangePassword">
+                                        <i class="icon-key"></i>
+                                        تغییر کلمه عبور
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="/Inbox/List/Inbox">
+                                        <i class="icon-email"></i>
+                                        صندوق ورودی
+                                        @if (inboxCount > 0)
+                                        {
+                                            <span class="badge badge-pill badge-danger ml-3">@inboxCount</span>
+                                        }
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="/Account/LogOff">
+                                        <i class="icon-power-off"></i>
+                                        خروج
+                                    </a>
+                                </li>
+                            </ul>
+                        </li>
+                    </ul>
+                    <div class="d-lg-none mobile-toggle">
+                        <i class="icon-more"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!--Page Header Ends-->
+        <!--Page Body Start-->
+        <div class="page-body-wrapper">
+
+            <!--Page Sidebar Start-->
+            <div class="page-sidebar custom-scrollbar">
+                <div class="sidebar-user text-center">
+                    <div>
+                        <img class="img-80 rounded-circle" src="@Url.Action("ImageResizer", "Base", new { width = 200, height = 200, fileType = "Images", moduleName = "Profile", fileName = profileId, fileExtension = "jpg" })" alt="تصویر پروفایل" title="@profileName">
+                    </div>
+                    <h6 class="mt-3 f-12">@profileName</h6>
+                </div>
+                <ul class="sidebar-menu">
+                    <li>
+                        <div class="sidebar-title">عمومی</div>
+                    </li>
+                    @if (User.IsInRole("Developer") || User.IsInRole("SuperAdministrator") || User.IsInRole("Administrator"))
+                    {
+                        <li>
+                            <a href="/Admin" class="sidebar-header">
+                                <i class="icon-dashboard"></i><span> داشبورد</span>
+                            </a>
+                        </li>
+                    }
+                    else if (User.IsInRole("User"))
+                    {
+                        <li>
+                            <a href="/User" class="sidebar-header">
+                                <i class="icon-dashboard"></i><span> داشبورد</span>
+                            </a>
+                        </li>
+                    }
+                    <li>
+                        <a href="/" target="_blank" class="sidebar-header">
+                            <i class="icon-home"></i><span> مشاهده سایت</span>
+                        </a>
+                    </li>
+                    @if (User.IsInRole("Developer") || User.IsInRole("SuperAdministrator") || User.IsInRole("Blog") || User.IsInRole("Tag") || User.IsInRole("Comment"))
+                    {
+                        <li>
+                            <div class="sidebar-title">مدیریت سایت</div>
+                        </li>
+                    }
+                    @if (User.IsInRole("Developer") || User.IsInRole("SuperAdministrator") || User.IsInRole("Blog"))
+                    {
+                        <li>
+                            <a href="#" class="sidebar-header">
+                                <i class="icon-pencil-alt"></i><span> مدیریت مطالب</span><i class="fa fa-angle-right pull-right"></i>
+                            </a>
+                            <ul class="sidebar-submenu">
+                                <li><a href="/Blog/Create"><i class="fa fa-angle-left"></i> مطلب جدید</a></li>
+                                <li><a href="/Blog/List"><i class="fa fa-angle-left"></i> لیست مطالب</a></li>
+                                @if (User.IsInRole("Developer") || User.IsInRole("SuperAdministrator") || User.IsInRole("Category"))
+                                {
+                                    <li><a href="/Category/List/Blog"><i class="fa fa-angle-left"></i> دسته بندی</a></li>
+                                }
+                            </ul>
+                        </li>
+                    }
+                    @if (User.IsInRole("Developer") || User.IsInRole("SuperAdministrator") || User.IsInRole("Tag"))
+                    {
+                        <li>
+                            <a href="#" class="sidebar-header">
+                                <i class="icon-tag"></i><span> مدیریت برچسب ها</span><i class="fa fa-angle-right pull-right"></i>
+                            </a>
+                            <ul class="sidebar-submenu">
+                                <li><a href="/Tag/Create"><i class="fa fa-angle-left"></i> برچسب جدید</a></li>
+                                <li><a href="/Tag/List"><i class="fa fa-angle-left"></i> لیست برچسب ها</a></li>
+                            </ul>
+                        </li>
+                    }
+                    @if (User.IsInRole("Developer") || User.IsInRole("SuperAdministrator") || User.IsInRole("Comment"))
+                    {
+                        <li>
+                            <a href="#" class="sidebar-header">
+                                <i class="icon-comment"></i>
+                                <span>
+                                    مدیریت نظرات
+                                    @if (allComments > 0)
+                                    {
+                                        <span class="badge badge-pill badge-danger ml-3">@allComments</span>
+                                    }
+                                </span>
+                                <i class="fa fa-angle-right pull-right"></i>
+                            </a>
+                            <ul class="sidebar-submenu">
+                                <li>
+                                    <a href="#">
+                                        <i class="fa fa-angle-left"></i> مطالب
+                                        @if (blogComments > 0)
+                                        {
+                                            <span class="badge badge-pill badge-danger ml-3">@blogComments</span>
+                                        }
+                                        <i class="fa fa-angle-right pull-right"></i>
+                                    </a>
+                                    <ul class="sidebar-submenu">
+                                        <li class="menulevel3"><a href="/Comment/List/Blog/Confirmed"><i class="fa fa-angle-left"></i> لیست نظرات</a></li>
+                                        <li class="menulevel3">
+                                            <a href="/Comment/List/Blog/UnConfirmed">
+                                                <i class="fa fa-angle-left"></i> در انتظار تایید
+                                                @if (blogComments > 0)
+                                                {
+                                                    <span class="badge badge-pill badge-danger ml-3">@blogComments</span>
+                                                }
+                                            </a>
+                                        </li>
+                                    </ul>
+                                </li>
+                                <li>
+                                    <a href="#">
+                                        <i class="fa fa-angle-left"></i> محصولات
+                                        @if (productComments > 0)
+                                        {
+                                            <span class="badge badge-pill badge-danger ml-3">@productComments</span>
+                                        }
+                                        <i class="fa fa-angle-right pull-right"></i>
+                                    </a>
+                                    <ul class="sidebar-submenu">
+                                        <li class="menulevel3"><a href="/Comment/List/Product/Confirmed"><i class="fa fa-angle-left"></i> لیست نظرات</a></li>
+                                        <li class="menulevel3">
+                                            <a href="/Comment/List/Product/UnConfirmed">
+                                                <i class="fa fa-angle-left"></i> در انتظار تایید
+                                                @if (productComments > 0)
+                                                {
+                                                    <span class="badge badge-pill badge-danger ml-3">@productComments</span>
+                                                }
+                                            </a>
+                                        </li>
+                                    </ul>
+                                </li>
+                            </ul>
+                        </li>
+                    }
+                    @if (User.IsInRole("Developer") || User.IsInRole("SuperAdministrator"))
+                    {
+                        <li>
+                            <a href="#" class="sidebar-header">
+                                <i class="icon-file"></i><span> مدیریت صفحات</span><i class="fa fa-angle-right pull-right"></i>
+                            </a>
+                            <ul class="sidebar-submenu">
+                                <li><a href="/Page/Create"><i class="fa fa-angle-left"></i> صفحه جدید</a></li>
+                                <li><a href="/Page/List"><i class="fa fa-angle-left"></i> لیست صفحات</a></li>
+                            </ul>
+                        </li>
+                    }
+                    @if (User.IsInRole("Developer") || User.IsInRole("SuperAdministrator"))
+                    {
+                        <li>
+                            <a href="#" class="sidebar-header">
+                                <i class="icon-layout"></i><span> مدیریت محتواها</span><i class="fa fa-angle-right pull-right"></i>
+                            </a>
+                            <ul class="sidebar-submenu">
+                                @if (User.IsInRole("Developer"))
+                                {
+                                    <li><a href="/Box/Create"><i class="fa fa-angle-left"></i> محتوای جدید</a></li>
+                                }
+                                <li><a href="/Box/List"><i class="fa fa-angle-left"></i> لیست محتواها</a></li>
+                            </ul>
+                        </li>
+                    }
+                    @if (User.IsInRole("Developer") || User.IsInRole("SuperAdministrator"))
+                    {
+                        <li>
+                            <a href="#" class="sidebar-header">
+                                <i class="icon-gallery"></i><span> مدیریت اسلایدرها</span><i class="fa fa-angle-right pull-right"></i>
+                            </a>
+                            <ul class="sidebar-submenu">
+                                <li><a href="/Slider/Create"><i class="fa fa-angle-left"></i> اسلایدر جدید</a></li>
+                                <li><a href="/Slider/List"><i class="fa fa-angle-left"></i> لیست اسلایدر ها</a></li>
+                            </ul>
+                        </li>
+                    }
+                    @*@if (User.IsInRole("Developer") || User.IsInRole("SuperAdministrator") || User.IsInRole("Portfolio"))
+        {
+            <li>
+                <a href="#" class="sidebar-header">
+                    <i class="icon-palette"></i><span> مدیریت نمونه کارها</span><i class="fa fa-angle-right pull-right"></i>
+                </a>
+                <ul class="sidebar-submenu">
+                    <li><a href="#"><i class="fa fa-angle-left"></i> نمونه کار جدید</a></li>
+                    <li><a href="#"><i class="fa fa-angle-left"></i> لیست نمونه کارها</a></li>
+                    @if (User.IsInRole("Developer") || User.IsInRole("SuperAdministrator") || User.IsInRole("Category"))
+                    {
+                        <li><a href="#"><i class="fa fa-angle-left"></i> دسته بندی</a></li>
+                    }
+                </ul>
+            </li>
+        }
+        @if (User.IsInRole("Developer") || User.IsInRole("SuperAdministrator") || User.IsInRole("Customer"))
+        {
+            <li>
+                <a href="#" class="sidebar-header">
+                    <i class="icon-briefcase"></i><span> مدیریت مشتریان</span><i class="fa fa-angle-right pull-right"></i>
+                </a>
+                <ul class="sidebar-submenu">
+                    <li><a href="#"><i class="fa fa-angle-left"></i> مشتری جدید</a></li>
+                    <li><a href="#"><i class="fa fa-angle-left"></i> لیست مشتریان</a></li>
+                </ul>
+            </li>
+        }
+        @if (User.IsInRole("Developer") || User.IsInRole("SuperAdministrator") || User.IsInRole("Testimonial"))
+        {
+            <li>
+                <a href="#" class="sidebar-header">
+                    <i class="icon-comment-alt"></i><span> مدیریت نظرات مشتریان</span><i class="fa fa-angle-right pull-right"></i>
+                </a>
+                <ul class="sidebar-submenu">
+                    <li><a href="#"><i class="fa fa-angle-left"></i> نظر جدید</a></li>
+                    <li><a href="#"><i class="fa fa-angle-left"></i> لیست نظرات</a></li>
+                </ul>
+            </li>
+        }
+        @if (User.IsInRole("Developer") || User.IsInRole("SuperAdministrator") || User.IsInRole("FAQ"))
+        {
+            <li>
+                <a href="#" class="sidebar-header">
+                    <i class="icon-help"></i><span> مدیریت سوالات متداول</span><i class="fa fa-angle-right pull-right"></i>
+                </a>
+                <ul class="sidebar-submenu">
+                    <li><a href="#"><i class="fa fa-angle-left"></i> سوال جدید</a></li>
+                    <li><a href="#"><i class="fa fa-angle-left"></i> لیست سوال ها</a></li>
+                </ul>
+            </li>
+        }*@
+                    @if (User.IsInRole("Developer") || User.IsInRole("SuperAdministrator") || User.IsInRole("Product"))
+                    {
+                        <li>
+                            <div class="sidebar-title">مدیریت فروشگاه</div>
+                        </li>
+                    }
+                    @if (User.IsInRole("Developer") || User.IsInRole("SuperAdministrator") || User.IsInRole("Product"))
+                    {
+                        <li>
+                            <a href="#" class="sidebar-header">
+                                <i class="icon-package"></i><span> مدیریت محصولات</span><i class="fa fa-angle-right pull-right"></i>
+                            </a>
+                            <ul class="sidebar-submenu">
+                                <li><a href="/Product/Create"><i class="fa fa-angle-left"></i> محصول جدید</a></li>
+                                <li><a href="/Product/List"><i class="fa fa-angle-left"></i> لیست محصولات</a></li>
+                                @if (User.IsInRole("Developer") || User.IsInRole("SuperAdministrator") || User.IsInRole("Category"))
+                                {
+                                    <li><a href="/Category/List/Product"><i class="fa fa-angle-left"></i> دسته بندی</a></li>
+                                }
+                                @if (User.IsInRole("Developer") || User.IsInRole("SuperAdministrator") || User.IsInRole("Brand"))
+                                {
+                                    <li><a href="/Brand/List"><i class="fa fa-angle-left"></i> برندها</a></li>
+                                }
+                                <li><a href="/Product/Settings"><i class="fa fa-angle-left"></i> تنظیمات</a></li>
+                            </ul>
+                        </li>
+                    }
+                    @if (User.IsInRole("Developer") || User.IsInRole("SuperAdministrator") || User.IsInRole("Administrator") || User.IsInRole("Order") || User.IsInRole("User"))
+                    {
+                        <li>
+                            <div class="sidebar-title">مدیریت سفارشات</div>
+                        </li>
+                    }
+                    @if (User.IsInRole("Developer") || User.IsInRole("SuperAdministrator") || User.IsInRole("Order"))
+                    {
+                        <li>
+                            <a href="#" class="sidebar-header">
+                                <i class="icon-notepad"></i><span>
+                                    مدیریت سفارشات
+                                    @if (orderCount > 0)
+                                    {
+                                        <span class="badge badge-pill badge-danger ml-3">@orderCount</span>
+                                    }
+                                </span><i class="fa fa-angle-right pull-right"></i>
+                            </a>
+                            <ul class="sidebar-submenu">
+                                <li><a href="/Order/List"><i class="fa fa-angle-left"></i> لیست سفارشات</a></li>
+                                <li>
+                                    <a href="/Order/List/UnConfirmed">
+                                        <i class="fa fa-angle-left"></i> در انتظار تایید
+                                        @if (orderCount > 0)
+                                        {
+                                            <span class="badge badge-pill badge-danger ml-3">@orderCount</span>
+                                        }
+                                    </a>
+                                </li>
+                                <li><a href="/Order/List/MyOrders"><i class="fa fa-angle-left"></i> سفارشات من</a></li>
+                            </ul>
+                        </li>
+                    }
+                    else if (User.IsInRole("Administrator") || User.IsInRole("User"))
+                    {
+                        <li>
+                            <a href="/Order/List/MyOrders" class="sidebar-header">
+                                <i class="icon-notepad"></i><span> سفارشات من</span>
+                            </a>
+                        </li>
+                    }
+                    @if (User.IsInRole("Developer") || User.IsInRole("SuperAdministrator") || User.IsInRole("Marketer") || User.IsInRole("Seo") || User.IsInRole("Sms"))
+                    {
+                        <li>
+                            <div class="sidebar-title">سایر </div>
+                        </li>
+                    }
+                    @if (User.IsInRole("Developer") || User.IsInRole("SuperAdministrator") || User.IsInRole("Sms"))
+                    {
+                        <li>
+                            <a href="#" class="sidebar-header">
+                                <i class="icon-email"></i><span> مدیریت پیامک ها</span><i class="fa fa-angle-right pull-right"></i>
+                            </a>
+                            <ul class="sidebar-submenu">
+                                <li><a href="/Sms/Create"><i class="fa fa-angle-left"></i> پیامک جدید</a></li>
+                                <li><a href="/Sms/List"><i class="fa fa-angle-left"></i> لیست پیامک ها</a></li>
+                                <li><a href="/NewsLetter/List"><i class="fa fa-angle-left"></i> لیست شماره ها</a></li>
+                            </ul>
+                        </li>
+                    }
+                    @if (User.IsInRole("Developer") || User.IsInRole("SuperAdministrator") || User.IsInRole("Marketer"))
+                    {
+                        <li>
+                            <a href="#" class="sidebar-header">
+                                <i class="icon-money"></i><span> مدیریت بازاریابان</span><i class="fa fa-angle-right pull-right"></i>
+                            </a>
+                            <ul class="sidebar-submenu">
+                                <li><a href="/Marketer/List"><i class="fa fa-angle-left"></i> لیست بازاریابان</a></li>
+                            </ul>
+                        </li>
+                    }
+                    @if (User.IsInRole("Developer"))
+                    {
+                        <li>
+                            <a href="#" class="sidebar-header">
+                                <i class="icon-eye"></i><span> مدیریت رول ها</span><i class="fa fa-angle-right pull-right"></i>
+                            </a>
+                            <ul class="sidebar-submenu">
+                                <li><a href="/Role/Create"><i class="fa fa-angle-left"></i> رول جدید</a></li>
+                                <li><a href="/Role/List"><i class="fa fa-angle-left"></i> لیست رول ها</a></li>
+                            </ul>
+                        </li>
+                    }
+                    @if (User.IsInRole("Developer") || User.IsInRole("SuperAdministrator"))
+                    {
+                        <li>
+                            <a href="#" class="sidebar-header">
+                                <i class="icon-user"></i><span> مدیریت کاربران</span><i class="fa fa-angle-right pull-right"></i>
+                            </a>
+                            <ul class="sidebar-submenu">
+                                <li><a href="/User/Create"><i class="fa fa-angle-left"></i> کاربر جدید</a></li>
+                                <li><a href="/User/List"><i class="fa fa-angle-left"></i> لیست کاربران</a></li>
+                            </ul>
+                        </li>
+                    }
+                    @if (User.IsInRole("Developer") || User.IsInRole("SuperAdministrator") || User.IsInRole("Seo"))
+                    {
+                        <li>
+                            <a href="#" class="sidebar-header">
+                                <i class="icon-settings"></i><span> تنظیمات</span><i class="fa fa-angle-right pull-right"></i>
+                            </a>
+                            <ul class="sidebar-submenu">
+                                @if (User.IsInRole("Developer") || User.IsInRole("SuperAdministrator"))
+                                {
+                                    <li>
+                                        <a href="#"><i class="fa fa-angle-left"></i> اطلاعات سایت <i class="fa fa-angle-right pull-right"></i></a>
+                                        <ul class="sidebar-submenu">
+                                            <li class="menulevel3"><a href="/Info/Create"><i class="fa fa-angle-left"></i>اطلاعات جدید</a></li>
+                                            <li class="menulevel3"><a href="/Info/List"><i class="fa fa-angle-left"></i> لیست اطلاعات</a></li>
+                                        </ul>
+                                    </li>
+                                    <li><a href="/Address/CountryList"><i class="fa fa-angle-left"></i> مدیریت آدرس ها</a></li>
+                                }
+                                <li>
+                                    <a href="#"><i class="fa fa-angle-left"></i> نقشه سایت <i class="fa fa-angle-right pull-right"></i></a>
+                                    <ul class="sidebar-submenu">
+                                        <li class="menulevel3"><a href="/SiteMap/Create"><i class="fa fa-angle-left"></i>لینک جدید</a></li>
+                                        <li class="menulevel3"><a href="/SiteMap/List"><i class="fa fa-angle-left"></i> لیست لینک ها</a></li>
+                                        <li class="menulevel3"><a href="/SiteMap" target="_blank"><i class="fa fa-angle-left"></i> مشاهده نقشه</a></li>
+                                    </ul>
+                                </li>
+                            </ul>
+                        </li>
+                    }
+                </ul>
+                <div class="sidebar-widget text-center">
+                    <div class="sidebar-widget-top">
+                        <h6 class="mb-2 fs-14">به راهنمایی نیاز دارید؟</h6>
+                        <i class="icon-bell"></i>
+                    </div>
+                    <div class="sidebar-widget-bottom p-20 m-20">
+                        <p>
+                            @if (websiteTell != "")
+                            {
+                                @websiteTell
+                                <br><text>تماس بگیرید</text>
+                            }
+                            @*<br><a href="#">سوالات متداول</a>*@
+                        </p>
+                    </div>
+                </div>
+            </div>
+            <!--Page Sidebar Ends-->
+
+            <div class="page-body">
+                @RenderBody()
+            </div>
+            <!--Page Body Ends-->
+        </div>
+        <!--Page Body Ends-->
+    </div>
+    <!--page-wrapper Ends-->
+
+    @RenderSection("topScripts", required: false)
+
+    <!-- Bootstrap js-->
+    <script src="/Content/Layouts/AdminLayout/assets/js/bootstrap/popper.min.js"></script>
+    <script src="/Content/Layouts/AdminLayout/assets/js/bootstrap/bootstrap.js"></script>
+
+    <!-- Sidebar jquery-->
+    <script src="/Content/Layouts/AdminLayout/assets/js/sidebar-menu.js"></script>
+
+    <!-- prism js -->
+    <script src="/Content/Layouts/AdminLayout/assets/js/prism/prism.min.js"></script>
+
+    <!-- clipboard js -->
+    <script src="/Content/Layouts/AdminLayout/assets/js/clipboard/clipboard.min.js"></script>
+
+    <!-- custom card js  -->
+    <script src="/Content/Layouts/AdminLayout/assets/js/custom-card/custom-card.js"></script>
+
+    <!--Datatable js-->
+    <script src="/Content/Layouts/AdminLayout/assets/js/datatables/jquery.dataTables.min.js"></script>
+    <script src="/Content/Layouts/AdminLayout/assets/js/datatables/datatable.custom.js"></script>
+
+    <!-- Sweet alert jquery-->
+    <script src="/Content/Layouts/AdminLayout/assets/js/sweet-alert/sweetalert.min.js"></script>
+
+    <!-- Counter js-->
+    <script src="/Content/Layouts/AdminLayout/assets/js/counter/jquery.waypoints.min.js"></script>
+    <script src="/Content/Layouts/AdminLayout/assets/js/counter/jquery.counterup.min.js"></script>
+    <script src="/Content/Layouts/AdminLayout/assets/js/counter/counter-custom.js"></script>
+
+    <!--print js-->
+    <script src="/Content/Layouts/AdminLayout/assets/js/print.js"></script>
+
+    <!-- Theme js-->
+    <script src="/Content/Layouts/AdminLayout/assets/js/script.js"></script>
+
+    <!-- Select2 js -->
+    <script type="text/javascript" src="/Content/Layouts/AdminLayout/assets/js/select2/select2.full.min.js"></script>
+    <script type="text/javascript" src="/Content/Layouts/AdminLayout/assets/js/select2/select2-custom.js"></script>
+    <script type="text/javascript" src="/Content/Layouts/AdminLayout/assets/js/select2/select2.js"></script>
+
+    <!-- Tags Input js -->
+    <script type="text/javascript" src="/Content/Layouts/AdminLayout/assets/js/tagsinput/tagsinput.js"></script>
+
+    <!-- ckeditor js -->
+    <script type="text/javascript" src="/Content/Layouts/AdminLayout/assets/js/ckeditor/ckeditor.js"></script>
+    <script type="text/javascript" src="/Content/Layouts/AdminLayout/assets/js/ckeditor/adapters/jquery.js"></script>
+
+    <!-- datepicker js-->
+    <script src="/Content/Layouts/AdminLayout/assets/js/datepicker/kamadatepicker.min.js"></script>
+    <script src="/Content/Layouts/AdminLayout/assets/js/datepicker/kamadatepickerCustom.js"></script>
+
+    <!-- timepicker js-->
+    <script src="/Content/Layouts/AdminLayout/assets/js/timepicker/wickedpicker.min.js"></script>
+
+    <!-- Custome js-->
+    <script src="/Content/Layouts/AdminLayout/assets/js/core/core.js"></script>
+
+    @RenderSection("bottomScripts", required: false)
+
+</body>
+</html>
+

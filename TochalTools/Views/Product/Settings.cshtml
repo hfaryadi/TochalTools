@@ -1,0 +1,202 @@
+﻿@model ProductSettingsEditViewModel
+@{
+    ViewBag.Title = "تنظیمات محصولات";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+
+<!-- Container-fluid starts -->
+<div class="container-fluid">
+    <div class="page-header">
+        <div class="row">
+            <div class="col-lg-6">
+                <h3>
+                    @ViewBag.Title
+                    <small>تنظیمات مربوط به محصولات</small>
+                </h3>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- Container-fluid Ends -->
+
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-sm-12 col-xl-12">
+            <div class="row">
+                <div class="col-sm-12">
+                    @using (Html.BeginForm("Settings", "Product", FormMethod.Post, new { @class = "theme-form" }))
+                    {
+                        @Html.AntiForgeryToken()
+                        @Html.HiddenFor(m => m.Id)
+                        <div class="card">
+                            <div class="card-header">
+                                <h5>شنبه های ویژه</h5>
+                                <span>تنظیمات مربوط به شنبه های ویژه را در این قسمت انجام دهید.</span>
+                            </div>
+                            <div class="card-body">
+                                <div class="form-row">
+                                    <div class="col-md-6">
+                                        <div class="form-group">
+                                            @Html.LabelFor(m => m.OffProductId, new { @class = "col-form-label pt-0" })
+                                            @Html.ValidationMessageFor(m => m.OffProductId, "", new { @class = "text-danger" })
+                                            @Html.DropDownListFor(m => m.OffProductId, Model.ProductsList, "انتخاب کنید", new { @class = "form-control input-air-primary" })
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="form-row">
+                                    <div class="col-md-3">
+                                        <div class="form-group">
+                                            @Html.LabelFor(m => m.OffStartDate, new { @class = "col-form-label pt-0" })
+                                            @Html.ValidationMessageFor(m => m.OffStartDate, "", new { @class = "text-danger" })
+                                            @Html.EditorFor(m => m.OffStartDate, new { htmlAttributes = new { @class = "form-control input-air-primary" } })
+                                        </div>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <div class="form-group">
+                                            @Html.LabelFor(m => m.OffStartTime, new { @class = "col-form-label pt-0" })
+                                            @Html.ValidationMessageFor(m => m.OffStartTime, "", new { @class = "text-danger" })
+                                            @Html.EditorFor(m => m.OffStartTime, new { htmlAttributes = new { @class = "form-control input-air-primary timepicker", @style = "direction:ltr;text-align:right" } })
+                                        </div>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <div class="form-group">
+                                            @Html.LabelFor(m => m.OffEndDate, new { @class = "col-form-label pt-0" })
+                                            @Html.ValidationMessageFor(m => m.OffEndDate, "", new { @class = "text-danger" })
+                                            @Html.EditorFor(m => m.OffEndDate, new { htmlAttributes = new { @class = "form-control input-air-primary" } })
+                                        </div>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <div class="form-group">
+                                            @Html.LabelFor(m => m.OffEndTime, new { @class = "col-form-label pt-0" })
+                                            @Html.ValidationMessageFor(m => m.OffEndTime, "", new { @class = "text-danger" })
+                                            @Html.EditorFor(m => m.OffEndTime, new { htmlAttributes = new { @class = "form-control input-air-primary timepicker", @style = "direction:ltr;text-align:right" } })
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="card">
+                            <div class="card-header">
+                                <h5>پیشنهادات شگفت انگیز</h5>
+                                <span>تنظیمات مربوط به پیشنهادات شگفت انگیز را در این قسمت انجام دهید.</span>
+                            </div>
+                            <div class="card-body">
+                                <div class="form-row">
+                                    <div class="col-md-3">
+                                        <div class="form-group">
+                                            @Html.LabelFor(m => m.ProposalStartDate, new { @class = "col-form-label pt-0" })
+                                            @Html.ValidationMessageFor(m => m.ProposalStartDate, "", new { @class = "text-danger" })
+                                            @Html.EditorFor(m => m.ProposalStartDate, new { htmlAttributes = new { @class = "form-control input-air-primary" } })
+                                        </div>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <div class="form-group">
+                                            @Html.LabelFor(m => m.ProposalStartTime, new { @class = "col-form-label pt-0" })
+                                            @Html.ValidationMessageFor(m => m.ProposalStartTime, "", new { @class = "text-danger" })
+                                            @Html.EditorFor(m => m.ProposalStartTime, new { htmlAttributes = new { @class = "form-control input-air-primary timepicker", @style = "direction:ltr;text-align:right" } })
+                                        </div>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <div class="form-group">
+                                            @Html.LabelFor(m => m.ProposalEndDate, new { @class = "col-form-label pt-0" })
+                                            @Html.ValidationMessageFor(m => m.ProposalEndDate, "", new { @class = "text-danger" })
+                                            @Html.EditorFor(m => m.ProposalEndDate, new { htmlAttributes = new { @class = "form-control input-air-primary" } })
+                                        </div>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <div class="form-group">
+                                            @Html.LabelFor(m => m.ProposalEndTime, new { @class = "col-form-label pt-0" })
+                                            @Html.ValidationMessageFor(m => m.ProposalEndTime, "", new { @class = "text-danger" })
+                                            @Html.EditorFor(m => m.ProposalEndTime, new { htmlAttributes = new { @class = "form-control input-air-primary timepicker", @style = "direction:ltr;text-align:right" } })
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="card">
+                            <div class="card-header">
+                                <h5>محصولات ارزان قیمت</h5>
+                                <span>تنظیمات مربوط به محصولات ارزان قیمت را در این قسمت انجام دهید.</span>
+                            </div>
+                            <div class="card-body">
+                                <div class="form-row">
+                                    <div class="col-md-3">
+                                        <div class="form-group">
+                                            @Html.LabelFor(m => m.CheapProductStartPrice, new { @class = "col-form-label pt-0" })
+                                            @Html.ValidationMessageFor(m => m.CheapProductStartPrice, "", new { @class = "text-danger" })
+                                            @Html.TextBoxFor(m => m.CheapProductStartPrice, new { @class = "form-control input-air-primary", @maxlength = "18" })
+                                        </div>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <div class="form-group">
+                                            @Html.LabelFor(m => m.CheapProductEndPrice, new { @class = "col-form-label pt-0" })
+                                            @Html.ValidationMessageFor(m => m.CheapProductEndPrice, "", new { @class = "text-danger" })
+                                            @Html.TextBoxFor(m => m.CheapProductEndPrice, new { @class = "form-control input-air-primary", @maxlength = "18" })
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="btn-div">
+                            <button type="submit" class="btn btn-success" onclick="beforeSubmit()">ویرایش</button>
+                        </div>
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+@section bottomScripts {
+    <script>
+        $(document).ready(function () {
+            $('#CheapProductStartPrice').val(numFormat('@Model.CheapProductStartPrice.ToString()'));
+            $('#CheapProductEndPrice').val(numFormat('@Model.CheapProductEndPrice.ToString()'));
+            kamaDatepicker('OffStartDate', customOptions);
+            kamaDatepicker('OffEndDate', customOptions);
+            kamaDatepicker('ProposalStartDate', customOptions);
+            kamaDatepicker('ProposalEndDate', customOptions);
+            $('.timepicker').wickedpicker();
+            if ('@Model.OffStartDate' != null && '@Model.OffStartDate' != '') {
+                $('#OffStartTime').val('@Model.OffStartTime');
+            }
+            else {
+                $('#OffStartTime').val('');
+            }
+            if ('@Model.OffEndDate' != null && '@Model.OffEndDate' != '') {
+                $('#OffEndTime').val('@Model.OffEndTime');
+            }
+            else {
+                $('#OffEndTime').val('');
+            }
+            if ('@Model.ProposalStartDate' != null && '@Model.ProposalStartDate' != '') {
+                $('#ProposalStartTime').val('@Model.ProposalStartTime');
+            }
+            else {
+                $('#ProposalStartTime').val('');
+            }
+            if ('@Model.ProposalEndDate' != null && '@Model.ProposalEndDate' != '') {
+                $('#ProposalEndTime').val('@Model.ProposalEndTime');
+            }
+            else {
+                $('#ProposalEndTime').val('');
+            }
+        });
+        function beforeSubmit() {
+            comma();
+        }
+        $('#CheapProductStartPrice').change(function () {
+            $('#CheapProductStartPrice').val(numFormat($('#CheapProductStartPrice').val()));
+        });
+        $('#CheapProductStartPrice').keyup(function () {
+            $('#CheapProductStartPrice').blur();
+            $('#CheapProductStartPrice').focus();
+        });
+        $('#CheapProductEndPrice').change(function () {
+            $('#CheapProductEndPrice').val(numFormat($('#CheapProductEndPrice').val()));
+        });
+        $('#CheapProductEndPrice').keyup(function () {
+            $('#CheapProductEndPrice').blur();
+            $('#CheapProductEndPrice').focus();
+        });
+    </script>
+}

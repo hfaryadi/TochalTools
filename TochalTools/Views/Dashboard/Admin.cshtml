@@ -1,0 +1,80 @@
+﻿@model DashboardAdminViewModel
+@{
+    ViewBag.Title = "داشبورد";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+
+<!-- Container-fluid starts -->
+<div class="container-fluid">
+    <div class="page-header">
+        <div class="row">
+            <div class="col-lg-6">
+                <h3>
+                    @ViewBag.Title
+                    <small>پنل ادمین</small>
+                </h3>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- Container-fluid Ends -->
+<!-- Container-fluid starts -->
+<div class="container-fluid">
+    <div class="card border-widgets">
+        <div class="row m-0">
+            <div class="col-xl-3 col-6 xs-width-100">
+                <div class="crm-top-widget card-body">
+                    <a href="/Blog/List">
+                        <div class="media">
+                            <i class="icon-pencil-alt font-info align-self-center ml-3"></i>
+                            <div class="media-body">
+                                <span class="mt-0">تعداد مطالب</span>
+                                <h4 class="counter">@Model.BlogCount</h4>
+                            </div>
+                        </div>
+                    </a>
+                </div>
+            </div>
+            <div class="col-xl-3 col-6 xs-width-100">
+                <div class="crm-top-widget card-body">
+                    <a href="/Product/List">
+                        <div class="media">
+                            <i class="icon-package font-secondary align-self-center ml-3"></i>
+                            <div class="media-body">
+                                <span class="mt-0">تعداد محصولات</span>
+                                <h4 class="counter">@Model.ProductCount</h4>
+                            </div>
+                        </div>
+                    </a>
+                </div>
+            </div>
+            <div class="col-xl-3 col-6 xs-width-100">
+                <div class="crm-top-widget card-body">
+                    <a href="/Order/List">
+                        <div class="media">
+                            <i class="icon-notepad font-success align-self-center ml-3"></i>
+                            <div class="media-body">
+                                <span class="mt-0">تعداد سفارشات</span>
+                                <h4 class="counter">@Model.OrderCount</h4>
+                            </div>
+                        </div>
+                    </a>
+                </div>
+            </div>
+            <div class="col-xl-3 col-6 xs-width-100">
+                <div class="crm-top-widget card-body">
+                    <a href="/User/List">
+                        <div class="media">
+                            <i class="icon-user font-primary align-self-center ml-3"></i>
+                            <div class="media-body">
+                                <span class="mt-0">تعداد کاربران</span>
+                                <h4 class="counter">@Model.UserCount</h4>
+                            </div>
+                        </div>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- Container-fluid Ends -->

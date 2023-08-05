@@ -1,0 +1,78 @@
+﻿@model SmsCreateViewModel
+@{
+    ViewBag.Title = "پیامک جدید";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+
+<!-- Container-fluid starts -->
+<div class="container-fluid">
+    <div class="page-header">
+        <div class="row">
+            <div class="col-lg-6">
+                <h3>
+                    @ViewBag.Title
+                    <small>ارسال پیامک جدید</small>
+                </h3>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- Container-fluid Ends -->
+
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-sm-12 col-xl-12">
+            <div class="row">
+                <div class="col-sm-12">
+                    @using (Html.BeginForm("Create", "Sms", FormMethod.Post, new { @class = "theme-form" }))
+                    {
+                        @Html.AntiForgeryToken()
+                        <div class="card">
+                            <div class="card-header">
+                                <h5>اطلاعات پیامک</h5>
+                                <span>اطلاعات پیامک را در این قسمت وارد نمایید.</span>
+                            </div>
+                            <div class="card-body">
+                                <div class="form-row">
+                                    <div class="col-md-2">
+                                        <div class="form-group">
+                                            <div class="checkbox checkbox-success">
+                                                <input id="IsNewsLetters" type="checkbox" name="IsNewsLetters" value="true">
+                                                <label for="IsNewsLetters">خبرنامه پیامکی</label>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-2">
+                                        <div class="form-group">
+                                            <div class="checkbox checkbox-success">
+                                                <input id="IsUsers" type="checkbox" name="IsUsers" value="true">
+                                                <label for="IsUsers">کاربران</label>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-12">
+                                        <div class="form-group">
+                                            @Html.LabelFor(m => m.Mobiles, new { @class = "col-form-label pt-0" })
+                                            @Html.ValidationMessageFor(m => m.Mobiles, "", new { @class = "text-danger" })
+                                            @Html.EditorFor(m => m.Mobiles, new { htmlAttributes = new { @class = "form-control tagsinput-boxshadow-primary", @data_role = "tagsinput" } })
+                                        </div>
+                                    </div>
+                                    <div class="col-md-12">
+                                        <div class="form-group">
+                                            @Html.LabelFor(m => m.Content, new { @class = "col-form-label pt-0" })
+                                            @Html.ValidationMessageFor(m => m.Content, "", new { @class = "text-danger" })
+                                            @Html.TextAreaFor(m => m.Content, new { @class = "form-control input-air-primary", @rows = "4" })
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="btn-div">
+                            <button type="submit" class="btn btn-success">ارسال</button>
+                        </div>
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

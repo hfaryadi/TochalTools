@@ -1,0 +1,248 @@
+﻿@model BlogDetailsPageViewModel
+@{
+    ViewBag.Title = "جزئیات مطلب";
+    Layout = "~/Views/Shared/_HomeLayout.cshtml";
+    ViewBag.Keywords = Model.Blog.OptimizationKeywords;
+    ViewBag.Description = Model.Blog.OptimizationDescription;
+}
+
+<!-- inner page banner -->
+<div class="dez-bnr-inr overlay-black-middle" style="background-image:url(/Content/Images/Blog/@(Model.Blog.Id).jpg);">
+    <div class="container">
+        <div class="dez-bnr-inr-entry">
+            <h1 class="text-white">@Model.Blog.Title</h1>
+        </div>
+    </div>
+</div>
+<!-- inner page banner END -->
+<!-- Breadcrumb row -->
+<div class="breadcrumb-row">
+    <div class="container">
+        <ul class="list-inline">
+            <li><a href="/">صفحه نخست</a></li>
+            <li><a href="#">مطالب</a></li>
+            <li>@Model.Blog.Title</li>
+        </ul>
+    </div>
+</div>
+<!-- Breadcrumb row END -->
+<div class="content-area">
+    <div class="container">
+        <div class="row">
+            <!-- Left part start -->
+            <div class="col-lg-9 col-md-8 m-b30">
+                <!-- blog start -->
+                <div class="blog-post blog-single">
+                    <div class="dez-post-title ">
+                        <h3 class="post-title"><a href="/Blog/Details/@Model.Blog.Id/@Model.Blog.Title.Replace(' ', '-')">@Model.Blog.Title</a></h3>
+                    </div>
+                    <div class="dez-post-meta m-b20">
+                        <ul>
+                            <li class="post-date"> <i class="fa fa-calendar"></i><strong>@Model.Blog.Date.Split('/')[2] @DateTimeHelper.GetMonthName(Model.Blog.Date.Split('/')[1])</strong> <span>@Model.Blog.Date.Split('/')[0]</span> </li>
+                            <li class="post-author blogds"><i class="fa fa-eye"></i> @Model.Blog.Review بازدید </li>
+                            <li class="post-comment blogds"><i class="fa fa-comments"></i> @Model.Blog.CommentCount نظر </li>
+                        </ul>
+                    </div>
+                    <div class="dez-post-media dez-img-effect zoom-slow"> <a href="/Blog/Details/@Model.Blog.Id/@Model.Blog.Title.Replace(' ', '-')"><img src="/Content/Images/Blog/@(Model.Blog.Id).jpg" onerror="this.src='/Content/Images/Blog/Default.jpg'" alt="@Model.Blog.Title"></a> </div>
+                    <div class="dez-post-text">
+                        @Html.Raw(HttpUtility.HtmlDecode(Model.Blog.FullContent))
+                    </div>
+                    <div class="dez-post-tags clear">
+                        <div class="post-tags">
+                            @foreach (var item in Model.Blog.Tags)
+                            {
+                                <a href="#">@item.Text</a>
+                            }
+                        </div>
+                    </div>
+                </div>
+                <div class="clear" id="comment-list">
+                    <div class="comments-area " id="comments">
+                        <div class="dez-divider bg-gray-dark"><i class="icon-dot c-square"></i></div>
+                        <h2 class="comments-title">@Model.Blog.CommentCount نظر</h2>
+                        <div class="p-a30 blog-single-comment bg-white">
+                            <!-- comment list END -->
+                            @if (Model.Blog.IsCommentsActive)
+                            {
+                                <ol class="comment-list">
+                                    @foreach (var item in Model.Blog.Comments)
+                                    {
+                                        <li class="comment">
+                                            <div class="comment-body">
+                                                <div class="comment-author vcard"> <img class="avatar photo" src="@Url.Action("ImageResizer", "Base", new { width = 200, height = 200, fileType = "Images", moduleName = "Profile", fileName = item.UserId, fileExtension = "jpg" })" alt="تصویر"> <cite class="fn">@item.Name</cite> <span class="says">میگوید:</span> </div>
+                                                <div class="comment-meta"><i class="fa fa-calendar"></i> <a href="#">@item.Date.Split('-')[0].Split('/')[2] @DateTimeHelper.GetMonthName(item.Date.Split('-')[0].Split('/')[1]) @item.Date.Split('-')[0].Split('/')[0] - @item.Date.Split('-')[1]</a></div>
+                                                <p id="cm-@item.Id">@item.Content</p>
+                                                <div class="reply"> <a href="javascript:void(0)" class="comment-reply-link" onclick="answer('@item.Id', '@item.Name')">پاسخ</a> </div>
+                                            </div>
+                                            @if (item.Replays.Count() > 0)
+                                            {
+                                                <ol class="children">
+                                                    @foreach (var jtem in item.Replays)
+                                                    {
+                                                        <li class="comment odd parent">
+                                                            <div class="comment-body">
+                                                                <div class="comment-author vcard"> <img class="avatar photo" src="@Url.Action("ImageResizer", "Base", new { width = 200, height = 200, fileType = "Images", moduleName = "Profile", fileName = jtem.UserId, fileExtension = "jpg" })" alt="تصویر"> <cite class="fn">@jtem.Name</cite> <span class="says">میگوید:</span> </div>
+                                                                <div class="comment-meta"><i class="fa fa-calendar"></i> <a href="#">@jtem.Date.Split('-')[0].Split('/')[2] @DateTimeHelper.GetMonthName(jtem.Date.Split('-')[0].Split('/')[1]) @jtem.Date.Split('-')[0].Split('/')[0] - @jtem.Date.Split('-')[1]</a></div>
+                                                                <p id="cm-@jtem.Id">@jtem.Content</p>
+                                                            </div>
+                                                            <!-- list END -->
+                                                        </li>
+                                                    }
+                                                </ol>
+                                            }
+                                            <!-- list END -->
+                                        </li>
+                                    }
+                                </ol>
+                            }
+                            <!-- comment list END -->
+                            <!-- Form -->
+                            <div class="comment-respond blog-single-comment-form" id="respond">
+                                <h3 class="comment-reply-title" id="reply-title">ثبت نظر <small> <a style="display:none;" href="#" id="cancel-comment-reply-link" rel="nofollow">Cancel reply</a> </small> </h3>
+                                @using (Ajax.BeginForm("Create", "Comment", FormMethod.Post, new AjaxOptions { OnSuccess = "CommentCreateSuccess(data)" }, new { @class = "comment-form" }))
+                                {
+                                    @Html.AntiForgeryToken()
+                                    <input type="hidden" value="Blog" name="Group" id="Group" />
+                                    <input type="hidden" value="@Model.Blog.Id" name="RefId" id="RefId" />
+                                    <input type="hidden" value="0" name="CommentId" id="CommentId" />
+                                    if (User.Identity.IsAuthenticated)
+                                    {
+                                        ApplicationDbContext db = new ApplicationDbContext();
+                                        var profile = db.Profiles.Find(User.Identity.GetUserId());
+                                        if (profile != null && profile.Name != null && profile.Name != "")
+                                        {
+                                            <input type="hidden" value="@profile.Name" name="Name" id="Name">
+                                        }
+                                        else
+                                        {
+                                            <div class="comment-form-author">
+                                                <label for="author">نام و نام خانوادگی <span class="required">*</span> <span class="field-validation-valid text-danger" data-valmsg-for="Name" data-valmsg-replace="true"></span></label>
+                                                <input type="text" value="" name="Name" id="Name" data-val="true" data-val-required="نام و نام خانوادگی خود را وارد نمایید.">
+                                            </div>
+                                        }
+                                    }
+                                    else
+                                    {
+                                        <div class="comment-form-author">
+                                            <label for="author">نام و نام خانوادگی <span class="required">*</span> <span class="field-validation-valid text-danger" data-valmsg-for="Name" data-valmsg-replace="true"></span></label>
+                                            <input type="text" value="" name="Name" id="Name" data-val="true" data-val-required="نام و نام خانوادگی خود را وارد نمایید.">
+                                        </div>
+                                    }
+                                    <div class="comment-form-comment">
+                                        <label for="comment">متن نظر <span class="required">*</span> <span class="field-validation-valid text-danger" data-valmsg-for="Content" data-valmsg-replace="true"></span></label>
+                                        <textarea rows="8" name="Content" id="Content" data-val="true" data-val-required="متن نظر را وارد نمایید."></textarea>
+                                    </div>
+                                    <div class="form-submit" id="messagediv">
+                                        <input type="submit" value="ثبت" class="site-button" id="submit">
+                                    </div>
+                                }
+                            </div>
+                            <!-- Form -->
+                        </div>
+                    </div>
+                </div>
+                <!-- blog END -->
+            </div>
+            <!-- Left part END -->
+            <!-- Side bar start -->
+            <div class="col-lg-3 col-md-4 col-sm-6">
+                <aside class="side-bar">
+                    <div class="widget">
+                        <h4 class="widget-title">جستجو</h4>
+                        <div class="search-bx">
+                            <form role="search" action="/Blog?search=search">
+                                <div class="input-group">
+                                    <input name="search" type="text" class="form-control" placeholder="جستجوی مطلب">
+                                    <span class="input-group-btn">
+                                        <button type="submit" class="site-button"><i class="fa fa-search"></i></button>
+                                    </span>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                    @if (Model.Categories.Count() > 0)
+                    {
+                        <div class="widget widget_categories">
+                            <h4 class="widget-title">دسته بندی مطالب</h4>
+                            <ul>
+                                @foreach (var item in Model.Categories)
+                                {
+                                    <li><a href="/Blog/@item.Text.Replace(' ', '-')">@item.Text</a></li>
+                                }
+                            </ul>
+                        </div>
+                    }
+                    @if (Model.PopularBlogs.Count() > 0)
+                    {
+                        <div class="widget recent-posts-entry">
+                            <h4 class="widget-title">پربازدیدترین مطالب</h4>
+                            <div class="widget-post-bx">
+                                @foreach (var item in Model.PopularBlogs)
+                                {
+                                    <div class="widget-post clearfix">
+                                        <div class="dez-post-media"><a href="/Blog/Details/@item.Id/@item.Title.Replace(' ', '-')"><img src="/Content/Images/Blog/@(item.Id).jpg" onerror="this.src='/Content/Images/Blog/Default.jpg'" width="200" height="143" alt="@item.Title"></a></div>
+                                        <div class="dez-post-info">
+                                            <div class="dez-post-header">
+                                                <h6 class="post-title"><a href="/Blog/Details/@item.Id/@item.Title.Replace(' ', '-')">@item.Title</a></h6>
+                                            </div>
+                                            <div class="dez-post-meta">
+                                                <ul>
+                                                    <li class="post-author"><i class="fa fa-eye"></i> @item.Review بازدید</li>
+                                                    <li class="post-comment"><i class="fa fa-comments"></i> @item.CommentCount نظر</li>
+                                                </ul>
+                                            </div>
+                                        </div>
+                                    </div>
+                                }
+                            </div>
+                        </div>
+                    }
+                    @if (Model.SimilarBlogs.Count() > 0)
+                    {
+                        <div class="widget recent-posts-entry">
+                            <h4 class="widget-title">مطالب مشابه</h4>
+                            <div class="widget-post-bx">
+                                @foreach (var item in Model.SimilarBlogs)
+                                {
+                                    <div class="widget-post clearfix">
+                                        <div class="dez-post-media"><a href="/Blog/Details/@item.Id/@item.Title.Replace(' ', '-')"><img src="/Content/Images/Blog/@(item.Id).jpg" onerror="this.src='/Content/Images/Blog/Default.jpg'" width="200" height="143" alt="@item.Title"></a></div>
+                                        <div class="dez-post-info">
+                                            <div class="dez-post-header">
+                                                <h6 class="post-title"><a href="/Blog/Details/@item.Id/@item.Title.Replace(' ', '-')">@item.Title</a></h6>
+                                            </div>
+                                            <div class="dez-post-meta">
+                                                <ul>
+                                                    <li class="post-author"><i class="fa fa-eye"></i> @item.Review بازدید</li>
+                                                    <li class="post-comment"><i class="fa fa-comments"></i> @item.CommentCount نظر</li>
+                                                </ul>
+                                            </div>
+                                        </div>
+                                    </div>
+                                }
+                            </div>
+                        </div>
+                    }
+                </aside>
+            </div>
+            <!-- Side bar END -->
+        </div>
+    </div>
+</div>
+@section bottomScripts{
+    <script>
+        function answer(id, name) {
+            $('#CommentId').val(id);
+            $('#Content').attr('placeholder', 'پاسخ به ' + name);
+            $('#Content').focus();
+        }
+        function CommentCreateSuccess(data) {
+            if (data == true) {
+                $('#messagediv').attr('style', 'color:green;');
+                $('#messagediv').html('نظر شما با موفقیت ثبت شد و پس از تایید نمایش داده خواهد شد.');
+            }
+            else {
+                alert('متاسفانه نظر شما ثبت نشد، لطفا دوباره سعی نمایید.')
+            }
+        }
+    </script>
+}

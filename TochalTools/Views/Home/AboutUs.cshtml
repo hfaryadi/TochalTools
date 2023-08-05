@@ -1,0 +1,65 @@
+﻿@model HomeAboutUsViewModel
+@{
+    ViewBag.Title = "درباره ما";
+    Layout = "~/Views/Shared/_HomeLayout.cshtml";
+}
+
+<!-- inner page banner -->
+<div class="dez-bnr-inr overlay-black-middle" style="background-image:url(/Content/Layouts/HomeLayout/assets/images/aboutus.png);">
+    <div class="container">
+        <div class="dez-bnr-inr-entry">
+            <h1 class="text-white">درباره ما</h1>
+        </div>
+    </div>
+</div>
+<!-- inner page banner END -->
+<!-- Breadcrumb row -->
+<div class="breadcrumb-row">
+    <div class="container">
+        <ul class="list-inline">
+            <li><a href="#">صفحه نخست</a></li>
+            <li>درباره ما</li>
+        </ul>
+    </div>
+</div>
+<!-- Breadcrumb row END -->
+<!-- contact area -->
+<div class="clearfix">
+    <!-- About Company -->
+    <div class="section-full content-inner">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-12">
+                    @if (Model.MainBox != null)
+                    {
+                        <div class="section-head text-left">
+                            <h2 class="text-uppercase">@Model.MainBox.Title</h2>
+                            <div class="aon-separator bg-primary"></div>
+                            <p style="text-align:justify">
+                                @Html.Raw(HttpUtility.HtmlDecode(Model.MainBox.Content))
+                            </p>
+                        </div>
+                    }
+                    @if (Model.Boxes.Count() > 0)
+                    {
+                        <div class="row">
+                            @foreach (var item in Model.Boxes)
+                            {
+                                <div class="col-lg-4 col-md-6 col-sm-12">
+                                    <div class="icon-bx-wraper bx-style-2 m-l40 m-b30 p-a30 left">
+                                        <div class="icon-bx-sm bg-primary radius"> <a href="#" class="icon-cell"><i class="@item.Icon" style="padding-top:22px;"></i></a> </div>
+                                        <div class="icon-content p-l40">
+                                            <h5 class="aon-tilte text-uppercase">@item.Title</h5>
+                                            <p style="font-family:'IranYekan', IranSens">@Html.Raw(HttpUtility.HtmlEncode(item.Content))</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            }
+                        </div>
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- About Company END -->
+</div>

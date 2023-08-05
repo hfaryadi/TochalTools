@@ -1,0 +1,93 @@
+﻿@model MarketerDetailsViewModel
+@{
+    ViewBag.Title = "جزئیات بازاریاب";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+
+
+<!-- Container-fluid starts -->
+<div class="container-fluid">
+    <div class="page-header">
+        <div class="row">
+            <div class="col-lg-6">
+                <h3>
+                    @ViewBag.Title
+                    <small>جزئیات بازاریاب انتخاب شده</small>
+                </h3>
+            </div>
+
+
+        </div>
+    </div>
+</div>
+<!-- Container-fluid Ends -->
+
+<div class="container-fluid">
+    <div class="user-profile">
+        <div class="row">
+            <div class="col-sm-12">
+                <div class="card">
+                    <div class="profile-img-style">
+                        <div class="row">
+                            <div class="col-sm-12">
+                                <div class="media-body">
+                                    <label style="font-size:14px;">شماره پیگیری: <span style="font-size:14px;font-weight:600;padding-right:5px;">@Model.TrackingCode</span></label>
+                                </div>
+                            </div>
+                            <hr />
+                            <div class="col-sm-3">
+                                <div class="media-body">
+                                    <label style="font-size:14px;">نام و نام خانوادگی: <span style="font-size:14px;font-weight:600;padding-right:5px;">@Model.Name</span></label>
+                                </div>
+                            </div>
+                            <div class="col-sm-3">
+                                <div class="media-body">
+                                    <label style="font-size:14px;">شماره تماس: <span style="font-size:14px;font-weight:600;padding-right:5px;">@Model.Tell</span></label>
+                                </div>
+                            </div>
+                            <div class="col-sm-3">
+                                <div class="media-body">
+                                    <label style="font-size:14px;">سن: <span style="font-size:14px;font-weight:600;padding-right:5px;">@Model.Age</span></label>
+                                </div>
+                            </div>
+                            <div class="col-sm-3">
+                                <div class="media-body">
+                                    <label style="font-size:14px;">تاریخ ثبت: <span style="font-size:14px;font-weight:600;padding-right:5px;">@Model.Date</span></label>
+                                </div>
+                            </div>
+                            <hr />
+                            <div class="col-sm-12">
+                                <div class="media-body">
+                                    <label style="font-size:14px;">توضیح کوتاه: <span style="font-size:14px;font-weight:600;padding-right:5px;">@Model.Description</span></label>
+                                </div>
+                            </div>
+                            <hr />
+                            <div class="col-sm-3">
+                                <div class="media-body">
+                                    <label style="font-size:14px;">کشور: <span style="font-size:14px;font-weight:600;padding-right:5px;">@Model.CountryName</span></label>
+                                </div>
+                            </div>
+                            <div class="col-sm-3">
+                                <div class="media-body">
+                                    <label style="font-size:14px;">استان: <span style="font-size:14px;font-weight:600;padding-right:5px;">@Model.StateName</span></label>
+                                </div>
+                            </div>
+                            <div class="col-sm-3">
+                                <div class="media-body">
+                                    <label style="font-size:14px;">شهر: <span style="font-size:14px;font-weight:600;padding-right:5px;">@Model.CityName</span></label>
+                                </div>
+                            </div>
+                            <hr />
+                            <div class="col-sm-12">
+                                <div class="media-body">
+                                    <label style="font-size:14px;">آدرس: <span style="font-size:14px;font-weight:600;padding-right:5px;">@Model.Address</span></label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+

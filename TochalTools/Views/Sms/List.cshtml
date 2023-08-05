@@ -1,0 +1,105 @@
+﻿@model List<SmsListViewModel>
+@{
+    var type = "";
+    if (ViewBag.Id != null && ViewBag.Id != "")
+    {
+        if (ViewBag.Id.ToLower() == "archived")
+        {
+            type = " - آرشیو شده";
+        }
+    }
+    ViewBag.Title = "لیست پیامک ها" + type;
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+
+<!-- Container-fluid starts -->
+<div class="container-fluid">
+    <div class="page-header">
+        <div class="row">
+            <div class="col-lg-6">
+                <h3>
+                    @ViewBag.Title
+                    <small>لیست پیامک های ارسال شده</small>
+                </h3>
+            </div>
+            <div class="col-lg-6">
+                <a href="/Sms/Create" class="btn btn-secondary btn-link">پیامک جدید</a>
+                <a href="/Sms/List/Archived" class="btn btn-primary btn-link">لیست آرشیو</a>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- Container-fluid Ends -->
+
+<div class="container-fluid">
+    <div class="row">
+        <!--Zero Configuration  Starts -->
+        <div class="col-sm-12">
+            <div class="card">
+                <div class="card-body">
+                    <div class="table-responsive">
+                        <table id="basic-1" class="display dataTable cell-border">
+                            <thead>
+                                <tr>
+                                    <th>متن پیامک</th>
+                                    <th>گروه</th>
+                                    <th>تاریخ ارسال</th>
+                                    <th>مدیریت</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach (var item in Model)
+                                {
+                                    <tr id="sms-@item.Id">
+                                        <td>@item.Content</td>
+                                        <td>@item.Groups</td>
+                                        <td>@item.Date</td>
+                                        <td>
+                                            @if (!item.IsArchived)
+                                            {
+                                                <button type="button" onclick="archiveSms('@item.Id', 'پیامک')" class="btn btn-primary btn-datatable">آرشیو</button>
+                                            }
+                                        </td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!--Zero Configuration  Ends -->
+    </div>
+</div>
+@section bottomScripts{
+    <script>
+        function archiveSms(address, title) {
+            swal({
+                title: 'آیا از آرشیو ' + title + ' مطمئن هستید؟',
+                text: title + ' آرشیو خواهد شد.',
+                icon: 'warning',
+                buttons: true,
+                dangerMode: true,
+            }).then((willDelete) => {
+                if (willDelete) {
+                    $.ajax({
+                        type: 'Post',
+                        url: '/Sms/Archive',
+                        data: { id: address },
+                        success: function (data) {
+                            if (data == true) {
+                                swal(title + ' با موفقیت آرشیو شد!', {
+                                    icon: 'success',
+                                });
+                                $('#sms-' + address).fadeOut(1000);
+                            }
+                            else {
+                                swal(title + ' آرشیو نشد!');
+                            }
+                        }
+                    });
+                }
+            });
+        }
+    </script>
+}

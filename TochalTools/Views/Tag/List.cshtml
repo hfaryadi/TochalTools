@@ -1,0 +1,110 @@
+﻿@model List<TagListViewModel>
+@{
+    ViewBag.Title = "لیست برچسب ها";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+
+<!-- Container-fluid starts -->
+<div class="container-fluid">
+    <div class="page-header">
+        <div class="row">
+            <div class="col-lg-6">
+                <h3>
+                    @ViewBag.Title
+                    <small>لیست برچسب های ثبت شده</small>
+                </h3>
+            </div>
+            <div class="col-lg-6">
+                <a href="/Tag/Create" class="btn btn-secondary btn-link">برچسب جدید</a>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- Container-fluid Ends -->
+
+<div class="container-fluid">
+    <div class="row">
+        <!--Zero Configuration  Starts -->
+        <div class="col-sm-12">
+            <div class="card">
+                <div class="card-body">
+                    <div class="table-responsive">
+                        <table id="basic-1" class="display dataTable cell-border">
+                            <thead>
+                                <tr>
+                                    @if (User.IsInRole("Developer") || User.IsInRole("SuperAdministrator") || User.IsInRole("Administrator"))
+                                    {
+                                        <th>ثبت کننده</th>
+                                    }
+                                    <th>عنوان برچسب</th>
+                                    <th>گروه</th>
+                                    <th>تعداد بازدید</th>
+                                    <th>زبان</th>
+                                    <th>بروزرسانی</th>
+                                    <th>مدیریت</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach (var item in Model)
+                                {
+                                    <tr id="tag-@item.Id">
+                                        @if (User.IsInRole("Developer") || User.IsInRole("SuperAdministrator") || User.IsInRole("Administrator"))
+                                        {
+                                            <td>
+                                                <img class="img-40 rounded-circle" src="@Url.Action("ImageResizer", "Base", new { width = 200, height = 200, fileType = "Images", moduleName = "Profile", fileName = item.UserId, fileExtension = "jpg" })" alt="تصویر پروفایل" title="@item.UserName">
+                                                @item.UserName
+                                            </td>
+                                        }
+                                        <td>@item.Title</td>
+                                        <td>@item.Group</td>
+                                        <td>@item.Review</td>
+                                        <td>@item.Language</td>
+                                        <td>@item.Update</td>
+                                        <td>
+                                            <a href="/Tag/Details/@item.Id" target="_blank" class="btn btn-info btn-datatable">مشاهده</a>
+                                            <a href="/Tag/Edit/@item.Id" class="btn btn-success btn-datatable">ویرایش</a>
+                                            <button type="button" onclick="deleteTag('@item.Id', 'برچسب')" class="btn btn-danger btn-datatable">حذف</button>
+                                        </td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!--Zero Configuration  Ends -->
+    </div>
+</div>
+@section bottomScripts{
+    <script>
+        function deleteTag(address, title) {
+            swal({
+                title: 'آیا از حذف ' + title + ' مطمئن هستید؟',
+                text: title + ' حذف خواهد شد و قابل بازگردانی نخواهد بود.',
+                icon: 'warning',
+                buttons: true,
+                dangerMode: true,
+            }).then((willDelete) => {
+                if (willDelete) {
+                    $.ajax({
+                        type: 'Post',
+                        url: '/Tag/Delete',
+                        data: { id: address },
+                        success: function (data) {
+                            if (data == true) {
+                                swal(title + ' با موفقیت حذف شد!', {
+                                    icon: 'success',
+                                });
+                                $('#tag-' + address).fadeOut(1000);
+                            }
+                            else {
+                                swal(title + ' حذف نشد!');
+                            }
+                        }
+                    });
+                }
+            });
+        }
+    </script>
+}

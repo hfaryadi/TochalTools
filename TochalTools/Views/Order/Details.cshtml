@@ -1,0 +1,147 @@
+﻿@model OrderDetailsPageViewModel
+@{
+    ViewBag.Title = "جزئیات سفارش";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+
+<!-- Container-fluid starts -->
+<div class="container-fluid">
+    <div class="page-header">
+        <div class="row">
+            <div class="col-lg-6">
+                <h3>
+                    @ViewBag.Title
+                    <small>جزئیات سفارش انتخابی</small>
+                </h3>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- Container-fluid Ends -->
+<div class="container">
+    <div class="row">
+        <div class="col-sm-12">
+            <div class="card">
+                <div class="card-body">
+                    <div class="invoice">
+                        <div>
+                            <div class="row" style="margin-bottom: 17px;">
+                                <div class="col-md-6">
+                                    <div class="media">
+                                        <div class="media-body">
+                                            <h3>شماره سفارش: @Model.Order.PrintId</h3>
+                                            <p>
+                                                تاریخ سفارش: @Model.Order.Date<br>
+                                                وضعیت: @Model.Order.Status.Text
+                                            </p>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="divlocation">
+                                        <div class="media" style="float:right;min-width:230px;">
+                                            <div class="media-body">
+                                                <p>
+                                                    <span style="font-size:18px;">فروشنده: </span><span style="font-size:21px; font-weight:600;">@Model.Info.WebsiteTitle</span><br>
+                                                    تلفن: @Model.Info.FirstTell<br>
+                                                    موبایل: @Model.Info.FirstMobile<br>
+                                                </p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <hr />
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="media">
+                                        <div class="media-body">
+                                            <p style="font-size:16px;">
+                                                سفارش دهنده: <span style="font-size:19px; font-weight:500;">@Model.Order.Name</span><br>
+                                                تحویل گیرنده: <span style="font-size:22px; font-weight:600;">@Model.Order.ReceiverName</span><br>
+                                                موبایل: <span style="font-size:19px; font-weight:500;">@Model.Order.Mobile</span><br>
+                                            </p>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="divlocation">
+                                        <div class="media" style="float:right;min-width:230px;">
+                                            <div class="media-body" ">
+                                                <p style="font-size:16px;text-align:right">
+                                                    تلفن ثابت: <span style="font-size:19px; font-weight:500;">@Model.Order.Tell</span><br>
+                                                    کد پستی: <span style="font-size:19px; font-weight:500;">@Model.Order.PostalCode</span><br>
+                                                    نوع ارسال: <span style="font-size:19px; font-weight:500;">@Model.Order.SendType</span><br>
+                                                </p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <hr />
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <div class="media">
+                                        <div class="media-body">
+                                            <h5>آدرس:</h5>
+                                            <p style="font-size:18px;">@Model.Order.Country, @Model.Order.State, @Model.Order.City, @Model.Order.Address</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <hr />
+                            <div>
+                                <div id="table" class="table-responsive invoice-table">
+                                    <table class="table table-bordered table-striped">
+                                        <tr>
+                                            <td class="item"><h6 class="p-2 mb-0">آیتم ها</h6></td>
+                                            <td class="Hours"><h6 class="p-2 mb-0">قیمت واحد(تومان)</h6></td>
+                                            <td class="Rate"><h6 class="p-2 mb-0">تعداد</h6></td>
+                                            <td class="subtotal"><h6 class="p-2 mb-0">قیمت(تومان)</h6></td>
+                                        </tr>
+                                        @foreach (var item in Model.OrderItems)
+                                        {
+                                            <tr>
+                                                <td>
+                                                    <label>@item.Title</label>
+                                                </td>
+                                                <td><p class="itemtext digits">@item.Price.ToString("N0")</p></td>
+                                                <td><p class="itemtext digits">@item.Count</p></td>
+                                                <td><p class="itemtext digits">@item.TotalPrice.ToString("N0")</p></td>
+                                            </tr>
+                                        }
+                                        <tr>
+                                            <td></td>
+                                            <td></td>
+                                            <td class="Rate"><h6 class="mb-0 p-2">جمع کل</h6></td>
+                                            <td class="payment digits"><h6 class="mb-0 p-2">@Model.Order.Price.ToString("N0")</h6></td>
+                                        </tr>
+                                    </table>
+                                </div><!--End Table-->
+                                @*<div class="row">
+                                        <div class="col-md-8">
+                                            <div>
+                                                <p class="legal">
+                                                    <strong>Thank you for your business!</strong>  Payment is expected within 31 days; please process this invoice within that time. There will be a 5% interest charge per month on late invoices.
+                                                </p>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <form class="text-left">
+                                                <input type="image" src="../assets/images/paypal.png" name="submit" alt="PayPal - The safer, easier way to pay online!">
+                                            </form>
+                                        </div>
+                                    </div>*@
+                            </div>
+                            <!--End InvoiceBot-->
+
+                        </div>
+                        <!--End Invoice-->
+
+                    </div>
+                    <!-- End Invoice Holder-->
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

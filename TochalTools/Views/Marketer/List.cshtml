@@ -1,0 +1,145 @@
+﻿@model List<MarketerListViewModel>
+@{
+    var type = "";
+    if (ViewBag.Id != null && ViewBag.Id != "")
+    {
+        if (ViewBag.Id.ToLower() == "archived")
+        {
+            type = " - آرشیو شده";
+        }
+    }
+    ViewBag.Title = "لیست بازاریابان" + type;
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+
+<!-- Container-fluid starts -->
+<div class="container-fluid">
+    <div class="page-header">
+        <div class="row">
+            <div class="col-lg-6">
+                <h3>
+                    @ViewBag.Title
+                    <small>لیست بازاریابان ثبت شده</small>
+                </h3>
+            </div>
+            <div class="col-lg-6">
+                <a href="/Marketer/List/Archived" class="btn btn-primary btn-link">لیست آرشیو</a>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- Container-fluid Ends -->
+<!-- Container-fluid starts -->
+<div class="container-fluid">
+    <div class="row">
+        <!--Zero Configuration  Starts -->
+        <div class="col-sm-12">
+            <div class="card">
+                <div class="card-body">
+                    <div class="table-responsive">
+                        <table id="basic-1" class="display dataTable cell-border">
+                            <thead>
+                                <tr>
+                                    <th>شماره پیگیری</th>
+                                    <th>نام و نام خانوادگی</th>
+                                    <th>شماره تماس</th>
+                                    <th>سن</th>
+                                    <th>کشور</th>
+                                    <th>استان</th>
+                                    <th>شهر</th>
+                                    <th>تاریخ</th>
+                                    <th>مدیریت</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach (var item in Model)
+                                {
+
+                                    <tr id="marketer-@item.Id">
+                                        <td>@item.TrackingCode</td>
+                                        <td>@item.Name</td>
+                                        <td>@item.Tell</td>
+                                        <td>@item.Age</td>
+                                        <td>@item.CountryName</td>
+                                        <td>@item.StateName</td>
+                                        <td>@item.CityName</td>
+                                        <td>@item.Date</td>
+                                        <td>
+                                            <a href="/Marketer/Details/@item.Id" target="_blank" class="btn btn-info btn-datatable">مشاهده</a>
+                                            <button type="button" onclick="deleteMarketer('@item.Id', 'بازاریاب')" class="btn btn-danger btn-datatable">حذف</button>
+                                            @if (!item.IsArchived)
+                                            {
+                                                <button type="button" onclick="archiveMarketer('@item.Id', 'بازاریاب')" class="btn btn-primary btn-datatable">آرشیو</button>
+                                            }
+                                        </td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!--Zero Configuration  Ends -->
+    </div>
+</div>
+@section bottomScripts{
+    <script>
+        function deleteMarketer(address, title) {
+            swal({
+                title: 'آیا از حذف ' + title + ' مطمئن هستید؟',
+                text: title + ' حذف خواهد شد و قابل بازگردانی نخواهد بود.',
+                icon: 'warning',
+                buttons: true,
+                dangerMode: true,
+            }).then((willDelete) => {
+                if (willDelete) {
+                    $.ajax({
+                        type: 'Post',
+                        url: '/Marketer/Delete',
+                        data: { id: address },
+                        success: function (data) {
+                            if (data == true) {
+                                swal(title + ' با موفقیت حذف شد!', {
+                                    icon: 'success',
+                                });
+                                $('#marketer-' + address).fadeOut(1000);
+                            }
+                            else {
+                                swal(title + ' حذف نشد!');
+                            }
+                        }
+                    });
+                }
+            });
+        }
+        function archiveMarketer(address, title) {
+            swal({
+                title: 'آیا از آرشیو ' + title + ' مطمئن هستید؟',
+                text: title + ' آرشیو خواهد شد.',
+                icon: 'warning',
+                buttons: true,
+                dangerMode: true,
+            }).then((willDelete) => {
+                if (willDelete) {
+                    $.ajax({
+                        type: 'Post',
+                        url: '/Marketer/Archive',
+                        data: { id: address },
+                        success: function (data) {
+                            if (data == true) {
+                                swal(title + ' با موفقیت آرشیو شد!', {
+                                    icon: 'success',
+                                });
+                                $('#marketer-' + address).fadeOut(1000);
+                            }
+                            else {
+                                swal(title + ' آرشیو نشد!');
+                            }
+                        }
+                    });
+                }
+            });
+        }
+    </script>
+}

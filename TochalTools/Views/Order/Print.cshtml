@@ -1,0 +1,208 @@
+﻿@model OrderDetailsPageViewModel
+@{
+    Layout = null;
+}
+<!DOCTYPE html>
+<html lang="en" dir="rtl">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" href="/Content/Layouts/HomeLayout/assets/images/favicon.ico" type="image/x-icon" />
+    <link rel="shortcut icon" type="image/x-icon" href="/Content/Layouts/HomeLayout/assets/images/favicon.png" />
+    <title>@Model.Info.WebsiteTitle - جزئیات سفارش</title>
+
+    <!-- latest jquery-->
+    <script src="/Content/Layouts/AdminLayout/assets/scripts/jquery-3.3.1.min.js"></script>
+    <script src="/Content/Layouts/AdminLayout/assets/scripts/jquery.validate.min.js"></script>
+    <script src="/Content/Layouts/AdminLayout/assets/scripts/jquery.validate.unobtrusive.min.js"></script>
+
+    <!--Google font-->
+    <link href="/Content/Layouts/AdminLayout/assets/css/googleOpenSans.css" rel="stylesheet">
+    <link href="/Content/Layouts/AdminLayout/assets/css/googleRaleway.css" rel="stylesheet">
+
+    <!-- Font Awesome -->
+    <link rel="stylesheet" type="text/css" href="/Content/Layouts/AdminLayout/assets/css/fontawesome.css">
+
+    <!-- ico-font -->
+    <link rel="stylesheet" type="text/css" href="/Content/Layouts/AdminLayout/assets/css/icofont.css">
+
+    <!-- Themify icon -->
+    <link rel="stylesheet" type="text/css" href="/Content/Layouts/AdminLayout/assets/css/themify.css">
+
+    <!-- Flag icon -->
+    <link rel="stylesheet" type="text/css" href="/Content/Layouts/AdminLayout/assets/css/flag-icon.css">
+
+    <!-- Bootstrap css -->
+    <link rel="stylesheet" type="text/css" href="/Content/Layouts/AdminLayout/assets/css/bootstrap.css">
+
+    <!-- App css -->
+    <link rel="stylesheet" type="text/css" href="/Content/Layouts/AdminLayout/assets/css/style.css">
+
+    <!-- Print css -->
+    <link rel="stylesheet" type="text/css" href="/Content/Layouts/AdminLayout/assets/css/print.css">
+
+    <!-- Responsive css -->
+    <link rel="stylesheet" type="text/css" href="/Content/Layouts/AdminLayout/assets/css/responsive.css">
+
+</head>
+<body class="rtl">
+    <div class="page-wrapper">
+        <!--Page Body Start-->
+        <div class="page-body-wrapper">
+            <div class="page-body">
+                <div class="container">
+                    <div class="row">
+                        <div class="col-sm-12">
+                            <div class="card">
+                                <div class="card-body">
+                                    <div class="invoice">
+                                        <div>
+                                            <div class="row" style="margin-bottom: 17px;">
+                                                <div class="col-md-6">
+                                                    <div class="media">
+                                                        <div class="media-body">
+                                                            <h3>شماره سفارش: @Model.Order.PrintId</h3>
+                                                            <p>
+                                                                تاریخ سفارش: @Model.Order.Date<br>
+                                                                وضعیت: @Model.Order.Status.Text
+                                                            </p>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-6">
+                                                    <div class="divlocation">
+                                                        <div class="media" style="float:right;min-width:230px;">
+                                                            <div class="media-body">
+                                                                <p>
+                                                                    <span style="font-size:18px;">فروشنده: </span><span style="font-size:21px; font-weight:600;">@Model.Info.WebsiteTitle</span><br>
+                                                                    تلفن: @Model.Info.FirstTell<br>
+                                                                    موبایل: @Model.Info.FirstMobile<br>
+                                                                </p>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <hr />
+                                            <div class="row">
+                                                <div class="col-md-6">
+                                                    <div class="media">
+                                                        <div class="media-body">
+                                                            <p style="font-size:16px;">
+                                                                سفارش دهنده: <span style="font-size:19px; font-weight:500;">@Model.Order.Name</span><br>
+                                                                تحویل گیرنده: <span style="font-size:22px; font-weight:600;">@Model.Order.ReceiverName</span><br>
+                                                                موبایل: <span style="font-size:19px; font-weight:500;">@Model.Order.Mobile</span><br>
+                                                            </p>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-6">
+                                                    <div class="divlocation">
+                                                        <div class="media" style="float:right;min-width:230px;">
+                                                            <div class="media-body" ">
+                                                                <p style="font-size:16px;text-align:right">
+                                                                    تلفن ثابت: <span style="font-size:19px; font-weight:500;">@Model.Order.Tell</span><br>
+                                                                    کد پستی: <span style="font-size:19px; font-weight:500;">@Model.Order.PostalCode</span><br>
+                                                                    نوع ارسال: <span style="font-size:19px; font-weight:500;">@Model.Order.SendType</span><br>
+                                                                </p>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <hr />
+                                            <div class="row">
+                                                <div class="col-md-12">
+                                                    <div class="media">
+                                                        <div class="media-body">
+                                                            <h5>آدرس:</h5>
+                                                            <p style="font-size:18px;">@Model.Order.Country, @Model.Order.State, @Model.Order.City, @Model.Order.Address</p>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <hr />
+                                            <div>
+                                                <div id="table" class="table-responsive invoice-table">
+                                                    <table class="table table-bordered table-striped">
+                                                        <tr>
+                                                            <td class="item"><h6 class="p-2 mb-0">آیتم ها</h6></td>
+                                                            <td class="Hours"><h6 class="p-2 mb-0">قیمت واحد(تومان)</h6></td>
+                                                            <td class="Rate"><h6 class="p-2 mb-0">تعداد</h6></td>
+                                                            <td class="subtotal"><h6 class="p-2 mb-0">قیمت(تومان)</h6></td>
+                                                        </tr>
+                                                        @foreach (var item in Model.OrderItems)
+                                                        {
+                                                            <tr>
+                                                                <td>
+                                                                    <label>@item.Title</label>
+                                                                </td>
+                                                                <td><p class="itemtext digits">@item.Price.ToString("N0")</p></td>
+                                                                <td><p class="itemtext digits">@item.Count</p></td>
+                                                                <td><p class="itemtext digits">@item.TotalPrice.ToString("N0")</p></td>
+                                                            </tr>
+                                                        }
+                                                        <tr>
+                                                            <td></td>
+                                                            <td></td>
+                                                            <td class="Rate"><h6 class="mb-0 p-2">جمع کل</h6></td>
+                                                            <td class="payment digits"><h6 class="mb-0 p-2">@Model.Order.Price.ToString("N0")</h6></td>
+                                                        </tr>
+                                                    </table>
+                                                </div><!--End Table-->
+                                                @*<div class="row">
+                    <div class="col-md-8">
+                        <div>
+                            <p class="legal">
+                                <strong>Thank you for your business!</strong>  Payment is expected within 31 days; please process this invoice within that time. There will be a 5% interest charge per month on late invoices.
+                            </p>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <form class="text-left">
+                            <input type="image" src="../assets/images/paypal.png" name="submit" alt="PayPal - The safer, easier way to pay online!">
+                        </form>
+                    </div>
+                </div>*@
+                                            </div>
+                                            <!--End InvoiceBot-->
+
+                                        </div>
+
+                                        <div class="col-sm-12 mt-3">
+                                            <button type="button" onclick="myFunction()" class="btn btn btn-dark mr-2">پرینت</button>
+                                            <a class="btn btn btn-primary mr-2" href="/">صفحه نخست</a>
+                                        </div>
+                                        <!--End Invoice-->
+
+                                    </div>
+                                    <!-- End Invoice Holder-->
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Bootstrap js-->
+    <script src="/Content/Layouts/AdminLayout/assets/js/bootstrap/popper.min.js"></script>
+    <script src="/Content/Layouts/AdminLayout/assets/js/bootstrap/bootstrap.js"></script>
+
+    <!-- Counter js-->
+    <script src="/Content/Layouts/AdminLayout/assets/js/counter/jquery.waypoints.min.js"></script>
+    <script src="/Content/Layouts/AdminLayout/assets/js/counter/jquery.counterup.min.js"></script>
+    <script src="/Content/Layouts/AdminLayout/assets/js/counter/counter-custom.js"></script>
+
+    <!-- Sidebar jquery-->
+    <script src="/Content/Layouts/AdminLayout/assets/js/sidebar-menu.js"></script>
+
+    <!--print js-->
+    <script src="/Content/Layouts/AdminLayout/assets/js/print.js"></script>
+
+    <!-- Theme js-->
+    <script src="/Content/Layouts/AdminLayout/assets/js/script.js"></script>
+</body>
+</html>

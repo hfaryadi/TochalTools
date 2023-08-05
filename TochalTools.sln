@@ -1,0 +1,25 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.29728.190
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TochalTools", "TochalTools\TochalTools.csproj", "{F4285928-1A62-4190-BAEB-6CDD12928BC9}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{F4285928-1A62-4190-BAEB-6CDD12928BC9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F4285928-1A62-4190-BAEB-6CDD12928BC9}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F4285928-1A62-4190-BAEB-6CDD12928BC9}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F4285928-1A62-4190-BAEB-6CDD12928BC9}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {64270611-57EF-4D29-9B75-6389BA977530}
+	EndGlobalSection
+EndGlobal

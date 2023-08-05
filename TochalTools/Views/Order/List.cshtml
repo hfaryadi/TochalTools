@@ -1,0 +1,270 @@
+﻿@model OrderListPageViewModel
+@{
+    var type = "";
+    var id = "";
+    if (ViewBag.Id != null && ViewBag.Id != "")
+    {
+        id = ViewBag.Id.ToLower();
+        if (ViewBag.Id.ToLower() == "confirmed")
+        {
+            type = " - تایید شده";
+        }
+        if (ViewBag.Id.ToLower() == "rejected")
+        {
+            type = " - رد شده";
+        }
+        if (ViewBag.Id.ToLower() == "unconfirmed")
+        {
+            type = " - در انتظار تایید";
+        }
+        if (ViewBag.Id.ToLower() == "archived")
+        {
+            type = " - آرشیو شده";
+        }
+        if (ViewBag.Id.ToLower() == "myorders")
+        {
+            type = " من";
+        }
+    }
+    ViewBag.Title = "لیست سفارشات" + type;
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+
+<!-- Container-fluid starts -->
+<div class="container-fluid">
+    <div class="page-header">
+        <div class="row">
+            <div class="col-lg-6">
+                <h3>
+                    @ViewBag.Title
+                    <small>لیست سفارشات ثبت شده</small>
+                </h3>
+            </div>
+            <div class="col-lg-6">
+                <a href="/Order/List/Archived" class="btn btn-primary btn-link">لیست آرشیو</a>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- Container-fluid Ends -->
+
+<!-- Container-fluid starts -->
+<div class="container-fluid">
+    <div class="card border-widgets">
+        <div class="row m-0">
+            <div class="col-xl-3 col-6 xs-width-100">
+                <div class="crm-top-widget card-body">
+                    <a href="/Order/List">
+                        <div class="media">
+                            <i class="icon-notepad font-info align-self-center ml-3"></i>
+                            <div class="media-body">
+                                <span class="mt-0">سفارشات کلی</span>
+                                <h4 class="counter">@Model.AllOrdersCount</h4>
+                            </div>
+                        </div>
+                    </a>
+                </div>
+            </div>
+            <div class="col-xl-3 col-6 xs-width-100">
+                <div class="crm-top-widget card-body">
+                    <a href="/Order/List/Confirmed">
+                        <div class="media">
+                            <i class="icon-notepad font-success align-self-center ml-3"></i>
+                            <div class="media-body">
+                                <span class="mt-0">تایید شده</span>
+                                <h4 class="counter">@Model.ConfirmedOrdersCount</h4>
+                            </div>
+                        </div>
+                    </a>
+                </div>
+            </div>
+            <div class="col-xl-3 col-6 xs-width-100">
+                <div class="crm-top-widget card-body">
+                    <a href="/Order/List/UnConfirmed">
+                        <div class="media">
+                            <i class="icon-notepad font-warning align-self-center ml-3"></i>
+                            <div class="media-body">
+                                <span class="mt-0">در انتظار تایید</span>
+                                <h4 class="counter">@Model.UnConfirmedOrdersCount</h4>
+                            </div>
+                        </div>
+                    </a>
+                </div>
+            </div>
+            <div class="col-xl-3 col-6 xs-width-100">
+                <div class="crm-top-widget card-body">
+                    <a href="/Order/List/Rejected">
+                        <div class="media">
+                            <i class="icon-notepad font-danger align-self-center ml-3"></i>
+                            <div class="media-body">
+                                <span class="mt-0">رد شده</span>
+                                <h4 class="counter">@Model.RejectedOrdersCount</h4>
+                            </div>
+                        </div>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <!--Zero Configuration  Starts -->
+        <div class="col-sm-12">
+            <div class="card">
+                <div class="card-body">
+                    <div class="table-responsive">
+                        <table id="order-list" class="display dataTable cell-border">
+                            <thead>
+                                <tr>
+                                    <th>شماره سفارش</th>
+                                    @if (ViewBag.Id != null && ViewBag.Id.ToLower() != "myorders")
+                                    {
+                                        <th>سفارش دهنده</th>
+                                        <th>موبایل</th>
+                                    }
+                                    <th>تحویل گیرنده</th>
+                                    <th>وضعیت</th>
+                                    <th>تاریخ سفارش</th>
+                                    <th>مدیریت</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach (var item in Model.Orders)
+                                {
+
+                                    <tr id="order-@item.Id">
+                                        <td>@item.PrintId</td>
+                                        @if (ViewBag.Id != null && ViewBag.Id.ToLower() != "myorders")
+                                        {
+                                            <td>@item.Name</td>
+                                            <td>@item.Mobile</td>
+                                        }
+                                        <td>@item.ReceiverName</td>
+                                        <td>
+                                            <span class="badge badge-@item.Status.Class">@item.Status.Text</span>
+                                        </td>
+                                        <td>@item.Date</td>
+                                        <td>
+                                            <a href="/Order/Details/@item.Id" target="_blank" class="btn btn-info btn-datatable">مشاهده</a>
+                                            <a href="/Order/Print/@item.PrintId" target="_blank" class="btn btn-dark btn-datatable">پرینت</a>
+                                            @if ((User.IsInRole("Developer") || User.IsInRole("SuperAdministrator") || User.IsInRole("Order")) && (item.IsConfirmed == null))
+                                            {
+                                                <button id="orderBtnConfirm-@item.Id" type="button" onclick="confirm('@item.Id')" class="btn btn-warning btn-datatable">تایید</button>
+                                                <button id="orderBtnReject-@item.Id" type="button" onclick="reject('@item.Id')" class="btn btn-danger btn-datatable">رد</button>
+                                            }
+                                            @if (item.IsConfirmed != null && (((User.IsInRole("Developer") || User.IsInRole("SuperAdministrator") || User.IsInRole("Order")) && !item.IsAdminArchived) || ((!User.IsInRole("Developer") && !User.IsInRole("SuperAdministrator") && !User.IsInRole("Order")) && !item.IsUserArchived)))
+                                            {
+                                                <button type="button" onclick="archive('@item.Id', 'سفارش')" class="btn btn-primary btn-datatable">آرشیو</button>
+                                            }
+                                        </td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!--Zero Configuration  Ends -->
+    </div>
+</div>
+<!-- Container-fluid Ends -->
+@section bottomScripts {
+    <script>
+        var page = '@id';
+        function confirm(address) {
+            swal({
+                title: 'آیا از تایید سفارش مطمئن هستید؟',
+                text: 'سفارش تایید خواهد شد.',
+                icon: 'warning',
+                buttons: true,
+                dangerMode: true,
+            }).then((willConfirm) => {
+                if (willConfirm) {
+                    $.ajax({
+                        type: 'Post',
+                        url: '/Order/Confirm',
+                        data: { id: address, type: 'confirm' },
+                        success: function (data) {
+                            if (data == true) {
+                                swal('با موفقیت تایید شد!', {
+                                    icon: 'success',
+                                });
+                                if (page == 'unconfirmed') {
+                                    $('#order-' + address).fadeOut(1000);
+                                }
+                                else {
+                                    $('#orderBtnConfirm-' + address).fadeOut(1000);
+                                }
+                            }
+                            else {
+                                swal(title + ' تایید نشد!');
+                            }
+                        }
+                    });
+                }
+            });
+        }
+
+        function reject(address) {
+            swal({
+                title: 'آیا از رد سفارش مطمئن هستید؟',
+                text: 'سفارش رد خواهد شد.',
+                icon: 'warning',
+                buttons: true,
+                dangerMode: true,
+            }).then((willConfirm) => {
+                if (willConfirm) {
+                    $.ajax({
+                        type: 'Post',
+                        url: '/Order/Confirm',
+                        data: { id: address, type: 'reject' },
+                        success: function (data) {
+                            if (data == true) {
+                                swal('با موفقیت رد شد!', {
+                                    icon: 'success',
+                                });
+                                if (page == 'unconfirmed') {
+                                    $('#order-' + address).fadeOut(1000);
+                                }
+                                else {
+                                    $('#orderBtnReject-' + address).fadeOut(1000);
+                                }
+                            }
+                            else {
+                                swal(title + ' رد نشد!');
+                            }
+                        }
+                    });
+                }
+            });
+        }
+        function archive(address, title) {
+            swal({
+                title: 'آیا از آرشیو ' + title + ' مطمئن هستید؟',
+                text: title + ' آرشیو خواهد شد.',
+                icon: 'warning',
+                buttons: true,
+                dangerMode: true,
+            }).then((willDelete) => {
+                if (willDelete) {
+                    $.ajax({
+                        type: 'Post',
+                        url: '/Order/Archive',
+                        data: { id: address },
+                        success: function (data) {
+                            if (data == true) {
+                                swal(title + ' با موفقیت آرشیو شد!', {
+                                    icon: 'success',
+                                });
+                                $('#order-' + address).fadeOut(1000);
+                            }
+                            else {
+                                swal(title + ' آرشیو نشد!');
+                            }
+                        }
+                    });
+                }
+            });
+        }
+    </script>
+}

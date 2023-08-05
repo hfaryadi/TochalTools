@@ -1,0 +1,80 @@
+﻿@model DashboardUserViewModel
+@{
+    ViewBag.Title = "داشبورد";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+
+<!-- Container-fluid starts -->
+<div class="container-fluid">
+    <div class="page-header">
+        <div class="row">
+            <div class="col-lg-6">
+                <h3>
+                    @ViewBag.Title
+                    <small>پنل کاربر</small>
+                </h3>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- Container-fluid Ends -->
+<!-- Container-fluid starts -->
+<div class="container-fluid">
+    <div class="card border-widgets">
+        <div class="row m-0">
+            <div class="col-xl-3 col-6 xs-width-100">
+                <div class="crm-top-widget card-body">
+                    <a href="/Order/List">
+                        <div class="media">
+                            <i class="icon-notepad font-info align-self-center ml-3"></i>
+                            <div class="media-body">
+                                <span class="mt-0">سفارشات کلی</span>
+                                <h4 class="counter">@Model.AllOrdersCount</h4>
+                            </div>
+                        </div>
+                    </a>
+                </div>
+            </div>
+            <div class="col-xl-3 col-6 xs-width-100">
+                <div class="crm-top-widget card-body">
+                    <a href="/Order/List/Confirmed">
+                        <div class="media">
+                            <i class="icon-notepad font-success align-self-center ml-3"></i>
+                            <div class="media-body">
+                                <span class="mt-0">تایید شده</span>
+                                <h4 class="counter">@Model.ConfirmedOrdersCount</h4>
+                            </div>
+                        </div>
+                    </a>
+                </div>
+            </div>
+            <div class="col-xl-3 col-6 xs-width-100">
+                <div class="crm-top-widget card-body">
+                    <a href="/Order/List/UnConfirmed">
+                        <div class="media">
+                            <i class="icon-notepad font-warning align-self-center ml-3"></i>
+                            <div class="media-body">
+                                <span class="mt-0">در انتظار تایید</span>
+                                <h4 class="counter">@Model.UnConfirmedOrdersCount</h4>
+                            </div>
+                        </div>
+                    </a>
+                </div>
+            </div>
+            <div class="col-xl-3 col-6 xs-width-100">
+                <div class="crm-top-widget card-body">
+                    <a href="/Order/List/Rejected">
+                        <div class="media">
+                            <i class="icon-notepad font-danger align-self-center ml-3"></i>
+                            <div class="media-body">
+                                <span class="mt-0">رد شده</span>
+                                <h4 class="counter">@Model.RejectedOrdersCount</h4>
+                            </div>
+                        </div>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- Container-fluid Ends -->

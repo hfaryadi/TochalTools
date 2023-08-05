@@ -1,0 +1,53 @@
+﻿@model LoginViewModel
+@{
+    ViewBag.Title = "ورود";
+    Layout = "/Views/Shared/_LoginRegister.cshtml";
+}
+<!--Page start-->
+<div class="page-wrapper">
+    <div class="auth-bg">
+        <div class="authentication-box">
+            <h4 class="text-center">ورود</h4>
+            <h6 class="text-center">شماره موبایل و کلمه عبور خود را وارد نمایید.</h6>
+            <div class="card mt-4 p-4 mb-0">
+                @using (Html.BeginForm("Login", "Account", new { ReturnUrl = ViewBag.ReturnUrl }, FormMethod.Post, new { @class = "theme-form" }))
+                {
+                    @Html.AntiForgeryToken()
+                    <div class="form-group">
+                        @Html.LabelFor(m => m.Mobile, new { @class = "col-form-label" })
+                        @Html.ValidationMessageFor(m => m.Mobile, "", new { @class = "text-danger" })
+                        @Html.EditorFor(m => m.Mobile, new { htmlAttributes = new { @class = "form-control input-air-primary" } })
+                    </div>
+                    <div class="form-group">
+                        @Html.LabelFor(m => m.Password, new { @class = "col-form-label" })
+                        @Html.ValidationMessageFor(m => m.Password, "", new { @class = "text-danger" })
+                        @Html.EditorFor(m => m.Password, new { htmlAttributes = new { @class = "form-control input-air-primary" } })
+                    </div>
+                    <div class="form-group form-row mt-3">
+                        <div class="col-md-4">
+                            <button type="submit" class="btn btn-primary">ورود</button>
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="col-sm-4">
+                            <a href="/Account/ForgotPassword">فراموشی کلمه عبور</a>
+                        </div>
+                        <div class="col-sm-8">
+                            <div class="text-right">
+                                ثبت نام نکرده اید؟&nbsp;&nbsp;<a href="/Account/Register">ثبت نام</a>
+                            </div>
+                        </div>
+                    </div>
+                }
+            </div>
+        </div>
+    </div>
+    <div class="auth-bg-effect">
+        <div class="first-effect"></div>
+        <div class="second-effect"></div>
+        <div class="third-effect"></div>
+        <div class="fourth-effect"></div>
+    </div>
+
+</div>
+<!--Page ends-->

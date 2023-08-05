@@ -1,0 +1,106 @@
+﻿@model BlogIndexPageViewModel
+@{
+    ViewBag.Title = "مطالب";
+    Layout = "~/Views/Shared/_HomeLayout.cshtml";
+}
+
+<!-- inner page banner -->
+<div class="dez-bnr-inr overlay-black-middle" style="background-image:url(/Content/Images/Category/@(Model.Category.Value).jpg);">
+    <div class="container">
+        <div class="dez-bnr-inr-entry">
+            <h1 class="text-white">@Model.Category.Text</h1>
+        </div>
+    </div>
+</div>
+<!-- inner page banner END -->
+<!-- Breadcrumb row -->
+<div class="breadcrumb-row">
+    <div class="container">
+        <ul class="list-inline">
+            <li><a href="/">صفحه نخست</a></li>
+            <li><a href="#">مطالب</a></li>
+            <li>@Model.Category.Text</li>
+        </ul>
+    </div>
+</div>
+<!-- Breadcrumb row END -->
+<div class="content-area">
+    <div class="container">
+        @foreach (var item in Model.Blogs)
+        {
+            <div class="blog-post blog-md clearfix date-style-2">
+                <div class="dez-post-media dez-img-effect zoom-slow"> <a href="/Blog/Details/@item.Id/@item.Title.Replace(' ', '-')"><img src="/Content/Images/Blog/@(item.Id).jpg" onerror="this.src='/Content/Images/Blog/Default.jpg'" alt="@item.Title" style="height:200px"></a></div>
+                <div class="dez-post-info">
+                    <div class="dez-post-title ">
+                        <h3 class="post-title"><a href="/Blog/Details/@item.Id/@item.Title.Replace(' ', '-')">@item.Title</a></h3>
+                    </div>
+                    <div class="ow-post-meta">
+                        <ul>
+                            <li class="post-date"> <i class="fa fa-calendar"></i><strong>@item.Date.Split('/')[2] @DateTimeHelper.GetMonthName(item.Date.Split('/')[1])</strong><span>@item.Date.Split('/')[0]</span> </li>
+                            <li class="post-author blogds"><i class="fa fa-eye"></i> @item.Review بازدید </li>
+                            <li class="post-comment blogds"><i class="fa fa-comments"></i> @item.CommentCount نظر </li>
+                        </ul>
+                    </div>
+                    <div class="ow-post-text">
+                        @Html.Raw(HttpUtility.HtmlDecode(item.ShortContent))
+                    </div>
+                    <div class="ow-post-readmore "> <a href="/Blog/Details/@item.Id/@item.Title.Replace(' ', '-')" title="ادامه مطلب" rel="bookmark" class=" site-button-link"> ادامه مطلب <i class="fa fa-angle-double-left"></i></a></div>
+                    <div class="dez-post-tags">
+                        <div class="post-tags">
+                            @foreach (var jtem in item.Tags)
+                            {
+                                <a href="/Tag/Details/@jtem.Value/@jtem.Text.Replace(' ', '-')">@jtem.Text</a> 
+                            }
+                        </div>
+                    </div>
+                </div>
+            </div>
+        }
+        <!-- Pagination start -->
+        <div class="pagination-bx clearfix">
+            <ul class="pagination">
+                @if (Model.PageCount > 1)
+                {
+                    var prev = Model.Page - 2;
+                    var next = Model.Page + 2;
+                    if (prev < 1)
+                    {
+                        prev = 1;
+                    }
+                    if (next > Model.PageCount)
+                    {
+                        next = Model.PageCount;
+                    }
+                    if (Model.Page > 1)
+                    {
+                        <li class="previous"><a href="@Url.Action("Index", "Blog", new { category = Model.MainCategory.Replace(' ', '-'), search = Model.Search.Replace(' ', '-'), page = Model.Page - 1})"><i class="fa fa-angle-double-left"></i></a></li>
+                    }
+                    if (prev >= 2)
+                    {
+                        <li><a href="@Url.Action("Index", "Blog", new { category = Model.MainCategory.Replace(' ', '-'), search = Model.Search.Replace(' ', '-'), page = 1 })">1</a></li>
+                    }
+                    for (int i = prev; i <= next; i++)
+                    {
+                        if (i == Model.Page)
+                        {
+                            <li class="active"><a href="@Url.Action("Index", "Blog", new { category = Model.MainCategory.Replace(' ', '-'), search = Model.Search.Replace(' ', '-'), page = i })">@i</a></li>
+                        }
+                        else
+                        {
+                            <li><a href="@Url.Action("Index", "Blog", new { category = Model.MainCategory.Replace(' ', '-'), search = Model.Search.Replace(' ', '-'), page = i })">@i</a></li>
+                        }
+                    }
+                    if (next < Model.PageCount)
+                    {
+                        <li><a href="@Url.Action("Index", "Blog", new { category = Model.MainCategory.Replace(' ', '-'), search = Model.Search.Replace(' ', '-'), page = Model.PageCount })">@Model.PageCount</a></li>
+                    }
+                    if (Model.Page < Model.PageCount)
+                    {
+                        <li class="next"><a href="@Url.Action("Index", "Blog", new { category = Model.MainCategory.Replace(' ', '-'), search = Model.Search.Replace(' ', '-'), page = Model.Page + 1})"><i class="fa fa-angle-double-right"></i></a></li>
+                    }
+                }
+            </ul>
+        </div>
+        <!-- Pagination END -->
+    </div>
+</div>

@@ -1,0 +1,109 @@
+﻿@model CategoryEditViewModel
+@{
+    ViewBag.Title = "ویرایش دسته بندی " + ModuleHelper.ReadPersianNameByISO(Model.Group);
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+    var publicationActive = "";
+    if (Model.IsPublicationActive)
+    {
+        publicationActive = "checked";
+    }
+}
+
+<!-- Container-fluid starts -->
+<div class="container-fluid">
+    <div class="page-header">
+        <div class="row">
+            <div class="col-lg-6">
+                <h3>
+                    @ViewBag.Title
+                    <small>ویراش دسته بندی انتخابی</small>
+                </h3>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- Container-fluid Ends -->
+
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-sm-12 col-xl-12">
+            <div class="row">
+                <div class="col-sm-12">
+                    @using (Html.BeginForm("Edit", "Category", FormMethod.Post, new { @class = "theme-form", enctype = "multipart/form-data" }))
+                    {
+                        @Html.AntiForgeryToken()
+                        @Html.HiddenFor(m => m.Id)
+                        @Html.HiddenFor(m => m.Group, new { @Value = Model.Group })
+                        @Html.HiddenFor(m => m.Parents)
+                        <div class="card">
+                            <div class="card-header">
+                                <h5>اطلاعات دسته بندی</h5>
+                                <span>اطلاعات دسته بندی را در این قسمت وارد نمایید.</span>
+                            </div>
+                            <div class="card-body">
+                                <div class="form-row">
+                                    <div class="col-md-6">
+                                        <div class="form-group">
+                                            @Html.LabelFor(m => m.Name, new { @class = "col-form-label pt-0" })
+                                            @Html.ValidationMessageFor(m => m.Name, "", new { @class = "text-danger" })
+                                            @Html.EditorFor(m => m.Name, new { htmlAttributes = new { @class = "form-control input-air-primary" } })
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="form-group select2-drpdwn">
+                                            @Html.LabelFor(m => m.Parents, new { @class = "col-form-label pt-0" })
+                                            @Html.ValidationMessageFor(m => m.Parents, "", new { @class = "text-danger" })
+                                            @Html.DropDownList("mParents", Model.CategoriesList, new { @class = "js-example-rtl col-sm-12", @multiple = "multiple", @id = "mParents" })
+                                        </div>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <div class="form-group">
+                                            @Html.LabelFor(m => m.Language, new { @class = "col-form-label pt-0" })
+                                            @Html.ValidationMessageFor(m => m.Language, "", new { @class = "text-danger" })
+                                            @Html.DropDownListFor(m => m.Language, LanguageHelper.ReadAllLanguagesForSelect(), new { @class = "form-control input-air-primary" })
+                                        </div>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <div class="form-group">
+                                            <label class="col-form-label pt-0">تصویر دسته بندی</label>
+                                            <input class="form-control input-air-primary" id="File" name="File" type="file">
+                                        </div>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <div class="form-group">
+                                            <div class="checkbox checkbox-success" style="padding-top:26px;padding-right:20px;">
+                                                <input id="IsPublicationActive" type="checkbox" name="IsPublicationActive" value="true" @publicationActive>
+                                                <label for="IsPublicationActive">انتشار</label>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-12">
+                                        <div class="form-group">
+                                            @Html.LabelFor(m => m.Description, new { @class = "col-form-label pt-0" })
+                                            @Html.ValidationMessageFor(m => m.Description, "", new { @class = "text-danger" })
+                                            @Html.TextAreaFor(m => m.Description, new { @class = "form-control input-air-primary", @rows = "4" })
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="btn-div">
+                            <button type="submit" class="btn btn-success" onclick="beforeSubmit()">ویرایش</button>
+                        </div>
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+@section bottomScripts {
+    <script>
+        $(document).ready(function () {
+            getFromInput('#Parents', '#mParents');
+        });
+        function beforeSubmit() {
+            addToInput('#Parents', '#mParents');
+        }
+    </script>
+}
+

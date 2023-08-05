@@ -1,0 +1,120 @@
+﻿@model InboxDetailsViewModel
+@{
+    var userId = (Model.UserId != null && Model.UserId != "") ? Model.UserId : "NotRegistered";
+    var type = "دریافتی";
+    if (Model.Type == "دریافت کننده")
+    {
+        userId = (Model.ReceiverId != null && Model.ReceiverId != "") ? Model.ReceiverId : "NotRegistered";
+        type = "ارسالی";
+    }
+    ViewBag.Title = "جزئیات پیام " + type;
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+
+<!-- Container-fluid starts -->
+<div class="container-fluid">
+    <div class="page-header">
+        <div class="row">
+            <div class="col-lg-6">
+                <h3>
+                    @ViewBag.Title
+                    <small>جزئیات پیام انتخاب شده</small>
+                </h3>
+            </div>
+
+            
+        </div>
+    </div>
+</div>
+<!-- Container-fluid Ends -->
+
+<div class="container-fluid">
+    <div class="user-profile">
+        <div class="row">
+            <div class="col-sm-12">
+                <div class="card hovercard text-center">
+                    <div class="user-image">
+                        <div class="avatar">
+                            <img alt="تصویر پروفایل" title="@Model.Name" src="@Url.Action("ImageResizer", "Base", new { width = 200, height = 200, fileType = "Images", moduleName = "Profile", fileName = userId, fileExtension = "jpg" })">
+                        </div>
+                    </div>
+                    <div class="info">
+                        <div class="row">
+                            <div class="col-sm-6 col-lg-4 order-sm-1 order-xl-0">
+                                <div class="row">
+                                    <div class="col-md-4">
+                                        <div class="ttl-info text-right">
+                                            <h6><i class="fa fa-clock-o"></i>&nbsp;&nbsp;&nbsp;تاریخ ارسال</h6>
+                                            <span style="color: #ab8ce4">@Model.Date</span>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <div class="ttl-info text-right">
+                                            <h6><i class="fa fa-exclamation-circle"></i>&nbsp;&nbsp;&nbsp;وضعیت</h6>
+                                            <span style="color: #ab8ce4">@Model.Status.Text</span>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <div class="ttl-info text-right">
+                                            <h6><i class="fa fa-group"></i>&nbsp;&nbsp;&nbsp;گروه</h6>
+                                            <span style="color: #ab8ce4">@Model.GroupName</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-sm-12 col-lg-4 order-sm-0 order-xl-1">
+                                <div class="user-designation">
+                                    <div class="title" style="font-weight:600">
+                                        @Model.Name
+                                    </div>
+                                    <div class="desc mt-2">@Model.Type</div>
+                                </div>
+                            </div>
+                            <div class="col-sm-6 col-lg-4 order-sm-2 order-xl-2">
+                                <div class="row">
+                                    <div class="col-md-4">
+                                        <div class="ttl-info text-right">
+                                            <h6><i class="fa fa-phone"></i>&nbsp;&nbsp;&nbsp;تلفن تماس</h6>
+                                            <span><a href="tel:@Model.Tell">@Model.Tell</a></span>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <div class="ttl-info text-right">
+                                            <h6><i class="fa fa-envelope"></i>&nbsp;&nbsp;&nbsp;ایمیل</h6>
+                                            <span><a href="mailto:@Model.Email">@Model.Email</a></span>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <div class="ttl-info text-right">
+                                            <h6><i class="fa fa-link"></i>&nbsp;&nbsp;&nbsp;وب سایت</h6>
+                                            <span><a href="@Model.Website" target="_blank">@Model.Website</a></span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-12">
+                <div class="card">
+                    <div class="profile-img-style">
+
+                        <div class="row">
+                            <div class="col-sm-12 align-self-center">
+                                <div class="media-body align-self-center">
+                                    <h4 class="mt-0 user-name" style="font-size:18px">موضوع:</h4>
+                                    <br>
+                                    <h5 class="mt-0 user-name">@Model.Subject</h5>
+                                </div>
+                            </div>
+                        </div>
+                        <hr>
+                        <p>@Model.Content</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

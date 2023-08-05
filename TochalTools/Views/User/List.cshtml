@@ -1,0 +1,303 @@
+﻿@model UserListPageViewModel
+@{
+    var userTypes = "";
+    if (Model.ActionId != null && Model.ActionId != "")
+    {
+        if (Model.ActionId == "confirmed")
+        {
+            userTypes = " تایید شده";
+        }
+        else if (Model.ActionId == "unconfirmed")
+        {
+            userTypes = " در انتظار تایید";
+        }
+        else if (Model.ActionId == "blocked")
+        {
+            userTypes = " بلاک شده";
+        }
+    }
+    ViewBag.Title = "لیست کاربران" + userTypes;
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+
+}
+
+<!-- Container-fluid starts -->
+<div class="container-fluid">
+    <div class="page-header">
+        <div class="row">
+            <div class="col-lg-6">
+                <h3>
+                    @ViewBag.Title
+                    <small>لیست کاربران ثبت نام شده</small>
+                </h3>
+            </div>
+            <div class="col-lg-6">
+                <a href="/User/Create" class="btn btn-secondary btn-link">کاربر جدید</a>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- Container-fluid Ends -->
+<!-- Container-fluid starts -->
+<div class="container-fluid">
+    <div class="card border-widgets">
+        <div class="row m-0">
+            <div class="col-xl-3 col-6 xs-width-100">
+                <div class="crm-top-widget card-body">
+                    <a href="/User/List">
+                        <div class="media">
+                            <i class="icon-user font-primary align-self-center ml-3"></i>
+                            <div class="media-body">
+                                <span class="mt-0">همه کاربران</span>
+                                <h4 class="counter">@Model.AllUsersCount</h4>
+                            </div>
+                        </div>
+                    </a>
+                </div>
+            </div>
+            <div class="col-xl-3 col-6 xs-width-100">
+                <div class="crm-top-widget card-body">
+                    <a href="/User/List/Confirmed">
+                        <div class="media">
+                            <i class="icon-user font-success align-self-center ml-3"></i>
+                            <div class="media-body">
+                                <span class="mt-0">تایید شده</span>
+                                <h4 class="counter">@Model.ConfirmedCount</h4>
+                            </div>
+                        </div>
+                    </a>
+                </div>
+            </div>
+            <div class="col-xl-3 col-6 xs-width-100">
+                <div class="crm-top-widget card-body">
+                    <a href="/User/List/UnConfirmed">
+                        <div class="media">
+                            <i class="icon-user font-warning align-self-center ml-3"></i>
+                            <div class="media-body">
+                                <span class="mt-0">در انتظار تایید</span>
+                                <h4 class="counter">@Model.UnConfirmedCount</h4>
+                            </div>
+                        </div>
+                    </a>
+                </div>
+            </div>
+            <div class="col-xl-3 col-6 xs-width-100">
+                <div class="crm-top-widget card-body">
+                    <a href="/User/List/Blocked">
+                        <div class="media">
+                            <i class="icon-user font-dark align-self-center ml-3"></i>
+                            <div class="media-body">
+                                <span class="mt-0">بلاک شده</span>
+                                <h4 class="counter">@Model.BlockedCount</h4>
+                            </div>
+                        </div>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- Container-fluid Ends -->
+
+<div class="container-fluid">
+    <div class="row">
+        <!--Zero Configuration  Starts -->
+        <div class="col-sm-12">
+            <div class="card">
+                <div class="card-body">
+                    <div class="table-responsive">
+                        <table id="basic-1" class="display dataTable cell-border">
+                            <thead>
+                                <tr>
+                                    <th>نام و نام خانوادگی</th>
+                                    <th>موبایل</th>
+                                    <th>رول</th>
+                                    <th>تکمیل شده</th>
+                                    <th>مدیریت</th>
+                                </tr>
+                            </thead>
+
+                            <tbody>
+                                @foreach (var item in Model.Users)
+                                {
+                                    <tr id="user-@item.Id">
+                                        <td>
+                                            <img class="img-40 rounded-circle" src="@Url.Action("ImageResizer", "Base", new { width = 200, height = 200, fileType = "Images", moduleName = "Profile", fileName = item.Id, fileExtension = "jpg" })" alt="تصویر پروفایل" title="@item.Name">
+                                            @item.Name
+                                        </td>
+                                        <td>@item.Mobile</td>
+                                        <td>@item.Role</td>
+                                        <td>
+                                            <div class="checkbox checkbox-success">
+                                                <input id="isComplete" type="checkbox" class="checkbox-datatable" disabled @item.IsCompleted>
+                                                <label for="isComplete" class="checkbox-datatable"></label>
+                                            </div>
+                                        </td>
+                                        <td>
+                                            <a href="/User/Edit/@item.Id" class="btn btn-success btn-datatable">ویرایش</a>
+                                            <a href="/User/EditProfile/@item.Id" class="btn btn-secondary btn-datatable">ویرایش پروفایل</a>
+                                            <button type="button" onclick="sendInfo('@item.Id')" class="btn btn-info btn-datatable">ارسال اطلاعات</button>
+                                            @if (!item.IsBlocked)
+                                            {
+                                                <button id="userBtnBlock-@item.Id" type="button" onclick="blockUser('@item.Id', 'بلاک')" class="btn btn-dark btn-datatable">بلاک</button>
+                                            }
+                                            else
+                                            {
+                                                <button id="userBtnBlock-@item.Id" type="button" onclick="blockUser('@item.Id', 'آنبلاک')" class="btn btn-dark btn-datatable">آنبلاک</button>
+                                            }
+                                            <button type="button" onclick="deleteUser('@item.Id', 'کاربر')" class="btn btn-danger btn-datatable">حذف</button>
+                                            @if (!item.IsConfirmed)
+                                            {
+                                                <button id="userBtnConfirm-@item.Id" type="button" onclick="confirmUser('@item.Id')" class="btn btn-warning btn-datatable">تایید</button>
+                                            }
+                                        </td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!--Zero Configuration  Ends -->
+    </div>
+</div>
+@section bottomScripts {
+    <script>
+    var actionId = '';
+    if ('@Model.ActionId' != null) {
+        actionId = '@Model.ActionId';
+    }
+        function confirmUser(address) {
+            swal({
+                title: 'آیا از تایید کاربر مطمئن هستید؟',
+                text: 'کاربر تایید خواهد شد.',
+                icon: 'warning',
+                buttons: true,
+                dangerMode: true,
+            }).then((willConfirm) => {
+                if (willConfirm) {
+                    $.ajax({
+                        type: 'Post',
+                        url: '/User/Confirm',
+                        data: { id: address },
+                        success: function (data) {
+                            if (data == true) {
+                                swal('با موفقیت تایید شد!', {
+                                    icon: 'success',
+                                });
+                                if (actionId == 'unconfirmed') {
+                                    $('#user-' + address).fadeOut(1000);
+                                }
+                                else {
+                                    $('#userBtnConfirm-' + address).fadeOut(1000);
+                                }
+                            }
+                            else {
+                                swal(title + ' تایید نشد!');
+                            }
+                        }
+                    });
+                }
+            });
+        }
+
+        function blockUser(address, title) {
+            swal({
+                title: 'آیا از ' + title + ' کاربر مطمئن هستید؟',
+                text: 'کاربر ' + title + ' خواهد شد.',
+                icon: 'warning',
+                buttons: true,
+                dangerMode: true,
+            }).then((willBlock) => {
+                if (willBlock) {
+                    $.ajax({
+                        type: 'Post',
+                        url: '/User/Block',
+                        data: { id: address },
+                        success: function (data) {
+                            if (data == true) {
+                                swal('کاربر با موفقیت ' + title + ' شد!', {
+                                    icon: 'success',
+                                });
+                                if (title == 'بلاک') {
+                                    $('#userBtnBlock-' + address).html('آنبلاک');
+                                    $('#userBtnBlock-' + address).attr('onclick', "blockUser('" + address + "', 'آنبلاک')");
+                                }
+                                else {
+                                    if (actionId == 'blocked') {
+                                        $('#user-' + address).fadeOut(1000);
+                                    }
+                                    else {
+                                        $('#userBtnBlock-' + address).html('بلاک');
+                                    }
+                                }
+                            }
+                            else {
+                                swal(title + ' نشد!');
+                            }
+                        }
+                    });
+                }
+            });
+        }
+
+        function deleteUser(address, title) {
+            swal({
+                title: 'آیا از حذف ' + title + ' مطمئن هستید؟',
+                text: title + ' حذف خواهد شد و قابل بازگردانی نخواهد بود.',
+                icon: 'warning',
+                buttons: true,
+                dangerMode: true,
+            }).then((willDelete) => {
+                if (willDelete) {
+                    $.ajax({
+                        type: 'Post',
+                        url: '/User/Delete',
+                        data: { id: address },
+                        success: function (data) {
+                            if (data == true) {
+                                swal(title + ' با موفقیت حذف شد!', {
+                                    icon: 'success',
+                                });
+                                $('#user-' + address).fadeOut(1000);
+                            }
+                            else {
+                                swal(title + ' حذف نشد!');
+                            }
+                        }
+                    });
+                }
+            });
+        }
+
+        function sendInfo(address) {
+            swal({
+                title: 'آیا از ارسال اطلاعات مطمئن هستید؟',
+                text: 'نام کاربری و کلمه عبور به کاربر ارسال خواهد شد',
+                icon: 'warning',
+                buttons: true,
+                dangerMode: true,
+            }).then((willDelete) => {
+                if (willDelete) {
+                    $.ajax({
+                        type: 'Post',
+                        url: '/User/SendInfo',
+                        data: { id: address },
+                        success: function (data) {
+                            if (data == true) {
+                                swal('با موفقیت ارسال شد!', {
+                                    icon: 'success',
+                                });
+                            }
+                            else {
+                                swal('ارسال نشد.');
+                            }
+                        }
+                    });
+                }
+            });
+        }
+
+    </script>
+}

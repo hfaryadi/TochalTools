@@ -1,0 +1,128 @@
+﻿@model RegisterViewModel
+@{
+    ViewBag.Title = "کاربر جدید";
+    Layout = "/Views/Shared/_AdminLayout.cshtml";
+}
+
+<!-- Container-fluid starts -->
+<div class="container-fluid">
+    <div class="page-header">
+        <div class="row">
+            <div class="col-lg-6">
+                <h3>
+                    @ViewBag.Title
+                    <small>ایجاد کاربر جدید</small>
+                </h3>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- Container-fluid Ends -->
+
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-sm-12 col-xl-12">
+            <div class="row">
+                <div class="col-sm-12">
+                    @using (Html.BeginForm("Create", "User", FormMethod.Post, new { @class = "theme-form" }))
+                    {
+                        @Html.AntiForgeryToken()
+                        <div class="card">
+                            <div class="card-header">
+                                <h5>نام کاربری و کلمه عبور</h5>
+                                <span>نام کاربری و کلمه عبور کاربر را در این قسمت وارد نمایید.</span>
+                            </div>
+                            <div class="card-body">
+                                <div class="form-row">
+                                    <div class="col-md-4">
+                                        <div class="form-group">
+                                            @Html.LabelFor(m => m.Mobile, new { @class = "col-form-label pt-0" })
+                                            @Html.ValidationMessageFor(m => m.Mobile, "", new { @class = "text-danger" })
+                                            @Html.EditorFor(m => m.Mobile, new { htmlAttributes = new { @class = "form-control input-air-primary" } })
+                                        </div>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <div class="form-group">
+                                            @Html.LabelFor(m => m.Password, new { @class = "col-form-label pt-0" })
+                                            @Html.ValidationMessageFor(m => m.Password, "", new { @class = "text-danger" })
+                                            @Html.EditorFor(m => m.Password, new { htmlAttributes = new { @class = "form-control input-air-primary" } })
+                                        </div>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <div class="form-group">
+                                            @Html.LabelFor(m => m.ConfirmPassword, new { @class = "col-form-label pt-0" })
+                                            @Html.ValidationMessageFor(m => m.ConfirmPassword, "", new { @class = "text-danger" })
+                                            @Html.EditorFor(m => m.ConfirmPassword, new { htmlAttributes = new { @class = "form-control input-air-primary" } })
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="card">
+                            <div class="card-header">
+                                <h5>رول</h5>
+                                <span>رول کاربر را در این قسمت انتخاب نمایید.</span>
+                            </div>
+                            <div class="card-body">
+                                <div class="form-row">
+                                    <div class="col-md-12">
+                                        <div class="form-group">
+                                            @Html.ValidationMessageFor(m => m.MainRole, "", new { @class = "text-danger" })
+                                        </div>
+                                    </div>
+                                    @foreach (var item in ViewBag.MainRoles)
+                                    {
+                                        string value = item.Value;
+                                        <div class="col-md-2">
+                                            <div class="form-group">
+                                                @if (item.Value == "User")
+                                                {
+                                                    <div class="radio radio-primary">
+                                                        @Html.RadioButtonFor(m => m.MainRole, value, new { @id = "MainRole-" + value, @checked = "true" })
+                                                        <label for="MainRole-@value">@item.Text</label>
+                                                    </div>
+                                                }
+                                                else
+                                                {
+                                                    <div class="radio radio-primary">
+                                                        @Html.RadioButtonFor(m => m.MainRole, value, new { @id = "MainRole-" + value })
+                                                        <label for="MainRole-@value">@item.Text</label>
+                                                    </div>
+                                                }
+                                            </div>
+                                        </div>
+                                    }
+                                </div>
+                            </div>
+                        </div>
+                        <div class="card">
+                            <div class="card-header">
+                                <h5>سطح دسترسی</h5>
+                                <span>سطح دسترسی کاربر را در این قسمت انتخاب نمایید.</span>
+                            </div>
+                            <div class="card-body">
+                                <div class="form-row">
+                                    @foreach (var item in ViewBag.SubRoles)
+                                    {
+                                        <div class="col-md-3">
+                                            <div class="form-group">
+                                                <div class="checkbox checkbox-success">
+                                                    <input id="SubRoles-@item.Value" type="checkbox" name="SubRoles" value="@item.Value">
+                                                    <label for="SubRoles-@item.Value">@item.Text</label>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    }
+                                </div>
+                            </div>
+                        </div>
+                        <div class="btn-div">
+                            <button type="submit" class="btn btn-success">ایجاد</button>
+                        </div>
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+

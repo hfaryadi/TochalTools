@@ -1,0 +1,124 @@
+﻿@model List<ProductListViewModel>
+@{
+    ViewBag.Title = "لیست محصولات";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+
+<!-- Container-fluid starts -->
+<div class="container-fluid">
+    <div class="page-header">
+        <div class="row">
+            <div class="col-lg-6">
+                <h3>
+                    @ViewBag.Title
+                    <small>لیست محصولات ثبت شده</small>
+                </h3>
+            </div>
+            <div class="col-lg-6">
+                <a href="/Product/Create" class="btn btn-secondary btn-link">محصول جدید</a>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- Container-fluid Ends -->
+
+<div class="container-fluid">
+    <div class="row">
+        <!--Zero Configuration  Starts -->
+        <div class="col-sm-12">
+            <div class="card">
+                <div class="card-body">
+                    <div class="table-responsive">
+                        <table id="basic-1" class="display dataTable cell-border">
+                            <thead>
+                                <tr>
+                                    @if (User.IsInRole("Developer") || User.IsInRole("SuperAdministrator") || User.IsInRole("Administrator"))
+                                    {
+                                        <th>ثبت کننده</th>
+                                    }
+                                    <th>عنوان محصول</th>
+                                    <th>تعداد</th>
+                                    <th>قیمت(تومان)</th>
+                                    <th>انتشار</th>
+                                    <th>صفحه نخست</th>
+                                    <th>زبان</th>
+                                    <th>بروزرسانی</th>
+                                    <th>مدیریت</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach (var item in Model)
+                                {
+                                <tr id="product-@item.Id">
+                                    @if (User.IsInRole("Developer") || User.IsInRole("SuperAdministrator") || User.IsInRole("Administrator"))
+                                    {
+                                        <td>
+                                            <img class="img-40 rounded-circle" src="@Url.Action("ImageResizer", "Base", new { width = 200, height = 200, fileType = "Images", moduleName = "Profile", fileName = item.UserId, fileExtension = "jpg" })" alt="تصویر پروفایل" title="@item.UserName">
+                                            @item.UserName
+                                        </td>
+                                    }
+                                    <td>@item.Title</td>
+                                    <td>@item.QT</td>
+                                    <td>@item.TotalPrice</td>
+                                    <td>
+                                        <div class="checkbox checkbox-success">
+                                            <input id="IsPublicationActive" type="checkbox" class="checkbox-datatable" disabled @item.IsPublicationActive>
+                                            <label for="IsPublicationActive" class="checkbox-datatable"></label>
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <div class="checkbox checkbox-success">
+                                            <input id="IsAtHomeActive" type="checkbox" class="checkbox-datatable" disabled @item.IsAtHomeActive>
+                                            <label for="IsAtHomeActive" class="checkbox-datatable"></label>
+                                        </div>
+                                    </td>
+                                    <td>@item.Language</td>
+                                    <td>@item.Update</td>
+                                    <td>
+                                        <a href="/Product/Details/@item.Id/@item.Title.Replace(' ', '-')" target="_blank" class="btn btn-info btn-datatable">مشاهده</a>
+                                        <a href="/Product/Edit/@item.Id" class="btn btn-success btn-datatable">ویرایش</a>
+                                        <button type="button" onclick="deleteProduct('@item.Id', 'محصول')" class="btn btn-danger btn-datatable">حذف</button>
+                                    </td>
+                                </tr>
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!--Zero Configuration  Ends -->
+    </div>
+</div>
+@section bottomScripts{
+    <script>
+        function deleteProduct(address, title) {
+            swal({
+                title: 'آیا از حذف ' + title + ' مطمئن هستید؟',
+                text: title + ' حذف خواهد شد و قابل بازگردانی نخواهد بود.',
+                icon: 'warning',
+                buttons: true,
+                dangerMode: true,
+            }).then((willDelete) => {
+                if (willDelete) {
+                    $.ajax({
+                        type: 'Post',
+                        url: '/Product/Delete',
+                        data: { id: address },
+                        success: function (data) {
+                            if (data == true) {
+                                swal(title + ' با موفقیت حذف شد!', {
+                                    icon: 'success',
+                                });
+                                $('#product-' + address).fadeOut(1000);
+                            }
+                            else {
+                                swal(title + ' حذف نشد!');
+                            }
+                        }
+                    });
+                }
+            });
+        }
+    </script>
+}

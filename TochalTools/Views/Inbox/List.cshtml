@@ -1,0 +1,142 @@
+﻿@model List<InboxListViewModel>
+@{
+    var type = "صندوق ورودی";
+    if (ViewBag.Id != null && ViewBag.Id.ToLower() == "outbox")
+    {
+        type = "صندوق ارسالی";
+    }
+    ViewBag.Title = "لیست پیام ها - " + type;
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+
+<!-- Container-fluid starts -->
+<div class="container-fluid">
+    <div class="page-header">
+        <div class="row">
+            <div class="col-lg-6">
+                <h3>
+                    @ViewBag.Title
+                    <small>لیست پیام ها</small>
+                </h3>
+            </div>
+
+            <div class="col-lg-6">
+                @if (ViewBag.Id != null && ViewBag.Id.ToLower() == "outbox")
+                {
+                    <a href="/Inbox/List/Inbox" class="btn btn-primary btn-link">صندوق ورودی</a>
+                }
+                else if (User.IsInRole("Developer") || User.IsInRole("SuperAdministrator") || User.IsInRole("Administrator"))
+                {
+                    <a href="/Inbox/List/OutBox" class="btn btn-primary btn-link">صندوق ارسالی</a>
+                }
+                @if (User.IsInRole("Developer") || User.IsInRole("SuperAdministrator") || User.IsInRole("Administrator"))
+                {
+                    <a href="/Inbox/Create" class="btn btn-secondary btn-link">پیام جدید</a>
+                }
+            </div>
+        </div>
+    </div>
+</div>
+<!-- Container-fluid Ends -->
+
+<div class="container-fluid">
+    <div class="row">
+        <!--Zero Configuration  Starts -->
+        <div class="col-sm-12">
+            <div class="card">
+                <div class="card-body">
+                    <div class="table-responsive">
+                        <table id="basic-1" class="display dataTable cell-border">
+                            <thead>
+                                <tr>
+                                    @if (ViewBag.Id != null && ViewBag.Id.ToLower() == "outbox")
+                                    {
+                                        <th>دریافت کننده</th>
+                                    }
+                                    else
+                                    {
+                                        <th>ارسال کننده</th>
+                                    }
+                                    <th>موضوع</th>
+                                    <th>وضعیت</th>
+                                    <th>گروه</th>
+                                    <th>تاریخ ارسال</th>
+                                    <th>مدیریت</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach (var item in Model)
+                                {
+                                    <tr id="inbox-@item.Id">
+                                        @if (ViewBag.Id != null && ViewBag.Id.ToLower() == "outbox")
+                                        {
+                                            var receiverId = (item.ReceiverId != null && item.ReceiverId != "") ? item.ReceiverId : "NotRegistered";
+                                            <td>
+                                                <img class="img-40 rounded-circle" src="@Url.Action("ImageResizer", "Base", new { width = 200, height = 200, fileType = "Images", moduleName = "Profile", fileName = receiverId, fileExtension = "jpg" })" alt="تصویر پروفایل" title="@item.ReceiverName">
+                                                @item.ReceiverName
+                                            </td>
+                                        }
+                                        else
+                                        {
+                                            var userId = (item.UserId != null && item.UserId != "") ? item.UserId : "NotRegistered";
+                                            <td>
+                                                <img class="img-40 rounded-circle" src="@Url.Action("ImageResizer", "Base", new { width = 200, height = 200, fileType = "Images", moduleName = "Profile", fileName = userId, fileExtension = "jpg" })" alt="تصویر پروفایل" title="@item.Name">
+                                                @item.Name
+                                            </td>
+                                        }
+                                        <td>@item.Subject</td>
+                                        <td>
+                                            <span class="badge badge-@item.Status.Class">@item.Status.Text</span>
+                                        </td>
+                                        <td>@item.Group</td>
+                                        <td>@item.Date</td>
+                                        <td>
+                                            <a href="/Inbox/Details/@item.Id" target="_blank" class="btn btn-info btn-datatable">مشاهده</a>
+                                            <button type="button" onclick="deleteInbox('@item.Id', 'پیام')" class="btn btn-danger btn-datatable">حذف</button>
+                                        </td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!--Zero Configuration  Ends -->
+    </div>
+</div>
+@section bottomScripts{
+    <script>
+        $('#basic-1').DataTable({
+            "order": [[4, "asc"]]
+        });
+        function deleteInbox(address, title) {
+            swal({
+                title: 'آیا از حذف ' + title + ' مطمئن هستید؟',
+                text: title + ' حذف خواهد شد و قابل بازگردانی نخواهد بود.',
+                icon: 'warning',
+                buttons: true,
+                dangerMode: true,
+            }).then((willDelete) => {
+                if (willDelete) {
+                    $.ajax({
+                        type: 'Post',
+                        url: '/Inbox/Delete',
+                        data: { id: address },
+                        success: function (data) {
+                            if (data == true) {
+                                swal(title + ' با موفقیت حذف شد!', {
+                                    icon: 'success',
+                                });
+                                $('#inbox-' + address).fadeOut(1000);
+                            }
+                            else {
+                                swal(title + ' حذف نشد!');
+                            }
+                        }
+                    });
+                }
+            });
+        }
+    </script>
+}

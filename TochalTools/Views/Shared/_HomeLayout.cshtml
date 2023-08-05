@@ -1,0 +1,407 @@
+﻿@{
+    HomeService homeService = new HomeService();
+    var Model = homeService.Layout();
+}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="keywords" content="@ViewBag.Keywords" />
+    <meta name="author" content="TochalTools" />
+    <meta name="description" content="@ViewBag.Description" />
+    <meta name="format-detection" content="telephone=no" />
+    <meta name="enamad" content="995405" />
+    <meta name="samandehi" content="364515196" />
+
+    <!-- FAVICONS ICON -->
+    <link rel="icon" href="/Content/Layouts/HomeLayout/assets/images/favicon.ico" type="image/x-icon" />
+    <link rel="shortcut icon" type="image/x-icon" href="/Content/Layouts/HomeLayout/assets/images/favicon.png" />
+
+    <!-- PAGE TITLE HERE -->
+    <title>توچال تولز - @ViewBag.Title</title>
+
+    <!-- MOBILE SPECIFIC -->
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <!--[if lt IE 9]>
+    <script src="js/html5shiv.min.js"></script>
+    <script src="js/respond.min.js"></script>
+    <![endif]-->
+
+    @RenderSection("head", required: false)
+
+    @RenderSection("topStyleSheets", required: false)
+
+    <!-- latest jquery-->
+    <script src="/Content/Layouts/HomeLayout/assets/scripts/jquery-3.3.1.min.js"></script>
+    <script src="/Content/Layouts/HomeLayout/assets/scripts/jquery.validate.min.js"></script>
+    <script src="/Content/Layouts/HomeLayout/assets/scripts/jquery.validate.unobtrusive.min.js"></script>
+    <script src="/Content/Layouts/HomeLayout/assets/scripts/jquery.unobtrusive-ajax.min.js"></script>
+
+    <!-- STYLESHEETS -->
+    <link rel="stylesheet" type="text/css" href="/Content/Layouts/HomeLayout/assets/css/plugins.css">
+    <link rel="stylesheet" type="text/css" href="/Content/Layouts/HomeLayout/assets/css/style.min.css">
+    <link class="skin" rel="stylesheet" type="text/css" href="/Content/Layouts/HomeLayout/assets/css/skin/skin-1.css">
+    <link rel="stylesheet" type="text/css" href="/Content/Layouts/HomeLayout/assets/css/templete.min.css">
+    <link rel="stylesheet" type="text/css" href="/Content/Layouts/HomeLayout/assets/css/style-rtl.css">
+    <link rel="stylesheet" type="text/css" href="/Content/Layouts/HomeLayout/assets/css/star-rating-svg.css">
+    <link rel="stylesheet" type="text/css" href="/Content/Layouts/HomeLayout/assets/plugins/flipdowncountdown/css/flipdown/flipdown.css">
+
+    <!-- Revolution Slider Css -->
+    <link rel="stylesheet" type="text/css" href="/Content/Layouts/HomeLayout/assets/plugins/revolution/css/settings.css">
+    <link rel="stylesheet" type="text/css" href="/Content/Layouts/HomeLayout/assets/plugins/revolution/css/navigation.css">
+    <!-- Revolution Navigation Style -->
+    <!--Google font-->
+    <link href="/Content/Layouts/HomeLayout/assets/fonts/google/googleOpenSans.css" rel="stylesheet">
+    <link href="/Content/Layouts/HomeLayout/assets/fonts/google/googleRaleway.css" rel="stylesheet">
+
+    <!-- Font Awesome -->
+    <link rel="stylesheet" type="text/css" href="/Content/Layouts/HomeLayout/assets/fonts/font-awesome/fontawesome.css">
+
+    <!-- ico-font -->
+    <link rel="stylesheet" type="text/css" href="/Content/Layouts/HomeLayout/assets/fonts/ico-font/icofont.css">
+
+    <!-- Themify icon -->
+    <link rel="stylesheet" type="text/css" href="/Content/Layouts/HomeLayout/assets/fonts/themify/themify.css">
+
+    @RenderSection("bottomStyleSheets", required: false)
+    <!--BEGIN RAYCHAT CODE-->
+    <script type="text/javascript">!function () { function t() { var t = document.createElement("script"); t.type = "text/javascript", t.async = !0, localStorage.getItem("rayToken") ? t.src = "https://app.raychat.io/scripts/js/" + o + "?rid=" + localStorage.getItem("rayToken") + "&href=" + window.location.href : t.src = "https://app.raychat.io/scripts/js/" + o; var e = document.getElementsByTagName("script")[0]; e.parentNode.insertBefore(t, e) } var e = document, a = window, o = "1bf6ffcc-f747-4e0f-b341-606f3b9be275"; "complete" == e.readyState ? t() : a.attachEvent ? a.attachEvent("onload", t) : a.addEventListener("load", t, !1) }();</script>
+    <!--END RAYCHAT CODE-->
+</head>
+<body id="bg">
+    <div id="loading-area"></div>
+    <div class="page-wraper">
+        <!-- header -->
+        <header class="site-header header mo-left header-style-1">
+            <!-- top bar -->
+            <div class="top-bar clearfix">
+                <div class="container">
+                    <div class="row d-flex justify-content-between">
+                        <div class="dez-topbar-left">
+                            @*<a href="/" class="topmenu-sitename">توچال  تولز</a>*@
+                        </div>
+                        <div class="dez-topbar-right">
+                            <div class="lrdiv">
+                                <a class="lrlink" style="color:white" href="tel:@Model.Info.FirstTell">@Model.Info.FirstTell <i class="fa fa-phone"></i></a>
+                            </div>
+                            <ul class="social-bx list-inline pull-right">
+                                @*<li><a href="@Model.Info.Linkedin" target="_blank" class="fa fa-linkedin not-show" style="background-color:#0077b5"></a></li>
+                                    <li><a href="@Model.Info.GooglePlus" target="_blank" class="fa fa-google-plus not-show" style="background-color:#dc4e41"></a></li>
+                                    <li><a href="@Model.Info.Facebook" target="_blank" class="fa fa-facebook not-show" style="background-color:#3b5998"></a></li>
+                                                            <li><a href="@Model.Info.Instagram" target="_blank" class="fa fa-instagram" style="background:radial-gradient(circle at 30% 115%, #fdf497 9%, #fdf497 0%, #fd5949 50%,#d6249f 63%,#285AEB 96%);border-radius:50%"></a></li>*@
+                                <li><a href="tel:@Model.Info.Twitter" target="_blank" class="fa fa-whatsapp socialspecial" style="background-color:#25d366;border-radius:50%"></a></li>
+                                <li><a href="@Model.Info.Instagram" target="_blank" class="fa fa-instagram instagrambc socialspecial" style="border-radius:50%"></a></li>
+                                <li><a href="@Model.Info.Telegram" target="_blank" class="fa fa-telegram socialspecial" style="background-color:#fff;color:#0088cc;border-radius:50%;font-size:21px !important;line-height:18px !important;padding-top:4px !important;"></a></li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- top bar END-->
+            <!-- main header -->
+            <div class="sticky-header header-curve main-bar-wraper navbar-expand-lg">
+                <div class="main-bar bg-primary clearfix ">
+                    <div class="container clearfix">
+                        <!-- website logo -->
+                        <div class="logo-header mostion">
+                            <a href="/">
+                                <img src="/Content/Layouts/HomeLayout/assets/images/logo10.png" alt="">
+                            </a>
+                        </div>
+                        <!-- nav toggle button -->
+                        <button class="navbar-toggler collapsed navicon justify-content-end" type="button" data-toggle="collapse" data-target="#navbarNavDropdown" aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
+                            <span></span>
+                            <span></span>
+                            <span></span>
+                        </button>
+                        <!-- extra nav -->
+                        @if (!User.Identity.IsAuthenticated)
+                        {
+                            <!-- extra nav -->
+                            <div class="extra-nav menu-firsticon">
+                                <div class="extra-cell">
+                                    <a href="/Account/Login" class="site-button header-icon"><i class="icon-user"></i><span class="login-show"> ورود / عضویت</span></a>
+                                </div>
+                            </div>
+                        }
+                        else
+                        {
+                            if (User.IsInRole("Developer") || User.IsInRole("SuperAdministrator") || User.IsInRole("Administrator"))
+                            {
+                                <!-- extra nav -->
+                                <div class="extra-nav menu-firsticon">
+                                    <div class="extra-cell">
+                                        <a href="/Dashboard/Admin" class="site-button header-icon"><i class="icon-user"></i><span class="login-show"> پنل کاربری</span></a>
+                                    </div>
+                                </div>
+                            }
+                            else
+                            {
+                                <!-- extra nav -->
+                                <div class="extra-nav menu-firsticon">
+                                    <div class="extra-cell">
+                                        <a href="/Dashboard/User" class="site-button header-icon"><i class="icon-user"></i><span class="login-show"> پنل کاربری</span></a>
+                                    </div>
+                                </div>
+                            }
+                        }
+                        <div class="extra-nav">
+                            <div class="extra-cell">
+                                <button id="quik-search-btn" type="button" class="site-button header-icon"><i class="icon-search"></i></button>
+                            </div>
+                        </div>
+                        <div class="extra-nav">
+                            <div class="extra-cell">
+                                <a href="/Cart" class="site-button header-icon"><span id="layoutCartCount" style="font-size:12px">@Model.CartCount</span><i class="icon-shopping-cart-full"></i></a>
+                            </div>
+                        </div>
+                        <!-- Quik search -->
+                        <div class="dez-quik-search bg-primary">
+                            <form action="/Product?search=search">
+                                <input name="search" value="" type="text" class="form-control" placeholder="جستجوی محصول">
+                                <span id="quik-search-remove"><i class="fa fa-remove"></i></span>
+                                <span style="left:45px"><button type="submit" style="color:white;display:contents;cursor:pointer"><i class="fa fa-search"></i></button></span>
+                            </form>
+                        </div>
+                        <!-- main nav -->
+                        <div class="header-nav navbar-collapse collapse justify-content-end" id="navbarNavDropdown">
+                            <ul class="nav navbar-nav">
+                                <li>
+                                    <a href="/">صفحه نخست</a>
+                                </li>
+                                @if (Model.ProductCategories.Count() > 0)
+                                {
+                                    <li>
+                                        <a href="javascript:;">محصولات<i class="fa fa-chevron-down"></i></a>
+                                        <ul class="sub-menu">
+                                            @foreach (var item in Model.ProductCategories)
+                                            {
+                                                <li>
+                                                    @if (item.Childs.Count() > 0)
+                                                    {
+                                                        <a onclick="openLink('/Product/@item.Name.Replace(' ', '-')')" style="cursor:pointer">@item.Name</a>
+                                                        <ul class="sub-menu" style="max-height:300px;overflow:hidden;overflow-y:auto">
+                                                            @foreach (var jtem in item.Childs)
+                                                            {
+                                                                <li><a href="/Product/@item.Name.Replace(' ', '-')/@jtem.Name.Replace(' ', '-')">@jtem.Name</a></li>
+                                                            }
+                                                        </ul>
+                                                    }
+                                                    else
+                                                    {
+                                                        <a href="/Product/@item.Name.Replace(' ', '-')">@item.Name</a>
+                                                    }
+                                                </li>
+                                            }
+                                        </ul>
+                                    </li>
+                                }
+                                @if (Model.BlogCategories.Count() > 0)
+                                {
+                                    <li>
+                                        <a href="javascript:;">مطالب<i class="fa fa-chevron-down"></i></a>
+                                        <ul class="sub-menu">
+                                            @foreach (var item in Model.BlogCategories)
+                                            {
+                                                <li>
+                                                    <a href="/Blog/@item.Name.Replace(' ', '-')">@item.Name</a>
+                                                </li>
+                                            }
+                                        </ul>
+                                    </li>
+                                }
+                                <li>
+                                    <a href="javascript:;">صفحات<i class="fa fa-chevron-down"></i></a>
+                                    <ul class="sub-menu">
+                                        @foreach (var item in Model.Pages)
+                                        {
+                                            <li>
+                                                <a href="/Page/Details/@item.Value.Replace(' ', '-')">@item.Text</a>
+                                            </li>
+                                        }
+                                    </ul>
+                                </li>
+                                <li>
+                                    <a href="/Marketer/Create">همکاری در فروش</a>
+                                </li>
+                                <li>
+                                    <a href="/AboutUs">درباره ما</a>
+                                </li>
+                                <li>
+                                    <a href="/ContactUs">تماس با ما</a>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- main header END -->
+        </header>
+        <!-- header END -->
+        <!-- Content -->
+        <div class="page-content">
+            @RenderBody()
+        </div>
+        <!-- Content -->
+        <!-- Footer -->
+        <footer class="site-footer">
+            <!-- footer top part -->
+            <div class="footer-top">
+                <div class="container">
+                    <div class="row">
+                        <div class="col-lg-3 col-md-6 col-sm-6 footer-col-4">
+                            <div class="widget widget_about">
+                                <div class="logo-footer"><img src="/Content/Layouts/HomeLayout/assets/images/logo10.png" alt=""></div>
+                                <p>@Model.Info.Description</p>
+                                <ul class="dez-social-icon dez-border">
+                                    <li><a class="fa fa-telegram socialspecial" href="@Model.Info.Telegram" target="_blank" style="background-color:#fff;color:#0088cc;border-radius:50%;font-size:21px !important;line-height:18px !important;padding-top:4px !important;"></a></li>
+                                    <li><a class="fa fa-instagram instagrambc socialspecial" href="@Model.Info.Instagram" target="_blank" style="border-radius:50%"></a></li>
+                                    <li><a class="fa fa-whatsapp socialspecial" href="tel:@Model.Info.Twitter" target="_blank" style="background-color:#25d366;border-radius:50%"></a></li>
+                                    @*<li><a class="fa fa-facebook not-show" href="@Model.Info.Facebook" target="_blank" style="background-color:#3b5998"></a></li>
+                                        <li><a class="fa fa-google-plus not-show" href="@Model.Info.GooglePlus" target="_blank" style="background-color:#dc4e41"></a></li>
+                                        <li><a class="fa fa-linkedin not-show" href="@Model.Info.Linkedin" target="_blank" style="background-color:#0077b5"></a></li>*@
+                                </ul>
+                            </div>
+                            <div class="item" style="width:230px;height:136px;border-radius:10px;display:flex">
+                                <div style="width:135px;height:136px;background-color:#fff;border-radius:10px;margin-left:5px">
+                                    <a referrerpolicy="origin" target="_blank" href="https://trustseal.enamad.ir/?id=222375&amp;Code=FaS9Tkd1LFN7v1IuL4lB"><img referrerpolicy="origin" src="https://Trustseal.eNamad.ir/logo.aspx?id=222375&amp;Code=FaS9Tkd1LFN7v1IuL4lB" alt="" style="cursor:pointer" id="FaS9Tkd1LFN7v1IuL4lB"></a>
+                                </div>
+                                <div style="width:135px;height:136px;background-color:#fff;border-radius:10px;margin-left:5px">
+                                    <a referrerpolicy="origin" target="_blank" href="https://logo.samandehi.ir/Verify.aspx?id=250199&p=uiwkdshwobpdrfthpfvlpfvl"><img referrerpolicy='origin' id='nbqeapfuesgtjxlzsizpsizp' style='cursor:pointer' alt='logo-samandehi' src='https://logo.samandehi.ir/logo.aspx?id=250199&p=odrfujynlymanbpdbsiybsiy' /></a>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-lg-3 col-md-6 col-sm-6 footer-col-4">
+                            <div class="widget recent-posts-entry">
+                                <h4 class="m-b15 text-uppercase">جدیدترین مطالب</h4>
+                                <div class="dez-separator-outer m-b10">
+                                    <div class="dez-separator bg-white style-skew"></div>
+                                </div>
+                                @if (Model.LatestBlogs.Count() > 0)
+                                {
+                                    <div class="widget-post-bx">
+                                        @foreach (var item in Model.LatestBlogs)
+                                        {
+                                            <div class="widget-post clearfix">
+                                                <div class="dez-post-media"> <img src="/Content/Images/Blog/@(item.Id).jpg" onerror="this.src='/Content/Images/Blog/Default.jpg'" alt="" width="200" height="143"> </div>
+                                                <div class="dez-post-info">
+                                                    <div class="dez-post-header">
+                                                        <h6 class="post-title text-uppercase"><a href="/Blog/Details/@item.Id/@item.Title.Replace(' ', '-')">@item.Title</a></h6>
+                                                    </div>
+                                                    <div class="dez-post-meta">
+                                                        <ul>
+                                                            <li class="post-author"><i class="fa fa-eye"></i> @item.Review بازدید</li>
+                                                            <li class="post-comment"><i class="fa fa-comments"></i> @item.CommentCount نظر</li>
+                                                        </ul>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        }
+                                    </div>
+                                }
+                            </div>
+                        </div>
+                        <div class="col-lg-3 col-md-6 col-sm-6 footer-col-4">
+                            <div class="widget widget_services">
+                                <h4 class="m-b15 text-uppercase">جدیدترین محصولات</h4>
+                                <div class="dez-separator-outer m-b10">
+                                    <div class="dez-separator bg-white style-skew"></div>
+                                </div>
+                                @if (Model.LatestProducts.Count() > 0)
+                                {
+                                    <ul>
+                                        @foreach (var item in Model.LatestProducts)
+                                        {
+                                            <li><a href="/Product/Details/@item.Id/@item.Title.Replace(' ', '-')">@item.Title</a></li>
+                                        }
+                                    </ul>
+                                }
+                            </div>
+                        </div>
+                        <div class="col-lg-3 col-md-6 col-sm-6 footer-col-4">
+                            <div class="widget widget_getintuch">
+                                <h4 class="m-b15 text-uppercase">تماس با ما</h4>
+                                <div class="dez-separator-outer m-b10">
+                                    <div class="dez-separator bg-white style-skew"></div>
+                                </div>
+                                <ul>
+                                    <li><i class="fa fa-map-marker"></i><strong>آدرس</strong> @Model.Info.Address </li>
+                                    <li><i class="fa fa-phone"></i><strong>تلفن</strong>@Model.Info.FirstTell</li>
+                                    <li><i class="fa fa-mobile"></i><strong>موبایل</strong>@Model.Info.FirstMobile</li>
+                                    <li><i class="fa fa-envelope"></i><strong>ایمیل</strong>@Model.Info.Email</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- footer bottom part -->
+            <div class="footer-bottom footer-line">
+                <div class="container">
+                    <div class="row">
+                        <div class="col-lg-4 col-md-4 text-left">
+                            <span> کپی رایت @DateTime.Now.Year ©</span>
+                        </div>
+                        <div class="col-lg-4 col-md-4 text-center">
+                            <span> طراحی شده توسط <a href="#">وباسا</a></span>
+                        </div>
+                        <div class="col-lg-4 col-md-4 text-right">
+                            <a href="/ContactUs"> تماس با ما</a>
+                            <a href="/AboutUs"> درباره ما</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </footer>
+        <!-- Footer END-->
+        <!-- scroll top button -->
+        <button class="scroltop fa fa-arrow-up style5"></button>
+    </div>
+
+    @RenderSection("topScripts", required: false)
+
+    <!-- JavaScript  files ========================================= -->
+    <script src="/Content/Layouts/HomeLayout/assets/js/jquery.min.js"></script><!-- JQUERY.MIN JS -->
+    <script src="/Content/Layouts/HomeLayout/assets/plugins/bootstrap/js/bootstrap.min.js"></script><!-- BOOTSTRAP.MIN JS -->
+    <script src="/Content/Layouts/HomeLayout/assets/plugins/bootstrap/js/popper.min.js"></script><!-- BOOTSTRAP.MIN JS -->
+    <script src="/Content/Layouts/HomeLayout/assets/plugins/bootstrap-select/bootstrap-select.min.js"></script><!-- FORM JS -->
+    <script src="/Content/Layouts/HomeLayout/assets/plugins/bootstrap-touchspin/jquery.bootstrap-touchspin.js"></script><!-- FORM JS -->
+    <script src="/Content/Layouts/HomeLayout/assets/plugins/magnific-popup/magnific-popup.js"></script><!-- MAGNIFIC POPUP JS -->
+    <script src="/Content/Layouts/HomeLayout/assets/plugins/counter/waypoints-min.js"></script><!-- WAYPOINTS JS -->
+    <script src="/Content/Layouts/HomeLayout/assets/plugins/counter/counterup.min.js"></script><!-- COUNTERUP JS -->
+    <script src="/Content/Layouts/HomeLayout/assets/plugins/imagesloaded/imagesloaded.js"></script><!-- IMAGESLOADED -->
+    <script src="/Content/Layouts/HomeLayout/assets/plugins/masonry/masonry-3.1.4.js"></script><!-- MASONRY -->
+    <script src="/Content/Layouts/HomeLayout/assets/plugins/masonry/masonry.filter.js"></script><!-- MASONRY -->
+    <script src="/Content/Layouts/HomeLayout/assets/plugins/owl-carousel/owl.carousel.js"></script><!-- OWL SLIDER -->
+    <script src="/Content/Layouts/HomeLayout/assets/plugins/lightgallery/js/lightgallery-all.js"></script><!-- LIGHT GALLERY -->
+    <script type="text/javascript" src="/Content/Layouts/HomeLayout/assets/plugins/flipdowncountdown/js/flipdown/flipdown.js"></script>
+    @if (ViewBag.Title != null && ViewBag.Title != "ثبت سفارش" && ViewBag.Title != "ثبت نام در همکاری فروش")
+    {
+        <script src="/Content/Layouts/HomeLayout/assets/js/custom.min.js"></script><!-- CUSTOM FUCTIONS  -->
+    }
+    <script src="/Content/Layouts/HomeLayout/assets/js/dz.carousel.min.js"></script><!-- SORTCODE FUCTIONS  -->
+    <script src="/Content/Layouts/HomeLayout/assets/js/jquery.star-rating-svg.js"></script>
+    <script src="/Content/Layouts/HomeLayout/assets/js/dz.ajax.js"></script><!-- CONTACT JS  -->
+    <!-- REVOLUTION JS FILES -->
+    <script src="/Content/Layouts/HomeLayout/assets/plugins/revolution/js/jquery.themepunch.tools.min.js"></script>
+    <script src="/Content/Layouts/HomeLayout/assets/plugins/revolution/js/jquery.themepunch.revolution.min.js"></script>
+    <!-- Slider revolution 5.0 Extensions  (Load Extensions only on Local File Systems !  The following part can be removed on Server for On Demand Loading) -->
+    <script src="/Content/Layouts/HomeLayout/assets/plugins/revolution/js/extensions/revolution.extension.actions.min.js"></script>
+    <script src="/Content/Layouts/HomeLayout/assets/plugins/revolution/js/extensions/revolution.extension.carousel.min.js"></script>
+    <script src="/Content/Layouts/HomeLayout/assets/plugins/revolution/js/extensions/revolution.extension.kenburn.min.js"></script>
+    <script src="/Content/Layouts/HomeLayout/assets/plugins/revolution/js/extensions/revolution.extension.layeranimation.min.js"></script>
+    <script src="/Content/Layouts/HomeLayout/assets/plugins/revolution/js/extensions/revolution.extension.migration.min.js"></script>
+    <script src="/Content/Layouts/HomeLayout/assets/plugins/revolution/js/extensions/revolution.extension.navigation.min.js"></script>
+    <script src="/Content/Layouts/HomeLayout/assets/plugins/revolution/js/extensions/revolution.extension.parallax.min.js"></script>
+    <script src="/Content/Layouts/HomeLayout/assets/plugins/revolution/js/extensions/revolution.extension.slideanims.min.js"></script>
+    <script src="/Content/Layouts/HomeLayout/assets/plugins/revolution/js/extensions/revolution.extension.video.min.js"></script>
+    <script src="/Content/Layouts/HomeLayout/assets/js/rev.slider.js"></script>
+    <!-- Custome js-->
+    <script src="/Content/Layouts/HomeLayout/assets/js/core/core.js"></script>
+    @RenderSection("bottomScripts", required: false)
+</body>
+</html>
+

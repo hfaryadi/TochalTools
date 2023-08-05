@@ -1,0 +1,177 @@
+﻿@model BlogCreateViewModel
+@{
+    ViewBag.Title = "ایجاد مطلب";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+
+<!-- Container-fluid starts -->
+<div class="container-fluid">
+    <div class="page-header">
+        <div class="row">
+            <div class="col-lg-6">
+                <h3>
+                    @ViewBag.Title
+                    <small>ایجاد مطلب جدید</small>
+                </h3>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- Container-fluid Ends -->
+
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-sm-12 col-xl-12">
+            <div class="row">
+                <div class="col-sm-12">
+                    @using (Html.BeginForm("Create", "Blog", FormMethod.Post, new { @class = "theme-form", enctype = "multipart/form-data" }))
+                    {
+                        @Html.AntiForgeryToken()
+                        @Html.HiddenFor(m => m.Categories, new { @data_val = "false" })
+                        @Html.HiddenFor(m => m.Tags)
+                        <div class="card">
+                            <div class="card-header">
+                                <h5>اطلاعات مطلب</h5>
+                                <span>اطلاعات مطلب را در این قسمت وارد نمایید.</span>
+                            </div>
+                            <div class="card-body">
+                                <div class="form-row">
+                                    <div class="col-md-8">
+                                        <div class="form-group">
+                                            @Html.LabelFor(m => m.Title, new { @class = "col-form-label pt-0" })
+                                            <label id="Title-error" class="error" for="Title"></label>
+                                            @Html.EditorFor(m => m.Title, new { htmlAttributes = new { @class = "form-control input-air-primary", @data_val = "false" } })
+                                        </div>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <div class="form-group">
+                                            <label class="col-form-label pt-0">تصویر</label>
+                                            <input class="form-control input-air-primary" id="File" name="File" type="file">
+                                        </div>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <div class="form-group select2-drpdwn">
+                                            @Html.LabelFor(m => m.Categories, new { @class = "col-form-label pt-0" })
+                                            <label id="Categories-error" class="error" for="Categories"></label>
+                                            @Html.DropDownList("mCategories", Model.CategoriesList, new { @class = "js-example-rtl col-sm-12", @multiple = "multiple", @id = "mCategories" })
+                                        </div>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <div class="form-group select2-drpdwn">
+                                            @Html.LabelFor(m => m.Tags, new { @class = "col-form-label pt-0" })
+                                            @Html.ValidationMessageFor(m => m.Tags, "", new { @class = "text-danger" })
+                                            @Html.DropDownList("mTags", Model.TagsList, new { @class = "js-example-rtl col-sm-12", @multiple = "multiple", @id = "mTags" })
+                                        </div>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <div class="form-group">
+                                            @Html.LabelFor(m => m.Language, new { @class = "col-form-label pt-0" })
+                                            <label id="Language-error" class="error" for="Language"></label>
+                                            @Html.DropDownListFor(m => m.Language, LanguageHelper.ReadAllLanguagesForSelect(), new { @class = "form-control input-air-primary", @data_val = "false" })
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="card">
+                            <div class="card-header">
+                                <h5> محتوای مطلب</h5>
+                                <span>محتوای مطلب را در این قسمت وارد نمایید.</span>
+                            </div>
+                            <div class="card-body">
+                                <div class="form-row">
+                                    <div class="col-md-12">
+                                        <div class="form-group">
+                                            @Html.LabelFor(m => m.ShortContent, new { @class = "col-form-label pt-0" })
+                                            <label id="ShortContent-error" class="error" for="ShortContent"></label>
+                                            @Html.TextAreaFor(m => m.ShortContent, new { @class = "form-control input-air-primary ckeditor", @data_val = "false" })
+
+                                        </div>
+                                    </div>
+                                    <div class="col-md-12">
+                                        <div class="form-group">
+                                            @Html.LabelFor(m => m.FullContent, new { @class = "col-form-label pt-0" })
+                                            <label id="FullContent-error" class="error" for="FullContent"></label>
+                                            @Html.TextAreaFor(m => m.FullContent, new { @class = "form-control input-air-primary ckeditor", @data_val = "false" })
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="card">
+                            <div class="card-header">
+                                <h5>تنظیمات مطلب</h5>
+                                <span>تنظیمات مطلب را در این قسمت انجام نمایید.</span>
+                            </div>
+                            <div class="card-body">
+                                <div class="form-row">
+                                    <div class="col-md-2">
+                                        <div class="form-group">
+                                            <div class="checkbox checkbox-success">
+                                                <input id="IsPublicationActive" type="checkbox" name="IsPublicationActive" value="true" checked>
+                                                <label for="IsPublicationActive">انتشار</label>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-2">
+                                        <div class="form-group">
+                                            <div class="checkbox checkbox-success">
+                                                <input id="IsAtHomeActive" type="checkbox" name="IsAtHomeActive" value="true">
+                                                <label for="IsAtHomeActive">صفحه نخست</label>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-2">
+                                        <div class="form-group">
+                                            <div class="checkbox checkbox-success">
+                                                <input id="IsCommentsActive" type="checkbox" name="IsCommentsActive" value="true" checked>
+                                                <label for="IsCommentsActive">نمایش نظرات</label>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="card">
+                            <div class="card-header">
+                                <h5>بهینه سازی</h5>
+                                <span>اطلاعات بهینه سازی مطلب را در این قسمت وارد نمایید.</span>
+                            </div>
+                            <div class="card-body">
+                                <div class="form-row">
+                                    <div class="col-md-4">
+                                        <div class="form-group">
+                                            @Html.LabelFor(m => m.OptimizationTitle, new { @class = "col-form-label pt-0" })
+                                            @Html.ValidationMessageFor(m => m.OptimizationTitle, "", new { @class = "text-danger" })
+                                            @Html.EditorFor(m => m.OptimizationTitle, new { htmlAttributes = new { @class = "form-control input-air-primary" } })
+                                        </div>
+                                    </div>
+                                    <div class="col-md-8">
+                                        <div class="form-group">
+                                            @Html.LabelFor(m => m.OptimizationKeywords, new { @class = "col-form-label pt-0" })
+                                            @Html.ValidationMessageFor(m => m.OptimizationKeywords, "", new { @class = "text-danger" })
+                                            @Html.EditorFor(m => m.OptimizationKeywords, new { htmlAttributes = new { @class = "form-control tagsinput-boxshadow-primary", @data_role = "tagsinput" } })
+                                        </div>
+                                    </div>
+                                    <div class="col-md-12">
+                                        <div class="form-group">
+                                            @Html.LabelFor(m => m.OptimizationDescription, new { @class = "col-form-label pt-0" })
+                                            @Html.ValidationMessageFor(m => m.OptimizationDescription, "", new { @class = "text-danger" })
+                                            @Html.TextAreaFor(m => m.OptimizationDescription, new { @class = "form-control input-air-primary", @rows = "4" })
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="btn-div">
+                            <button type="submit" class="btn btn-success" onclick="beforeSubmit()">ایجاد</button>
+                        </div>
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+@section bottomScripts {
+    <script type="text/javascript" src="/Content/Layouts/AdminLayout/assets/js/pages/blog-create.js"></script>
+}

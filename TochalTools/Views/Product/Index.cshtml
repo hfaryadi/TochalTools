@@ -1,0 +1,220 @@
+﻿@model ProductIndexPageViewModel
+@{
+    ViewBag.Title = "محصولات";
+    Layout = "~/Views/Shared/_HomeLayout.cshtml";
+    var now = DateTime.Now;
+}
+
+<!-- inner page banner -->
+<div class="dez-bnr-inr overlay-black-middle" style="background-image:url(/Content/Images/Category/@(Model.Category.Value).jpg);">
+    <div class="container">
+        <div class="dez-bnr-inr-entry">
+            <h1 class="text-white">@Model.Category.Text</h1>
+        </div>
+    </div>
+</div>
+<!-- inner page banner END -->
+<!-- Breadcrumb row -->
+<div class="breadcrumb-row">
+    <div class="container">
+        <ul class="list-inline">
+            <li><a href="/">صفحه نخست</a></li>
+            <li><a href="#">محصولات</a></li>
+            <li>@Model.Category.Text</li>
+        </ul>
+    </div>
+</div>
+<!-- Breadcrumb row END -->
+<!-- contact area -->
+<div class="content-inner section-full bg-white">
+    <!-- Product -->
+    <div class="container">
+        <div class="row">
+            @foreach (var item in Model.Products)
+            {
+                //var staro = 5 - item.Rate;
+                <div class="col-lg-3 col-md-6 col-sm-6 m-b30 product-item card-container">
+                    <div class="dez-box ">
+                        <div class="dez-thum-bx  dez-img-effect ">
+                            <a href="/Product/Details/@item.Id/@item.Title.Replace(' ', '-')"><img src="/Content/Images/Product/@(item.FileId).jpg" onerror="this.src='/Content/Images/Product/Default.jpg'" alt="@item.Title" class="productindexpic"></a>
+                        </div>
+                        <div class="dez-info p-a10 text-center">
+                            <div class="pricediv special">
+                                <h4 class="dez-title m-t0 text-uppercase"><a href="/Product/Details/@item.Id/@item.Title.Replace(' ', '-')">@item.Title</a></h4>
+                                @if (item.TotalPrice > 0)
+                                {
+                                    <h2 class="m-b0" style="color:green">
+                                        @item.TotalPrice.ToString("N0") تومان
+                                    </h2>
+                                }
+                                else
+                                {
+                                    <h3>
+                                        تماس بگیرید
+                                    </h3>
+                                }
+                                @if (item.Off > 0 && (item.OffExpireDate == null || (item.OffExpireDate >= now)))
+                                {
+                                    <del><span style="color:#dc3545">@item.Price.ToString("N0") تومان</span></del>
+                                    if (item.IsPercentShow)
+                                    {
+                                        <span class="badge badge-pill badge-danger percentbadge">@item.Percent%</span>
+                                    }
+                                }
+                            </div>
+                            @*@if (item.IsAvailable)
+                                {
+                                    <div class="badge badge-success tdvalue">
+                                        موجود
+                                    </div>
+                                }
+                                else
+                                {
+                                    <div class="badge badge-danger tdvalue">
+                                        ناموجود
+                                    </div>
+                                }*@
+                            @*<div class="m-t20">
+                                    <span class="rating-bx">
+                                        @for (int i = 1; i <= staro; i++)
+                                        {
+                                            <i class="fa fa-star-o"></i>
+                                        }
+                                        @for (int i = 1; i <= item.Rate; i++)
+                                        {
+                                            <i class="fa fa-star"></i>
+                                        }
+                                    </span>
+                                </div>
+                                <div class="m-t20">
+                                    @if (item.IsAvailable)
+                                    {
+                                        <a href="javascript:void(0)" class="site-button" id="cart-@item.Id" onclick="addtocart('@item.Id', '1')">افزودن به سبد خرید</a>
+                                    }
+                                </div>*@
+                        </div>
+                        @if (item.IsSpecial)
+                        {
+                            <div class="sale">
+                                <span class="site-button button-sm primary specialbutton">ویژه</span>
+                            </div>
+                        }
+                    </div>
+                </div>
+            }
+        </div>
+        <!-- Pagination start -->
+        <div class="pagination-bx clearfix">
+            <ul class="pagination">
+                @if (Model.PageCount > 1)
+                {
+                    var prev = Model.Page - 2;
+                    var next = Model.Page + 2;
+                    if (prev < 1)
+                    {
+                        prev = 1;
+                    }
+                    if (next > Model.PageCount)
+                    {
+                        next = Model.PageCount;
+                    }
+                    if (Model.Page > 1)
+                    {
+                        <li class="previous"><a href="@Url.Action("Index", "Product", new { mainCategory = Model.MainCategory.Replace(' ', '-'), subCategory = Model.SubCategory.Replace(' ', '-'), type = Model.Type, brand = Model.Brand, search = Model.Search.Replace(' ', '-'), page = Model.Page - 1})"><i class="fa fa-angle-double-left"></i></a></li>
+                    }
+                    if (prev >= 2)
+                    {
+                        <li><a href="@Url.Action("Index", "Product", new { mainCategory = Model.MainCategory.Replace(' ', '-'), subCategory = Model.SubCategory.Replace(' ', '-'), type = Model.Type, brand = Model.Brand, search = Model.Search.Replace(' ', '-'), page = 1 })">1</a></li>
+                    }
+                    for (int i = prev; i <= next; i++)
+                    {
+                        if (i == Model.Page)
+                        {
+                            <li class="active"><a href="@Url.Action("Index", "Product", new { mainCategory = Model.MainCategory.Replace(' ', '-'), subCategory = Model.SubCategory.Replace(' ', '-'), type = Model.Type, brand = Model.Brand, search = Model.Search.Replace(' ', '-'), page = i })">@i</a></li>
+                        }
+                        else
+                        {
+                            <li><a href="@Url.Action("Index", "Product", new { mainCategory = Model.MainCategory.Replace(' ', '-'), subCategory = Model.SubCategory.Replace(' ', '-'), type = Model.Type, brand = Model.Brand, search = Model.Search.Replace(' ', '-'), page = i })">@i</a></li>
+                        }
+                    }
+                    if (next < Model.PageCount)
+                    {
+                        <li><a href="@Url.Action("Index", "Product", new { mainCategory = Model.MainCategory.Replace(' ', '-'), subCategory = Model.SubCategory.Replace(' ', '-'), type = Model.Type, brand = Model.Brand, search = Model.Search.Replace(' ', '-'), page = Model.PageCount })">@Model.PageCount</a></li>
+                    }
+                    if (Model.Page < Model.PageCount)
+                    {
+                        <li class="next"><a href="@Url.Action("Index", "Product", new { mainCategory = Model.MainCategory.Replace(' ', '-'), subCategory = Model.SubCategory.Replace(' ', '-'), type = Model.Type, brand = Model.Brand, search = Model.Search.Replace(' ', '-'), page = Model.Page + 1})"><i class="fa fa-angle-double-right"></i></a></li>
+                    }
+                }
+            </ul>
+        </div>
+        <!-- Pagination END -->
+    </div>
+    <!-- Product END -->
+</div>
+<!-- contact area  END -->
+@section bottomScripts{
+    <script>
+        $(document).ready(function () {
+            var cook = getCookie('cart');
+            if (cook != null && cook != '') {
+                var array = cook.split(',');
+                $.each(array, function (index, value) {
+                    try {
+                        var prd = value.split('-');
+                        $('#cart-' + prd[0]).html('حذف از سبد خرید');
+                    } catch (e) { }
+                });
+            }
+        });
+        function getCookie(cname) {
+            var name = cname + '=';
+            var decodedCookie = decodeURIComponent(document.cookie);
+            var ca = decodedCookie.split(';');
+            for (var i = 0; i < ca.length; i++) {
+                var c = ca[i];
+                while (c.charAt(0) == ' ') {
+                    c = c.substring(1);
+                }
+                if (c.indexOf(name) == 0) {
+                    return c.substring(name.length, c.length);
+                }
+            }
+            return '';
+        }
+        function setCookie(cname, cvalue, exdays) {
+            var d = new Date();
+            d.setTime(d.getTime() + (exdays * 24 * 60 * 60 * 1000));
+            var expires = 'expires=' + d.toUTCString();
+            document.cookie = cname + '=' + cvalue + ';' + expires + ';path=/';
+        }
+        function addtocart(id, count) {
+            var cook = getCookie('cart');
+            if (cook == null || cook == '') {
+                cook = id + '-' + count;
+                setCookie('cart', cook, 365);
+                $('#cart-' + id).html('حذف از سبد خرید');
+            }
+            else {
+                var include = false;
+                var array = cook.split(',');
+                $.each(array, function (index, value) {
+                    try {
+                        var prd = value.split('-');
+                        if (prd[0] == id) {
+                            array.splice(index, 1);
+                            setCookie('cart', array.toString(), 365);
+                            include = true;
+                            $('#cart-' + id).html('افزودن به سبد خرید');
+                        }
+                    } catch (e) { }
+                });
+                if (include == false) {
+                    cook += "," + id + '-' + count;
+                    setCookie('cart', cook, 365);
+                    $('#cart-' + id).html('حذف از سبد خرید');
+                }
+            }
+        }
+    </script>
+}

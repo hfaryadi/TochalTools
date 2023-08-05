@@ -1,0 +1,101 @@
+﻿@model List<CategoryListViewModel>
+@{
+    ViewBag.Title = "لیست دسته بندی " + ModuleHelper.ReadPersianNameByISO(ViewBag.Group);
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+
+<!-- Container-fluid starts -->
+<div class="container-fluid">
+    <div class="page-header">
+        <div class="row">
+            <div class="col-lg-6">
+                <h3>
+                    @ViewBag.Title
+                    <small>لیست دسته بندی های ثبت شده</small>
+                </h3>
+            </div>
+            <div class="col-lg-6">
+                <a href="/Category/Create/@ViewBag.Group" class="btn btn-secondary btn-link">دسته بندی جدید</a>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- Container-fluid Ends -->
+
+<div class="container-fluid">
+    <div class="row">
+        <!--Zero Configuration  Starts -->
+        <div class="col-sm-12">
+            <div class="card">
+                <div class="card-body">
+                    <div class="table-responsive">
+                        <table id="basic-1" class="display dataTable cell-border">
+                            <thead>
+                                <tr>
+                                    <th>نام دسته بندی</th>
+                                    <th>انتشار</th>
+                                    <th>دسته بندی</th>
+                                    <th>زبان</th>
+                                    <th>مدیریت</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach (var item in Model)
+                                {
+                                <tr id="category-@item.Id">
+                                    <td>@item.Name</td>
+                                    <td>
+                                        <div class="checkbox checkbox-success">
+                                            <input id="IsPublicationActive" type="checkbox" class="checkbox-datatable" disabled @item.IsPublicationActive>
+                                            <label for="IsPublicationActive" class="checkbox-datatable"></label>
+                                        </div>
+                                    </td>
+                                    <td>@item.Parents</td>
+                                    <td>@item.Language</td>
+                                    <td>
+                                        <a href="/Category/Edit/@item.Id" class="btn btn-success btn-datatable">ویرایش</a>
+                                        <button type="button" onclick="deleteCategory('@item.Id', 'دسته بندی')" class="btn btn-danger btn-datatable">حذف</button>
+                                    </td>
+                                </tr>
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!--Zero Configuration  Ends -->
+    </div>
+</div>
+@section bottomScripts{
+    <script>
+        function deleteCategory(address, title) {
+            swal({
+                title: 'آیا از حذف ' + title + ' مطمئن هستید؟',
+                text: title + ' حذف خواهد شد و قابل بازگردانی نخواهد بود.',
+                icon: 'warning',
+                buttons: true,
+                dangerMode: true,
+            }).then((willDelete) => {
+                if (willDelete) {
+                    $.ajax({
+                        type: 'Post',
+                        url: '/Category/Delete',
+                        data: { id: address },
+                        success: function (data) {
+                            if (data == true) {
+                                swal(title + ' با موفقیت حذف شد!', {
+                                    icon: 'success',
+                                });
+                                $('#category-' + address).fadeOut(1000);
+                            }
+                            else {
+                                swal(title + ' حذف نشد!');
+                            }
+                        }
+                    });
+                }
+            });
+        }
+    </script>
+}

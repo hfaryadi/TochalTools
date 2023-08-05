@@ -1,0 +1,980 @@
+﻿@model HomeIndexViewModel
+@{
+    ViewBag.Title = "صفحه نخست";
+    Layout = "~/Views/Shared/_HomeLayout.cshtml";
+    ApplicationDbContext db = new ApplicationDbContext();
+    var pSettings = db.ProductSettings.FirstOrDefault();
+    var info = db.Infos.Where(x => !x.IsDeleted && x.Language == "fa").FirstOrDefault();
+    if (info != null)
+    {
+        ViewBag.Keywords = info.OptimizationKeywords;
+        ViewBag.Description = info.OptimizationDescription;
+    }
+    double firstDayDate = 0;
+    double proposalDayDate = 0;
+    if (Model.FirstDayProduct != null)
+    {
+        if (pSettings != null)
+        {
+            var firstDate = (pSettings.OffEndDate) ?? DateTime.Now;
+            var firstDateUtc = firstDate.ToUniversalTime();
+            var ts = firstDateUtc - new DateTime(1970, 1, 1);
+            firstDayDate = ts.TotalMilliseconds;
+
+        }
+    }
+    if (Model.ProposalProducts.Count() > 0)
+    {
+        var proposalDate = (pSettings.ProposalEndDate) ?? DateTime.Now;
+        var proposalDateUtc = proposalDate.ToUniversalTime();
+        var ts2 = proposalDateUtc - new DateTime(1970, 1, 1);
+        proposalDayDate = ts2.TotalMilliseconds;
+    }
+}
+@*@if (Model.Sliders.Count() > 0)
+    {
+        int i = 0;
+         Slider
+        <div class="main-slider style-two default-banner rev-slider-rtl">
+            <div class="tp-banner-container">
+                <div class="tp-banner">
+                    <div id="rev_slider_1014_1_wrapper" class="rev_slider_wrapper fullscreen-container" data-alias="typewriter-effect" data-source="gallery">
+                         START REVOLUTION SLIDER 5.3.0.2
+                        <div id="rev_slider_1014_1" class="rev_slider fullscreenbanner" style="display:none;" data-version="5.3.0.2">
+                            <ul>
+                                @foreach (var item in Model.Sliders)
+                                {
+                                    i = i + 1000;
+                                    <li data-index="rs-@i" data-transition="slidingoverlayhorizontal" data-slotamount="default" data-hideafterloop="0" data-hideslideonmobile="off" data-easein="default" data-easeout="default" data-masterspeed="default" data-thumb="/Content/Images/Slider/@(item.Id).jpg" data-rotate="0" data-saveperformance="off" data-title="Slide" data-param1="" data-param2="" data-param3="" data-param4="" data-param5="" data-param6="" data-param7="" data-param8="" data-param9="" data-param10="" data-description="">
+                                         MAIN IMAGE
+                                        <img src="/Content/Images/Slider/@(item.Id).jpg" onerror="this.src='/Content/Images/Slider/Default.jpg'" alt="" data-bgposition="center center" data-bgfit="cover" data-bgrepeat="no-repeat" class="rev-slidebg" data-no-retina />
+                                         LAYERS
+                                         LAYER NR. 1 [ for overlay ]
+                                        <div class="tp-caption tp-shape tp-shapewrapper "
+                                             id="slide-100-layer-1"
+                                             data-x="['center','center','center','center']" data-hoffset="['0','0','0','0']"
+                                             data-y="['middle','middle','middle','middle']" data-voffset="['0','0','0','0']"
+                                             data-width="full"
+                                             data-height="full"
+                                             data-whitespace="nowrap"
+                                             data-type="shape"
+                                             data-basealign="slide"
+                                             data-responsive_offset="off"
+                                             data-responsive="off"
+                                             data-frames='[{"from":"opacity:0;","speed":1000,"to":"o:1;","delay":0,"ease":"Power4.easeOut"},{"delay":"wait","speed":1000,"to":"opacity:0;","ease":"Power4.easeOut"}]'
+                                             data-textAlign="['right','right','right','right']"
+                                             data-paddingtop="[0,0,0,0]"
+                                             data-paddingright="[0,0,0,0]"
+                                             data-paddingbottom="[0,0,0,0]"
+                                             data-paddingleft="[0,0,0,0]"
+                                             style="z-index: 12;background-color:rgba(0, 0, 0, 0.50);border-color:rgba(0, 0, 0, 0);border-width:0px;">
+                                        </div>
+
+                                         LAYER NR. 2 [ for title ]
+                                        <div class="tp-caption  tp-resizeme"
+                                             id="slide-100-layer-2"
+                                             data-x="['right','right','right','right']" data-hoffset="['30','30','30','30']"
+                                             data-y="['top','top','top','top']" data-voffset="['40','30','30','25']"
+                                             data-fontsize="['70','60','50','40']"
+                                             data-lineheight="['70','60','50','40']"
+                                             data-width="['700','700','700','700']"
+                                             data-height="['none','none','none','none']"
+                                             data-whitespace="['normal','normal','normal','normal']"
+                                             data-type="text"
+                                             data-responsive_offset="on"
+                                             data-frames='[{"from":"y:50px(R);opacity:0;","speed":1500,"to":"o:1;","delay":500,"ease":"Power4.easeOut"},{"delay":"wait","speed":1000,"to":"y:-50px;opacity:0;","ease":"Power2.easeInOut"}]'
+                                             data-textAlign="['right','right','right','right']"
+                                             data-paddingtop="[0,0,0,0]"
+                                             data-paddingright="[0,0,0,0]"
+                                             data-paddingbottom="[0,0,0,0]"
+                                             data-paddingleft="[0,0,0,0]"
+                                             style="z-index: 13; white-space: normal; font-size: 60px; line-height: 60px; font-weight: 700; color: rgba(255, 255, 255, 1.00); border-width:0px; direction:rtl;">
+                                            <span class="text-uppercase">@item.Title</span>
+                                        </div>
+
+                                         LAYER NR. 3 [ for paragraph]
+                                        <div class="tp-caption tp-resizeme"
+                                             id="slide-100-layer-3"
+                                             data-x="['right','right','right','right']" data-hoffset="['30','30','30','30']"
+                                             data-y="['top','top','top','top']" data-voffset="['130','130','100','70']"
+                                             data-fontsize="['18','18','18','16']"
+                                             data-lineheight="['30','30','30','24']"
+                                             data-width="['800','800','600','400']"
+                                             data-height="['none','none','none','none']"
+                                             data-whitespace="['normal','normal','normal','normal']"
+                                             data-type="text"
+                                             data-responsive_offset="on"
+                                             data-frames='[
+                                            {"from":"y:50px(R);opacity:0;","speed":1500,"to":"o:1;","delay":500,"ease":"Power4.easeOut"},
+                                            {"delay":"wait","speed":1000,"to":"y:-50px;opacity:0;","ease":"Power2.easeInOut"}
+                                            ]'
+                                             data-textAlign="['justify','justify','justify','justify']"
+                                             data-paddingtop="[0,0,0,0]"
+                                             data-paddingright="[0,0,0,0]"
+                                             data-paddingbottom="[0,0,0,0]"
+                                             data-paddingleft="[0,0,0,0]"
+                                             style="z-index: 13; font-weight: 500; color: rgba(255, 255, 255, 0.85); border-width:0px; direction:rtl;">
+                                            <span>@item.Description</span>
+                                        </div>
+
+                                         LAYER NR. 4 [ for readmore botton ]
+                                        <div class="tp-caption tp-resizeme"
+                                             id="slide-100-layer-4"
+                                             data-x="['right','right','right','right']" data-hoffset="['30','30','30','30']"
+                                             data-y="['top','top','top','top']" data-voffset="['250','250','230','200']"
+                                             data-fontsize="['none','none','none','none']"
+                                             data-lineheight="['none','none','none','none']"
+                                             data-width="['700','700','700','700']"
+                                             data-height="['none','none','none','none']"
+                                             data-whitespace="['normal','normal','normal','normal']"
+                                             data-type="text"
+                                             data-responsive_offset="on"
+                                             data-frames='[
+                                            {"from":"y:50px(R);opacity:0;","speed":1500,"to":"o:1;","delay":500,"ease":"Power4.easeOut"},
+                                            {"delay":"wait","speed":1000,"to":"y:-50px;opacity:0;","ease":"Power2.easeInOut"}
+                                            ]'
+                                             data-textAlign="['right','right','right','right']"
+                                             data-paddingtop="[0,0,0,0]"
+                                             data-paddingright="[0,0,0,0]"
+                                             data-paddingbottom="[0,0,0,0]"
+                                             data-paddingleft="[0,0,0,0]"
+                                             style="z-index: 13;">
+                                            @if (item.Link != null && item.Link != "")
+                                            {
+                                                <a href="@item.Link" class="site-button  button-skew">
+                                                    <span>بیشتر</span><i class="fa fa-angle-right" style="transform: rotate(0deg);"></i>
+                                                </a>
+                                            }
+                                        </div>
+                                    </li>
+                                }
+                            </ul>
+                            <div class="tp-bannertimer tp-bottom" style="visibility: hidden !important;"></div>
+                        </div>
+                    </div>
+                     END REVOLUTION SLIDER
+                </div>
+            </div>
+        </div>
+         Slider END
+    }*@
+
+@if (Model.Sliders.Count() > 0)
+{
+    <div id="jssor_1" style="position:relative;margin:0 auto;top:0px;left:0px;width:1920px;height:600px;overflow:hidden;visibility:hidden;">
+        <div data-u="slides" style="cursor:default;position:relative;top:0px;left:0px;width:1920px;height:600px;overflow:hidden;">
+            @foreach (var item in Model.Sliders)
+            {
+                <div data-p="680">
+                    <img data-u="image" src="/Content/Images/Slider/@(item.Id).jpg" onerror="this.src='/Content/Images/Slider/Default.jpg'" />
+                </div>
+            }
+        </div><a data-scale="0" href="tochaltools.com/" style="display:none;position:absolute;"></a>
+        <!-- Bullet Navigator -->
+        <div data-u="navigator" class="jssorb102" style="position:absolute;bottom:16px;right:16px;" data-autocenter="1" data-scale="0.5" data-scale-bottom="0.75">
+            <div data-u="prototype" class="i" style="width:16px;height:16px;">
+                <svg viewbox="0 0 16000 16000" style="position:absolute;top:0;left:0;width:100%;height:100%;">
+                    <circle class="co" cx="8000" cy="8000" r="5000"></circle>
+                    <circle class="ci" cx="8000" cy="8000" r="3000"></circle>
+                </svg>
+            </div>
+        </div>
+        <!-- Arrow Navigator -->
+        @*<div data-u="arrowleft" class="jssora051" style="width:55px;height:55px;top:0px;left:25px;" data-autocenter="2" data-scale="0.75" data-scale-left="0.75">
+                <svg viewbox="0 0 16000 16000" style="position:absolute;top:0;left:0;width:100%;height:100%;">
+                    <polyline class="a" points="11040,1920 4960,8000 11040,14080 "></polyline>
+                </svg>
+            </div>*@
+        @*<div data-u="arrowright" class="jssora051" style="width:55px;height:55px;top:0px;right:25px;" data-autocenter="2" data-scale="0.75" data-scale-right="0.75">
+                <svg viewbox="0 0 16000 16000" style="position:absolute;top:0;left:0;width:100%;height:100%;">
+                    <polyline class="a" points="4960,1920 11040,8000 4960,14080 "></polyline>
+                </svg>
+            </div>*@
+    </div>
+}
+
+@if (Model.OffProducts.Count() > 0 || Model.BuyProducts.Count() > 0 || Model.LatestProducts.Count() > 0)
+{
+    var now = DateTime.Now;
+    <!-- contact area -->
+    <div class="section-full  bg-white content-inner" style="padding-top:12.5px;padding-bottom: 1px;">
+        <!-- Product -->
+        <div class="container">
+            @if (pSettings != null && pSettings.OffEndDate != null && pSettings.OffEndDate >= now && Model.OffBox != null && Model.FirstDayProduct != null)
+            {
+                <div id="firstDayProduct" class="productmainbox" style="background-color:#2392ec;">
+                    <div class="section-content" style="margin:10px">
+                        <div class="row hidden-sm" style="margin:0">
+                            <div style="color:white;margin-left:10px;width:790px">
+                                <div class="text-center">
+                                    <h1 style="color:white;padding-top:40px;">@Model.OffBox.Title</h1>
+                                    <center>
+                                        <div id="flipdown" class="flipdown" style="margin-right: -10px;"></div>
+                                    </center>
+                                    <hr />
+                                    <p>@Html.Raw(HttpUtility.HtmlDecode(Model.OffBox.Content))</p>
+                                </div>
+                            </div>
+                            <div class="dez-box add-product" style="margin-top: 10px;margin-bottom:10px">
+                                <div class="dez-media dez-img-effect" style="border-radius: 10px 10px;">
+                                    <a href="/Product/Details/@Model.FirstDayProduct.Id/@Model.FirstDayProduct.Title.Replace(' ', '-')">
+                                        <img src="/Content/Images/Product/@(Model.FirstDayProduct.FileId).jpg" class="firstdayimg" onerror="this.src='/Content/Images/Product/Default.jpg'" alt="@Model.FirstDayProduct.Title" style="border-radius:10px 10px;">
+                                        <div class="dez-info-has p-a20 bg-black no-hover">
+                                            <h3 class="m-t10">@Model.FirstDayProduct.Title</h3>
+                                            @if (Model.FirstDayProduct.TotalPrice > 0)
+                                            {
+                                                <h2 style="color:green">
+                                                    @Model.FirstDayProduct.TotalPrice.ToString("N0") تومان
+                                                </h2>
+                                            }
+                                            else
+                                            {
+                                                <h3>
+                                                    تماس بگیرید
+                                                </h3>
+                                            }
+                                            <h3>
+                                                @if (Model.FirstDayProduct.Off > 0 && (Model.FirstDayProduct.OffExpireDate == null || (Model.FirstDayProduct.OffExpireDate >= now)))
+                                                {
+                                                    <del class="m-lr15"><span style="color:#dc3545">@Model.FirstDayProduct.Price.ToString("N0") تومان</span></del>
+                                                }
+                                            </h3>
+                                        </div>
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            }
+            @if (pSettings != null && pSettings.ProposalEndDate != null && pSettings.ProposalEndDate >= now && Model.ProposalProducts.Count() > 0)
+            {
+                <div id="proposalProduct" class="productmainbox">
+                    <div class="productheaderbox producttitlebox">
+                        <div class="producttitleimagebox">
+                            <a href="/Product?type=Proposal">
+                                @if (Model.ProposalImgBox != null)
+                                {
+                                    <img class="producttitleimage" src="/Content/Images/Box/@(Model.ProposalImgBox.Id).jpg" onerror="this.src='/Content/Images/Box/Default.jpg'" />
+                                }
+                                else
+                                {
+                                    <img class="producttitleimagebox" src="/Content/Images/Box/Default.jpg" />
+                                }
+                            </a>
+                        </div>
+                        <div id="proposalflipdown" class="flipdown countermain"></div>
+                    </div>
+                    <div class="section-content productcontentbox" style="padding-top:35px;">
+                        <div class="product-carousel mfp-gallery gallery owl-carousel owl-btn-center-lr">
+                            @foreach (var item in Model.ProposalProducts)
+                            {
+                                <div class="product-item card-container boxradious">
+                                    <div class="dez-box boxradious">
+                                        <div class="dez-thum-bx  dez-img-effect imgradious">
+                                            <a class="imgradios" href="/Product/Details/@item.Id/@item.Title.Replace(' ', '-')"><img class="imgradious" src="/Content/Images/Product/@(item.FileId).jpg" onerror="this.src='/Content/Images/Product/Default.jpg'" alt="@item.Title"></a>
+                                        </div>
+                                        <div class="dez-info p-a10 text-center price-box priceradious">
+                                            <div class="pricediv">
+                                                <h4 class="dez-title m-t0 text-uppercase small-product-title"><a class="product-title" href="/Product/Details/@item.Id/@item.Title.Replace(' ', '-')">@item.Title</a></h4>
+                                                @if (item.TotalPrice > 0)
+                                                {
+                                                    <h2 class="m-b0" style="color:green">
+                                                        @item.TotalPrice.ToString("N0") تومان
+                                                    </h2>
+                                                }
+                                                else
+                                                {
+                                                    <h3>
+                                                        تماس بگیرید
+                                                    </h3>
+                                                }
+                                                @if (item.Off > 0 && (item.OffExpireDate == null || (item.OffExpireDate >= now)))
+                                                {
+                                                    <del><span style="color:#dc3545">@item.Price.ToString("N0") تومان</span></del>
+                                                    if (item.IsPercentShow)
+                                                    {
+                                                        <span class="badge badge-pill badge-danger percentbadge">@item.Percent%</span>
+                                                    }
+                                                }
+                                            </div>
+                                        </div>
+                                        @if (item.IsSpecial)
+                                        {
+                                            <div class="sale">
+                                                <span class="site-button button-sm primary specialbutton">ویژه</span>
+                                            </div>
+                                        }
+                                    </div>
+                                </div>
+                            }
+                        </div>
+                        <div class="productfooterbox">
+                            <a class="product-box-footer-link" style="color:cornflowerblue" href="/Product?type=Proposal">مشاهده بیشتر <i class="fa fa-angle-left"></i></a>
+                        </div>
+                    </div>
+                </div>
+                <hr />
+            }
+
+            @if (Model.BuyProducts.Count() > 0)
+            {
+                <div class="productmainbox">
+                    <div class="productheaderbox">
+                        <a href="/Product?type=Buy">
+                            @if (Model.BuyImgBox != null)
+                            {
+                                <img class="productboximgcustom" src="/Content/Images/Box/@(Model.BuyImgBox.Id).jpg" onerror="this.src='/Content/Images/Box/Default.jpg'" />
+                            }
+                            else
+                            {
+                                <img class="productboximgcustom" src="/Content/Images/Box/Default.jpg" />
+                            }
+                        </a>
+                    </div>
+                    <div class="section-content productcontentbox">
+                        <div class="product-carousel mfp-gallery gallery owl-carousel owl-btn-center-lr">
+                            @foreach (var item in Model.BuyProducts)
+                            {
+                                <div class="product-item card-container boxradious">
+                                    <div class="dez-box boxradious">
+                                        <div class="dez-thum-bx  dez-img-effect imgradious">
+                                            <a class="imgradios" href="/Product/Details/@item.Id/@item.Title.Replace(' ', '-')"><img class="imgradious" src="/Content/Images/Product/@(item.FileId).jpg" onerror="this.src='/Content/Images/Product/Default.jpg'" alt="@item.Title"></a>
+                                        </div>
+                                        <div class="dez-info p-a10 text-center price-box priceradious">
+                                            <div class="pricediv">
+                                                <h4 class="dez-title m-t0 text-uppercase small-product-title"><a class="product-title" href="/Product/Details/@item.Id/@item.Title.Replace(' ', '-')">@item.Title</a></h4>
+                                                @if (item.TotalPrice > 0)
+                                                {
+                                                    <h2 class="m-b0" style="color:green">
+                                                        @item.TotalPrice.ToString("N0") تومان
+                                                    </h2>
+                                                }
+                                                else
+                                                {
+                                                    <h3>
+                                                        تماس بگیرید
+                                                    </h3>
+                                                }
+                                                @if (item.Off > 0 && (item.OffExpireDate == null || (item.OffExpireDate >= now)))
+                                                {
+                                                    <del><span style="color:#dc3545">@item.Price.ToString("N0") تومان</span></del>
+                                                    if (item.IsPercentShow)
+                                                    {
+                                                        <span class="badge badge-pill badge-danger percentbadge">@item.Percent%</span>
+                                                    }
+                                                }
+                                            </div>
+                                        </div>
+                                        @if (item.IsSpecial)
+                                        {
+                                            <div class="sale">
+                                                <span class="site-button button-sm primary specialbutton">ویژه</span>
+                                            </div>
+                                        }
+                                    </div>
+                                </div>
+                            }
+                        </div>
+                        <div class="productfooterbox">
+                            <a class="product-box-footer-link" style="color:cornflowerblue" href="/Product?type=Buy">مشاهده بیشتر <i class="fa fa-angle-left"></i></a>
+                        </div>
+                    </div>
+                </div>
+                <hr />
+            }
+
+            @if (Model.OffProducts.Count() > 0)
+            {
+                <div class="productmainbox">
+                    <div class="productheaderbox">
+                        <a href="/Product?type=Off">
+                            @if (Model.OffImgBox != null)
+                            {
+                                <img class="productboximg" src="/Content/Images/Box/@(Model.OffImgBox.Id).jpg" onerror="this.src='/Content/Images/Box/Default.jpg'" />
+                            }
+                            else
+                            {
+                                <img class="productboximg" src="/Content/Images/Box/Default.jpg" />
+                            }
+                        </a>
+                    </div>
+                    @*<div class="section-content productcontentbox">
+                            <div class="product-carousel mfp-gallery gallery owl-carousel owl-btn-center-lr">
+                                @foreach (var item in Model.OffProducts)
+                                {
+                                    <div class="product-item card-container boxradious">
+                                        <div class="dez-box boxradious">
+                                            <div class="dez-thum-bx  dez-img-effect imgradious">
+                                                <a class="imgradios" href="/Product/Details/@item.Id/@item.Title.Replace(' ', '-')"><img class="imgradious" src="/Content/Images/Product/@(item.FileId).jpg" onerror="this.src='/Content/Images/Product/Default.jpg'" alt="@item.Title"></a>
+                                            </div>
+                                            <div class="dez-info p-a10 text-center price-box priceradious">
+                                                <div class="pricediv">
+                                                    <h4 class="dez-title m-t0 text-uppercase small-product-title"><a class="product-title" href="/Product/Details/@item.Id/@item.Title.Replace(' ', '-')">@item.Title</a></h4>
+                        <h2 class="m-b0" style="color:green">
+                                                        @item.TotalPrice.ToString("N0") تومان
+                                                    </h2>
+                                                    @if (item.Off > 0 && (item.OffExpireDate == null || (item.OffExpireDate >= now)))
+                                                    {
+                                                        <del><span style="color:#dc3545">@item.Price.ToString("N0") تومان</span></del>
+                        if (item.IsPercentShow)
+                                    {
+                                                        <span class="badge badge-pill badge-danger percentbadge">@item.Percent%</span>
+                                }
+                                                    }
+                                                </div>
+                                            </div>
+                                            @if (item.IsSpecial)
+                                            {
+                                                <div class="sale">
+                                                    <span class="site-button button-sm primary specialbutton">ویژه</span>
+                                                </div>
+                                            }
+                                        </div>
+                                    </div>
+                                }
+                            </div>
+                            <div class="productfooterbox">
+                                <a class="product-box-footer-link" style="color:cornflowerblue" href="/Product?type=Off">مشاهده بیشتر <i class="fa fa-angle-left"></i></a>
+                            </div>
+                        </div>*@
+                </div>
+                <hr />
+            }
+
+            @if (Model.LatestProducts.Count() > 0)
+            {
+                <div class="productmainbox">
+                    <div class="productheaderbox">
+                        <a href="/Product">
+                            @if (Model.LatestImgBox != null)
+                            {
+                                <img class="productboximgcustom" src="/Content/Images/Box/@(Model.LatestImgBox.Id).jpg" onerror="this.src='/Content/Images/Box/Default.jpg'" />
+                            }
+                            else
+                            {
+                                <img class="productboximgcustom" src="/Content/Images/Box/Default.jpg" />
+                            }
+                        </a>
+                    </div>
+                    <div class="section-content productcontentbox">
+                        <div class="product-carousel mfp-gallery gallery owl-carousel owl-btn-center-lr">
+                            @foreach (var item in Model.LatestProducts)
+                            {
+                                <div class="product-item card-container boxradious">
+                                    <div class="dez-box boxradious">
+                                        <div class="dez-thum-bx  dez-img-effect imgradious">
+                                            <a class="imgradios" href="/Product/Details/@item.Id/@item.Title.Replace(' ', '-')"><img class="imgradious" src="/Content/Images/Product/@(item.FileId).jpg" onerror="this.src='/Content/Images/Product/Default.jpg'" alt="@item.Title"></a>
+                                        </div>
+                                        <div class="dez-info p-a10 text-center price-box priceradious">
+                                            <div class="pricediv">
+                                                <h4 class="dez-title m-t0 text-uppercase small-product-title"><a class="product-title" href="/Product/Details/@item.Id/@item.Title.Replace(' ', '-')">@item.Title</a></h4>
+                                                @if (item.TotalPrice > 0)
+                                                {
+                                                    <h2 class="m-b0" style="color:green">
+                                                        @item.TotalPrice.ToString("N0") تومان
+                                                    </h2>
+                                                }
+                                                else
+                                                {
+                                                    <h3>
+                                                        تماس بگیرید
+                                                    </h3>
+                                                }
+                                                @if (item.Off > 0 && (item.OffExpireDate == null || (item.OffExpireDate >= now)))
+                                                {
+                                                    <del><span style="color:#dc3545">@item.Price.ToString("N0") تومان</span></del>
+                                                    if (item.IsPercentShow)
+                                                    {
+                                                        <span class="badge badge-pill badge-danger percentbadge">@item.Percent%</span>
+                                                    }
+                                                }
+                                            </div>
+                                        </div>
+                                        @if (item.IsSpecial)
+                                        {
+                                            <div class="sale">
+                                                <span class="site-button button-sm primary specialbutton">ویژه</span>
+                                            </div>
+                                        }
+                                    </div>
+                                </div>
+                            }
+                        </div>
+                        <div class="productfooterbox">
+                            <a class="product-box-footer-link" style="color:cornflowerblue" href="/Product">مشاهده بیشتر <i class="fa fa-angle-left"></i></a>
+                        </div>
+                    </div>
+                </div>
+                <hr />
+            }
+
+            @if (Model.CheapProducts.Count() > 0)
+            {
+                <div class="productmainbox">
+                    <div class="productheaderbox">
+                        <a href="/Product?type=Cheap">
+                            @if (Model.CheapImgBox != null)
+                            {
+                                <img class="productboximg" src="/Content/Images/Box/@(Model.CheapImgBox.Id).jpg" onerror="this.src='/Content/Images/Box/Default.jpg'" />
+                            }
+                            else
+                            {
+                                <img class="productboximg" src="/Content/Images/Box/Default.jpg" />
+                            }
+                        </a>
+                    </div>
+                    @*<div class="section-content productcontentbox">
+                            <div class="product-carousel mfp-gallery gallery owl-carousel owl-btn-center-lr">
+                                @foreach (var item in Model.CheapProducts)
+                                {
+                                    <div class="product-item card-container boxradious">
+                                        <div class="dez-box boxradious">
+                                            <div class="dez-thum-bx  dez-img-effect imgradious">
+                                                <a class="imgradios" href="/Product/Details/@item.Id/@item.Title.Replace(' ', '-')"><img class="imgradious" src="/Content/Images/Product/@(item.FileId).jpg" onerror="this.src='/Content/Images/Product/Default.jpg'" alt="@item.Title"></a>
+                                            </div>
+                                            <div class="dez-info p-a10 text-center price-box priceradious">
+                                                <div class="pricediv">
+                                                    <h4 class="dez-title m-t0 text-uppercase small-product-title"><a class="product-title" href="/Product/Details/@item.Id/@item.Title.Replace(' ', '-')">@item.Title</a></h4>
+                        <h2 class="m-b0" style="color:green">
+                                                        @item.TotalPrice.ToString("N0") تومان
+                                                    </h2>
+                                                    @if (item.Off > 0 && (item.OffExpireDate == null || (item.OffExpireDate >= now)))
+                                                    {
+                                                        <del><span style="color:#dc3545">@item.Price.ToString("N0") تومان</span></del>
+                        if (item.IsPercentShow)
+                                    {
+                                                        <span class="badge badge-pill badge-danger percentbadge">@item.Percent%</span>
+                                }
+                                                    }
+
+                                                </div>
+                                            </div>
+                                            @if (item.IsSpecial)
+                                            {
+                                                <div class="sale">
+                                                    <span class="site-button button-sm primary specialbutton">ویژه</span>
+                                                </div>
+                                            }
+                                        </div>
+                                    </div>
+                                }
+                            </div>
+                            <div class="productfooterbox">
+                                <a class="product-box-footer-link" style="color:cornflowerblue" href="/Product?type=Cheap">مشاهده بیشتر <i class="fa fa-angle-left"></i></a>
+                            </div>
+                        </div>*@
+                </div>
+                <hr />
+            }
+        </div>
+    </div>
+    <!-- contact area  END -->
+}
+
+@if (Model.Brands.Count() > 0)
+{
+    @*<div class="section-full dez-we-find bg-img-fix p-t50 p-b50 ">
+            <div class="container">
+                <div class="section-content">
+                    <div class="client-logo-carousel owl-carousel mfp-gallery gallery owl-btn-center-lr">
+                        @foreach (var item in Model.Brands)
+                        {
+                            <div class="item">
+                                <div class="ow-client-logo">
+                                    <div class="client-logo"><a href="/Product?brand=@item.Id"><img src="/Content/Images/Brand/@(item.Id).jpg" onerror="this.src='/Content/Images/Brand/Default.jpg'" alt="@item.Title"></a></div>
+                                </div>
+                            </div>
+                        }
+                    </div>
+                </div>
+            </div>
+        </div>*@
+    <div class="section-full  bg-white content-inner" style="padding-top:0;">
+        <!-- Product -->
+        <div class="container">
+            <div style="font-size:25px;font-weight:600;">
+                برندها
+            </div>
+            <div class="row">
+                @foreach (var item in Model.Brands)
+                {
+                    <div class="item" style="padding:10px;">
+                        <div class="ow-client-logo">
+                            <div class="client-logo"><a href="/Product?brand=@item.Id"><img class="brandbox" src="/Content/Images/Brand/@(item.Id).jpg" onerror="this.src='/Content/Images/Brand/Default.jpg'" alt="@item.Title"></a></div>
+                        </div>
+                    </div>
+                }
+            </div>
+            <hr />
+        </div>
+    </div>
+}
+
+@if (Model.MainBox != null || Model.Boxes.Count() > 0)
+{
+    <!-- Architecture -->
+    <div class="section-full  bg-white content-inner" style="padding-top:1px">
+        <div class="container" style="margin-top:50px">
+            @if (Model.MainBox != null)
+            {
+                <div class="section-head text-center">
+                    <h2 class="text-uppercase">@Model.MainBox.Title</h2>
+                    <div class="dez-separator-outer ">
+                        <div class="dez-separator bg-secondry style-skew"></div>
+                    </div>
+                    <p>@Html.Raw(HttpUtility.HtmlDecode(Model.MainBox.Content))</p>
+                </div>
+            }
+            @if (Model.Boxes.Count() > 0)
+            {
+                <div class="row">
+                    @foreach (var item in Model.Boxes)
+                    {
+                        <div class="col-lg-4 col-md-6 col-sm-6">
+                            <div class="icon-bx-wraper bx-style-1 p-a30 center m-b30">
+                                <div class="icon-bx-sm bg-secondry m-b20"> <span class="icon-cell"><i class="@item.Icon" style="padding-top:22px;"></i></span> </div>
+                                <div class="icon-content">
+                                    <h5 class="dez-tilte text-uppercase">@item.Title</h5>
+                                    <p style="font-family:'IranYekan', IranSens">@Html.Raw(HttpUtility.HtmlDecode(item.Content))</p>
+                                </div>
+                            </div>
+                        </div>
+                    }
+                </div>
+            }
+        </div>
+    </div>
+    <!-- Architecture END-->
+
+    <!-- newsletter part -->
+    <div class="bg-primary dez-newsletter">
+        <div class="container equal-wraper">
+            @using (Ajax.BeginForm("Create", "NewsLetter", FormMethod.Post, new AjaxOptions { OnSuccess = "NewsLetterCreateSuccess(data)" }))
+            {
+                @Html.AntiForgeryToken()
+                <div class="row">
+                    <div class="col-md-4 col-lg-4">
+                        <div class="icon-bx-wraper equal-col p-t30 p-b20 left">
+                            <div class="icon-lg text-primary radius"> <a href="#" class="icon-cell"><i class="fa fa-envelope-o"></i></a> </div>
+                            <div class="icon-content">
+                                <h2 class="dez-tilte text-uppercase">خبرنامه پیامکی</h2>
+                                <h6 class="text-black text-uppercase" style="color:white;">برای اطلاع از فروش محصولات ویژه و دریافت خبرنامه پیامکی شماره موبایل خود را ثبت نمایید.</h6>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4 col-lg-4">
+                        <div class="dzSubscribeMsg"></div>
+                        <div class="input-group equal-col p-t40 p-b20">
+                            <input name="Mobile" required placeholder="شماره موبایل" class="form-control" type="number">
+                        </div>
+                    </div>
+                    <div class="col-md-3 col-lg-3 offset-lg-1 offset-md-1">
+                        <div id="newsLetterMessageDiv" class="equal-col p-t40 p-b20 skew-subscribe">
+                            <button id="newsLetterbtn" type="submit" class="site-button-secondry button-skew z-index1">
+                                <span>ثبت</span><i class="fa fa-angle-right" style="transform: rotate(0deg);"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
+    </div>
+}
+@if (Model.LatestBlogs.Count() > 0)
+{
+    <!-- Latest blog -->
+    <div class="section-full content-inner-1 ">
+        <div class="container">
+            <div class="section-head text-center">
+                <h2 class="text-uppercase">جدیدترین مطالب</h2>
+                <div class="dez-separator-outer ">
+                    <div class="dez-separator bg-secondry style-skew"></div>
+                </div>
+            </div>
+            <div class="section-content">
+                <div class="blog-carousel mfp-gallery gallery owl-carousel owl-btn-center-lr">
+                    @foreach (var item in Model.LatestBlogs)
+                    {
+                        <div class="item">
+                            <div class="ow-blog-post date-style-2">
+                                <div class="ow-post-media dez-img-effect zoom-slow"><a href="/Blog/Details/@item.Id/@item.Title.Replace(' ', '-')"><img src="/Content/Images/Blog/@(item.Id).jpg" onerror="this.src='/Content/Images/Blog/Default.jpg'" alt="@item.Title" style="height:200px"></a></div>
+                                <div class="ow-post-info">
+                                    <div class="ow-post-title">
+                                        <h4 class="post-title"><a href="/Blog/Details/@item.Id/@item.Title.Replace(' ', '-')" title="@item.Title">@item.Title</a></h4>
+                                    </div>
+                                    <div class="ow-post-meta">
+                                        <ul>
+                                            <li class="post-date"> <i class="fa fa-calendar"></i><strong>@item.Date.Split('/')[2] @DateTimeHelper.GetMonthName(item.Date.Split('/')[1])</strong> <span>@item.Date.Split('/')[0]</span></li>
+                                            <li class="post-author blogds"><i class="fa fa-eye"></i> @item.Review بازدید </li>
+                                            <li class="post-comment blogds"><i class="fa fa-comments"></i> @item.CommentCount نظر </li>
+                                        </ul>
+                                    </div>
+                                    <div class="ow-post-text">
+                                        @Html.Raw(HttpUtility.HtmlDecode(item.ShortContent))
+                                    </div>
+                                    <div class="ow-post-readmore "><a href="/Blog/Details/@item.Id/@item.Title.Replace(' ', '-')" title="ادامه مطلب" rel="bookmark" class=" site-button-link"> ادامه مطلب <i class="fa fa-angle-double-left"></i></a> </div>
+                                </div>
+                            </div>
+                        </div>
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Latest blog END -->
+}
+<div class="section-full content-inner bg-white contact-style-1">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-12">
+                <!-- Map part start -->
+                <h2>لوکیشن ما</h2>
+                <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3240.6757264734315!2d51.4084493!3d35.68498579999999!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3f8e017fc0239fb7%3A0x83736702abeab269!2z2KrZiNqG2KfZhCDYqtmI2YTYsg!5e0!3m2!1sen!2s!4v1586901818514!5m2!1sen!2s" style="border:0; width:100%; height:400px;" allowfullscreen></iframe>
+                <!-- Map part END -->
+            </div>
+        </div>
+    </div>
+</div>
+<!-- meet & ask -->
+<div class="section-full overlay-primary-dark " style="background-image: url(/Content/Layouts/HomeLayout/assets/images/background/bg4.jpg); background-attachment: fixed; position: relative; z-index: 1;">
+    <div class="container">
+        <div class="row p-tb30">
+            <div class="col-lg-6 col-md-6">
+                <div class="icon-bx-wraper clearfix text-white left">
+                    <div class="icon-xl "> <span class=" icon-cell"><i class="fa fa-building-o"></i></span> </div>
+                    <div class="icon-content">
+                        <h3 class="dez-tilte text-uppercase m-b10">انتقادات و پیشنهادات</h3>
+                        <p>شما میتوانید نظرات، انتقادات و پیشنهادات خود را با ما در میان بگذارید.  </p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-6 col-md-6 m-t20">
+                <a href="/ContactUs" class="site-button-secondry m-l10">
+                    <span>تماس با ما </span><i class="fa fa-angle-left m-l10"></i>
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- meet & ask END -->
+@section bottomStyleSheets{
+    @*<link href="~/Content/Layouts/HomeLayout/assets/plugins/jssor-slider/jssor.slider-28.1.0.css" type="text/css" />*@
+}
+@section bottomScripts{
+    <script src="~/Content/Layouts/HomeLayout/assets/plugins/jssor-slider/jssor.slider-28.1.0.min.js" type="text/javascript"></script>
+    <script>
+        jQuery(document).ready(function () {
+            'use strict';
+            dz_rev_slider_1();
+            //var twoDaysFromNow = (new Date().getTime() / 1000) + (86400 * 2) + 1;
+            var firstDate = ('@firstDayDate' / 1000);
+            var proposalDate = ('@proposalDayDate' / 1000);
+            try {
+                var flipdown = new FlipDown(firstDate, 'flipdown', {theme: 'light'}).start().ifEnded(() => {
+                    $('#firstDayProduct').fadeOut(1000);
+            });
+            }
+            catch (e) { }
+            try {
+                var flipdowm2 = new FlipDown(proposalDate, 'proposalflipdown').start().ifEnded(() => {
+                $('#proposalProduct').fadeOut(1000);
+            });
+            }
+            catch (e) { }
+            var cook = getCookie('cart');
+            if (cook != null && cook != '') {
+                var array = cook.split(',');
+                $.each(array, function (index, value) {
+                    try {
+                        var prd = value.split('-');
+                        $('#cartoff-' + prd[0]).html('حذف از سبد خرید');
+                        $('#cartbuy-' + prd[0]).html('حذف از سبد خرید');
+                        $('#cartlatest-' + prd[0]).html('حذف از سبد خرید');
+                    } catch (e) { }
+                });
+            }
+        });
+
+        function getCookie(cname) {
+            var name = cname + '=';
+            var decodedCookie = decodeURIComponent(document.cookie);
+            var ca = decodedCookie.split(';');
+            for (var i = 0; i < ca.length; i++) {
+                var c = ca[i];
+                while (c.charAt(0) == ' ') {
+                    c = c.substring(1);
+                }
+                if (c.indexOf(name) == 0) {
+                    return c.substring(name.length, c.length);
+                }
+            }
+            return '';
+        }
+        function setCookie(cname, cvalue, exdays) {
+            var d = new Date();
+            d.setTime(d.getTime() + (exdays * 24 * 60 * 60 * 1000));
+            var expires = 'expires=' + d.toUTCString();
+            document.cookie = cname + '=' + cvalue + ';' + expires + ';path=/';
+        }
+        function addtocart(id, count) {
+            var cook = getCookie('cart');
+            if (cook == null || cook == '') {
+                cook = id + '-' + count;
+                setCookie('cart', cook, 365);
+                $('#cartoff-' + id).html('حذف از سبد خرید');
+                $('#cartbuy-' + id).html('حذف از سبد خرید');
+                $('#cartlatest-' + id).html('حذف از سبد خرید');
+            }
+            else {
+                var include = false;
+                var array = cook.split(',');
+                $.each(array, function (index, value) {
+                    try {
+                        var prd = value.split('-');
+                        if (prd[0] == id) {
+                            array.splice(index, 1);
+                            setCookie('cart', array.toString(), 365);
+                            include = true;
+                            $('#cartoff-' + id).html('افزودن به سبد خرید');
+                            $('#cartbuy-' + id).html('افزودن به سبد خرید');
+                            $('#cartlatest-' + id).html('افزودن به سبد خرید');
+                        }
+                    } catch (e) { }
+                });
+                if (include == false) {
+                    cook += "," + id + '-' + count;
+                    setCookie('cart', cook, 365);
+                    $('#cartoff-' + id).html('حذف از سبد خرید');
+                    $('#cartbuy-' + id).html('حذف از سبد خرید');
+                    $('#cartlatest-' + id).html('حذف از سبد خرید');
+                }
+            }
+        }
+
+        function NewsLetterCreateSuccess(data) {
+            if (data == 'شماره شما با موفقیت در سیستم ثبت شد.') {
+                $('#newsLetterbtn').hide();
+            }
+            alert(data);
+        }
+    </script>
+    <script type="text/javascript">
+        window.jssor_1_slider_init = function () {
+
+            var jssor_1_SlideoTransitions = [
+                [{ b: 0, d: 600, o: 0.8 }],
+                [{ b: 300, d: 600, o: 0.8 }],
+                [{ b: 600, d: 600, o: 0.8 }],
+                [{ b: -1, d: 1, da: [0, 700] }, { b: 500, d: 3500, da: [623, 700], e: { da: 1 } }],
+                [{ b: 1000, d: 500, o: 1 }],
+                [{ b: 1000, d: 500, o: 1 }],
+                [{ b: -1, d: 1, y: 30 }, { b: 1000, d: 500, y: 0, o: 1, e: { y: 27 } }],
+                [{ b: 1700, d: 500, o: 1 }],
+                [{ b: 1700, d: 500, o: 1 }],
+                [{ b: -1, d: 1, y: 30 }, { b: 1700, d: 500, y: 0, o: 1, e: { y: 27 } }],
+                [{ b: 2300, d: 500, o: 1 }],
+                [{ b: 2300, d: 500, o: 1 }],
+                [{ b: -1, d: 1, y: 30 }, { b: 2300, d: 500, y: 0, o: 1, e: { y: 27 } }],
+                [{ b: 2900, d: 500, o: 1 }],
+                [{ b: 2900, d: 500, o: 1 }],
+                [{ b: -1, d: 1, y: 30 }, { b: 2900, d: 500, y: 0, o: 1, e: { y: 27 } }],
+                [{ b: 0, d: 600, x: 208, y: 44, e: { x: 27, y: 27 } }],
+                [{ b: 300, d: 600, x: 145, y: 22, e: { x: 27, y: 27 } }],
+                [{ b: 100, d: 600, x: 177, y: 31, e: { x: 27, y: 27 } }],
+                [{ b: 200, d: 600, x: 177, y: 31, e: { x: 27, y: 27 } }],
+                [{ b: -1, d: 1, x: -80, y: -370, r: -60, rY: 30, sY: 1.5, p: { x: { d: 1, dO: 68 }, y: { d: 1, dO: 68 }, r: { d: 1, dO: 68 } } }, { b: 300, d: 1500, x: 0, y: 0, o: 1, r: 0, kX: -15, e: { x: 27, y: 27, o: 1, r: 27, kX: 27 }, p: { x: { dl: 0.02, o: 68 }, y: { dl: 0.02, o: 68 }, o: { dl: 0.2, o: 68 }, r: { dl: 0.02, o: 68 }, kX: { dl: 0.02, o: 68 } } }],
+                [{ b: -1, d: 1, x: -80, y: -370, r: -60, sY: 1.5, p: { x: { d: 1, dO: 68 }, y: { d: 1, dO: 68 }, r: { d: 1, dO: 68 } } }, { b: 300, d: 1500, x: 0, y: 0, o: 1, r: 0, kX: -15, e: { x: 27, y: 27, o: 1, r: 27, kX: 27 }, p: { x: { dl: 0.02, o: 68 }, y: { dl: 0.02, o: 68 }, o: { dl: 0.2, o: 68 }, r: { dl: 0.02, o: 68 }, kX: { dl: 0.02, o: 68 } } }],
+                [{ b: -1, d: 1, sX: 1.2, kX: -15 }, { b: 0, d: 600, o: 0.06 }],
+                [{ b: -1, d: 1, x: -30, sY: 1.3, p: { x: { o: 32, r: 0.5 } } }, { b: 600, d: 600, x: 0, o: 1, e: { x: 36, o: 1 }, p: { x: { dl: 0.1, o: 32, rd: 2 }, o: { dl: 0.1, o: 32, rd: 2 } } }],
+                [{ b: 600, d: 600, x: 300, e: { x: 7 } }],
+                [{ b: -1, d: 1, x: -30, sY: 1.3, p: { x: { o: 32, r: 0.5 } } }, { b: 900, d: 600, x: 0, o: 1, e: { x: 36, o: 1 }, p: { x: { dl: 0.1, o: 32, rd: 2 }, o: { dl: 0.1, o: 32, rd: 2 } } }],
+                [{ b: 900, d: 600, x: 97, e: { x: 7 } }],
+                [{ b: -1, d: 1, x: -30, sY: 1.3, p: { x: { o: 32, r: 0.5 } } }, { b: 1200, d: 600, x: 0, o: 1, e: { x: 36, o: 1 }, p: { x: { dl: 0.1, o: 32, rd: 2 }, o: { dl: 0.1, o: 32, rd: 2 } } }],
+                [{ b: 1200, d: 600, x: 260, e: { x: 7 } }],
+                [{ b: -1, d: 1, x: -30, sY: 1.3, p: { x: { o: 32, r: 0.5 } } }, { b: 1500, d: 1000, x: 0, o: 1, e: { x: 36, o: 1 }, p: { x: { dl: 0.1, o: 32, rd: 2 }, o: { dl: 0.1, o: 32, rd: 2 } } }],
+                [{ b: 1500, d: 1000, x: 112, e: { x: 7 } }],
+                [{ b: -1, d: 1, x: -30, sY: 1.3, p: { x: { o: 32, r: 0.5 } } }, { b: 2000, d: 1000, x: 0, o: 1, e: { x: 36, o: 1 }, p: { x: { dl: 0.1, o: 32, rd: 2 }, o: { dl: 0.1, o: 32, rd: 2 } } }],
+                [{ b: 2000, d: 1000, x: 105, e: { x: 7 } }]
+            ];
+
+            var jssor_1_options = {
+                $AutoPlay: 1,
+                $CaptionSliderOptions: {
+                    $Class: $JssorCaptionSlideo$,
+                    $Transitions: jssor_1_SlideoTransitions
+                },
+                $ArrowNavigatorOptions: {
+                    $Class: $JssorArrowNavigator$
+                },
+                $BulletNavigatorOptions: {
+                    $Class: $JssorBulletNavigator$,
+                    $SpacingX: 16,
+                    $SpacingY: 16
+                }
+            };
+
+            var jssor_1_slider = new $JssorSlider$("jssor_1", jssor_1_options);
+
+            /*#region responsive code begin*/
+
+            var MAX_WIDTH = 1920;
+
+            function ScaleSlider() {
+                var containerElement = jssor_1_slider.$Elmt.parentNode;
+                var containerWidth = containerElement.clientWidth;
+
+                if (containerWidth) {
+
+                    var expectedWidth = Math.min(MAX_WIDTH || containerWidth, containerWidth);
+
+                    jssor_1_slider.$ScaleWidth(expectedWidth);
+                }
+                else {
+                    window.setTimeout(ScaleSlider, 30);
+                }
+            }
+
+            ScaleSlider();
+
+            $Jssor$.$AddEvent(window, "load", ScaleSlider);
+            $Jssor$.$AddEvent(window, "resize", ScaleSlider);
+            $Jssor$.$AddEvent(window, "orientationchange", ScaleSlider);
+            /*#endregion responsive code end*/
+        };
+    </script>
+    <script type="text/javascript">
+        jssor_1_slider_init();
+    </script>
+    <style>
+        /*jssor slider loading skin double-tail-spin css*/
+        .jssorl-004-double-tail-spin img {
+            animation-name: jssorl-004-double-tail-spin;
+            animation-duration: 1.6s;
+            animation-iteration-count: infinite;
+            animation-timing-function: linear;
+        }
+
+        @*@keyframes jssorl-004-double-tail-spin {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }*@
+
+        /*jssor slider bullet skin 102 css*/
+        .jssorb102 .i {position:absolute;cursor:pointer;}
+        .jssorb102 .i .ci {fill:#fff;}
+        .jssorb102 .i .co {fill:#000;opacity:.2;}
+        .jssorb102 .i:hover .co {fill:#ff9933;opacity: 1;}
+        .jssorb101 .i:hover .ci {fill:#000;}
+        .jssorb102 .iav .ci {fill:#000;stroke-width:0;}
+        .jssorb102 .iav .co {fill:#ffba04;opacity: 1;}
+        .jssorb102 .i.idn {opacity:.3;}
+
+        /*jssor slider arrow skin 051 css*/
+        .jssora051 {display:block;position:absolute;cursor:pointer;}
+        .jssora051 .a {fill:none;stroke:#fff;stroke-width:360;stroke-miterlimit:10;}
+        .jssora051:hover {opacity:.8;}
+        .jssora051.jssora051dn {opacity:.5;}
+        .jssora051.jssora051ds {opacity:.3;pointer-events:none;}
+    </style>
+}

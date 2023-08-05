@@ -1,0 +1,64 @@
+﻿@model StateListPageViewModel
+@{
+    ViewBag.Title = "لیست استان های " + Model.CountryName;
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+
+<!-- Container-fluid starts -->
+<div class="container-fluid">
+    <div class="page-header">
+        <div class="row">
+            <div class="col-lg-6">
+                <h3>
+                    @ViewBag.Title
+                    <small>لیست استان های ثبت شده</small>
+                </h3>
+            </div>
+            <div class="col-lg-6">
+                <a href="/Address/CountryList" class="btn btn-primary btn-link"><i class="icon-arrow-right"></i></a>
+                <a href="/Address/CreateState/@ViewBag.CountryId" class="btn btn-secondary btn-link">استان جدید</a>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- Container-fluid Ends -->
+
+<div class="container-fluid">
+    <div class="row">
+        <!--Zero Configuration  Starts -->
+        <div class="col-sm-12">
+            <div class="card">
+                <div class="card-body">
+                    <div class="table-responsive">
+                        <table id="basic-1" class="display dataTable cell-border">
+                            <thead>
+                                <tr>
+                                    <th>نام استان</th>
+                                    <th>مدیریت</th>
+                                </tr>
+                            </thead>
+
+                            <tbody>
+                                @foreach (var item in Model.States)
+                                {
+                                    <tr id="state-@item.Id">
+                                        <td>@item.Name</td>
+                                        <td>
+                                            <a href="/Address/EditState/@item.Id" class="btn btn-success btn-datatable">ویرایش</a>
+                                            <button type="button" onclick="deleteState('@item.Id', 'استان')" class="btn btn-danger btn-datatable">حذف</button>
+                                            <a href="/Address/CityList/@item.Id/@ViewBag.CountryId" class="btn btn-info btn-datatable">شهر ها</a>
+                                        </td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!--Zero Configuration  Ends -->
+    </div>
+</div>
+@section bottomScripts {
+    <script src="/Content/Layouts/AdminLayout/assets/js/pages/address-list.js"></script>
+}

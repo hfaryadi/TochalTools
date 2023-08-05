@@ -1,0 +1,142 @@
+﻿@model List<CommentListViewModel>
+@{
+    var confirmed = "تایید شده";
+    if (ViewBag.IsConfirmed == false)
+    {
+        confirmed = "در انتظار تایید";
+    }
+    ViewBag.Title = "لیست نظرات " + ViewBag.PageTitle + " - " + confirmed;
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+
+<!-- Container-fluid starts -->
+<div class="container-fluid">
+    <div class="page-header">
+        <div class="row">
+            <div class="col-lg-6">
+                <h3>
+                    @ViewBag.Title
+                    <small>لیست نظرات ثبت شده</small>
+                </h3>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- Container-fluid Ends -->
+
+<div class="container-fluid">
+    <div class="row">
+        <!--Zero Configuration  Starts -->
+        <div class="col-sm-12">
+            <div class="card">
+                <div class="card-body">
+                    <div class="table-responsive">
+                        <table id="basic-1" class="display dataTable cell-border">
+                            <thead>
+                                <tr>
+                                    <th>ثبت کننده</th>
+                                    <th>متن نظر</th>
+                                    <th>گروه</th>
+                                    <th>پاسخ به</th>
+                                    <th>تاریخ ثبت</th>
+                                    <th>مدیریت</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach (var item in Model)
+                                {
+                                    var userId = (item.UserId != null && item.UserId != "") ? item.UserId : "NotRegistered";
+                                    <tr id="comment-@item.Id">
+                                        <td>
+                                            <img class="img-40 rounded-circle" src="@Url.Action("ImageResizer", "Base", new { width = 200, height = 200, fileType = "Images", moduleName = "Profile", fileName = userId, fileExtension = "jpg" })" alt="تصویر پروفایل" title="@item.Name">
+                                            @item.Name
+                                        </td>
+                                        <td>@item.Content</td>
+                                        <td>@item.GroupName</td>
+                                        <td>
+                                            @if (item.CommentId > 0)
+                                            {
+                                                <a href="/@item.Group/Details/@item.RefId#cm-@item.CommentId">@item.CommentName</a>
+                                            }
+                                        </td>
+                                        <td>@item.Date</td>
+                                        <td>
+                                            <a href="/@item.Group/Details/@item.RefId#cm-@item.Id" target="_blank" class="btn btn-info btn-datatable">مشاهده</a>
+                                            @if (!item.IsConfirmed)
+                                            {
+                                                <button type="button" onclick="confirmComment('@item.Id')" class="btn btn-warning btn-datatable">تایید</button>
+                                            }
+                                            <button type="button" onclick="deleteComment('@item.Id', 'نظر')" class="btn btn-danger btn-datatable">حذف</button>
+                                        </td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!--Zero Configuration  Ends -->
+    </div>
+</div>
+@section bottomScripts{
+    <script>
+        function deleteComment(address, title) {
+            swal({
+                title: 'آیا از حذف ' + title + ' مطمئن هستید؟',
+                text: title + ' حذف خواهد شد و قابل بازگردانی نخواهد بود.',
+                icon: 'warning',
+                buttons: true,
+                dangerMode: true,
+            }).then((willDelete) => {
+                if (willDelete) {
+                    $.ajax({
+                        type: 'Post',
+                        url: '/Comment/Delete',
+                        data: { id: address },
+                        success: function (data) {
+                            if (data == true) {
+                                swal(title + ' با موفقیت حذف شد!', {
+                                    icon: 'success',
+                                });
+                                $('#comment-' + address).fadeOut(1000);
+                            }
+                            else {
+                                swal(title + ' حذف نشد!');
+                            }
+                        }
+                    });
+                }
+            });
+        }
+
+        function confirmComment(address) {
+            swal({
+                title: 'آیا از تایید نظر مطمئن هستید؟',
+                text: 'نظر تایید خواهد شد.',
+                icon: 'warning',
+                buttons: true,
+                dangerMode: true,
+            }).then((willConfirm) => {
+                if (willConfirm) {
+                    $.ajax({
+                        type: 'Post',
+                        url: '/Comment/Confirm',
+                        data: { id: address },
+                        success: function (data) {
+                            if (data == true) {
+                                swal('با موفقیت تایید شد!', {
+                                    icon: 'success',
+                                });
+                                $('#comment-' + address).fadeOut(1000);
+                            }
+                            else {
+                                swal(title + ' تایید نشد!');
+                            }
+                        }
+                    });
+                }
+            });
+        }
+    </script>
+}

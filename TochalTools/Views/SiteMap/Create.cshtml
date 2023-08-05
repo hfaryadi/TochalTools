@@ -1,0 +1,76 @@
+﻿@model SiteMapCreateViewModel
+@{
+    ViewBag.Title = "ایجاد لینک";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+
+<!-- Container-fluid starts -->
+<div class="container-fluid">
+    <div class="page-header">
+        <div class="row">
+            <div class="col-lg-6">
+                <h3>
+                    @ViewBag.Title
+                    <small>ایجاد لینک جدید</small>
+                </h3>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- Container-fluid Ends -->
+
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-sm-12 col-xl-12">
+            <div class="row">
+                <div class="col-sm-12">
+                    @using (Html.BeginForm("Create", "SiteMap", FormMethod.Post, new { @class = "theme-form" }))
+                    {
+                        @Html.AntiForgeryToken()
+                        <div class="card">
+                            <div class="card-header">
+                                <h5>اطلاعات لینک</h5>
+                                <span>اطلاعات لینک را در این قسمت وارد نمایید.</span>
+                            </div>
+                            <div class="card-body">
+                                <div class="form-row">
+                                    <div class="col-md-4">
+                                        <div class="form-group">
+                                            @Html.LabelFor(m => m.Title, new { @class = "col-form-label pt-0" })
+                                            @Html.ValidationMessageFor(m => m.Title, "", new { @class = "text-danger" })
+                                            @Html.EditorFor(m => m.Title, new { htmlAttributes = new { @class = "form-control input-air-primary" } })
+                                        </div>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <div class="form-group">
+                                            @Html.LabelFor(m => m.Url, new { @class = "col-form-label pt-0" })
+                                            @Html.ValidationMessageFor(m => m.Url, "", new { @class = "text-danger" })
+                                            @Html.EditorFor(m => m.Url, new { htmlAttributes = new { @class = "form-control input-air-primary" } })
+                                        </div>
+                                    </div>
+                                    <div class="col-md-2">
+                                        <div class="form-group">
+                                            @Html.LabelFor(m => m.ChangeFrequency, new { @class = "col-form-label pt-0" })
+                                            @Html.ValidationMessageFor(m => m.ChangeFrequency, "", new { @class = "text-danger" })
+                                            @Html.DropDownListFor(m => m.ChangeFrequency, SiteMapHelper.ReadSiteMapFrequency(), new { @class = "form-control input-air-primary" })
+                                        </div>
+                                    </div>
+                                    <div class="col-md-2">
+                                        <div class="form-group">
+                                            @Html.LabelFor(m => m.Priority, new { @class = "col-form-label pt-0" })
+                                            @Html.ValidationMessageFor(m => m.Priority, "", new { @class = "text-danger" })
+                                            @Html.DropDownListFor(m => m.Priority, SiteMapHelper.ReadSiteMapPriority(), new { @class = "form-control input-air-primary" })
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="btn-div">
+                            <button type="submit" class="btn btn-success">ایجاد</button>
+                        </div>
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

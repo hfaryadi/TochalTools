@@ -1,0 +1,271 @@
+﻿@model ProfileEditViewModel
+@{
+    ViewBag.Title = "ویرایش پروفایل";
+    Layout = "/Views/Shared/_AdminLayout.cshtml";
+}
+
+<!-- Container-fluid starts -->
+<div class="container-fluid">
+    <div class="page-header">
+        <div class="row">
+            <div class="col-lg-6">
+                <h3>
+                    @ViewBag.Title
+                    <small>ویرایش مشخصات پروفایل</small>
+                </h3>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- Container-fluid Ends -->
+
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-sm-12 col-xl-12">
+            <div class="row">
+                <div class="col-sm-12">
+                    @using (Html.BeginForm("EditProfile", "User", FormMethod.Post, new { @class = "theme-form", enctype="multipart/form-data" }))
+                    {
+                        @Html.AntiForgeryToken()
+                        @Html.HiddenFor(m => m.Id)
+                        <div class="card">
+                            <div class="card-header">
+                                <h5>اطلاعات شخصی</h5>
+                                <span>اطلاعات شخصی کابر را در این قسمت وارد نمایید.</span>
+                            </div>
+                            <div class="card-body">
+                                <div class="form-row">
+                                    <div class="col-md-6">
+                                        <div class="form-group">
+                                            @Html.LabelFor(m => m.Name, new { @class = "col-form-label pt-0" })
+                                            @Html.ValidationMessageFor(m => m.Name, "", new { @class = "text-danger" })
+                                            @Html.EditorFor(m => m.Name, new { htmlAttributes = new { @class = "form-control input-air-primary" } })
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="form-group">
+                                            <label class="col-form-label pt-0">تصویر پروفایل</label>
+                                            <input class="form-control input-air-primary" id="File" name="File" type="file">
+                                        </div>
+                                    </div>
+                                    <div class="col-md-12">
+                                        <div class="form-group">
+                                            @Html.LabelFor(m => m.Description, new { @class = "col-form-label pt-0" })
+                                            @Html.ValidationMessageFor(m => m.Description, "", new { @class = "text-danger" })
+                                            @Html.TextAreaFor(m => m.Description, new { @class = "form-control input-air-primary", @rows = "4" })
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="card">
+                            <div class="card-header">
+                                <h5>اطلاعات تماس</h5>
+                                <span>اطلاعات تماس کاربر را در این قسمت وارد نمایید</span>
+                            </div>
+                            <div class="card-body">
+                                <div class="form-row">
+                                    <div class="col-md-4">
+                                        <div class="form-group">
+                                            @Html.LabelFor(m => m.Mobile, new { @class = "col-form-label pt-0" })
+                                            @Html.ValidationMessageFor(m => m.Mobile, "", new { @class = "text-danger" })
+                                            <div class="input-group">
+                                                @Html.EditorFor(m => m.Mobile, new { htmlAttributes = new { @class = "form-control input-air-primary" } })
+                                                <div class="input-group-append">
+                                                    <span class="input-group-text"><i class="icofont icofont-ui-cell-phone"></i></span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <div class="form-group">
+                                            @Html.LabelFor(m => m.Tell, new { @class = "col-form-label pt-0" })
+                                            @Html.ValidationMessageFor(m => m.Tell, "", new { @class = "text-danger" })
+                                            <div class="input-group">
+                                                @Html.EditorFor(m => m.Tell, new { htmlAttributes = new { @class = "form-control input-air-primary" } })
+                                                <div class="input-group-append">
+                                                    <span class="input-group-text"><i class="icofont icofont-ui-dial-phone"></i></span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <div class="form-group">
+                                            @Html.LabelFor(m => m.Fax, new { @class = "col-form-label pt-0" })
+                                            @Html.ValidationMessageFor(m => m.Fax, "", new { @class = "text-danger" })
+                                            <div class="input-group">
+                                                @Html.EditorFor(m => m.Fax, new { htmlAttributes = new { @class = "form-control input-air-primary" } })
+                                                <div class="input-group-append">
+                                                    <span class="input-group-text"><i class="icofont icofont-fax"></i></span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <div class="form-group">
+                                            @Html.LabelFor(m => m.Email, new { @class = "col-form-label pt-0" })
+                                            @Html.ValidationMessageFor(m => m.Email, "", new { @class = "text-danger" })
+                                            <div class="input-group">
+                                                @Html.EditorFor(m => m.Email, new { htmlAttributes = new { @class = "form-control input-air-primary" } })
+                                                <div class="input-group-append">
+                                                    <span class="input-group-text"><i class="icofont icofont-ui-email"></i></span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <div class="form-group">
+                                            @Html.LabelFor(m => m.Website, new { @class = "col-form-label pt-0" })
+                                            @Html.ValidationMessageFor(m => m.Website, "", new { @class = "text-danger" })
+                                            <div class="input-group">
+                                                @Html.EditorFor(m => m.Website, new { htmlAttributes = new { @class = "form-control input-air-primary" } })
+                                                <div class="input-group-append">
+                                                    <span class="input-group-text"><i class="icofont icofont-web"></i></span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="card">
+                            <div class="card-header">
+                                <h5>اطلاعات آدرس</h5>
+                                <span>اطلاعات آدرس کاربر را در این قسمت وارد نمایید.</span>
+                            </div>
+                            <div class="card-body">
+                                <div class="form-row">
+                                    <div class="col-md-3">
+                                        <div class="form-group">
+                                            @Html.LabelFor(m => m.CountryId, new { @class = "col-form-label pt-0" })
+                                            @Html.ValidationMessageFor(m => m.CountryId, "", new { @class = "text-danger" })
+                                            @Html.DropDownListFor(m => m.CountryId, Model.CountriesList, "انتخاب کنید", new { @class = "form-control input-air-primary", @onchange = "getStates('CountryId', 'StateId', 'CityId')" })
+                                        </div>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <div class="form-group">
+                                            @Html.LabelFor(m => m.StateId, new { @class = "col-form-label pt-0" })
+                                            @Html.ValidationMessageFor(m => m.StateId, "", new { @class = "text-danger" })
+                                            @Html.DropDownListFor(m => m.StateId, Model.StatesList, "انتخاب کنید", new { @class = "form-control input-air-primary", @onchange = "getCities('StateId', 'CityId')" })
+                                        </div>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <div class="form-group">
+                                            @Html.LabelFor(m => m.CityId, new { @class = "col-form-label pt-0" })
+                                            @Html.ValidationMessageFor(m => m.CityId, "", new { @class = "text-danger" })
+                                            @Html.DropDownListFor(m => m.CityId, Model.CitiesList, "انتخاب کنید", new { @class = "form-control input-air-primary" })
+                                        </div>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <div class="form-group">
+                                            @Html.LabelFor(m => m.PostalCode, new { @class = "col-form-label pt-0" })
+                                            @Html.ValidationMessageFor(m => m.PostalCode, "", new { @class = "text-danger" })
+                                            @Html.EditorFor(m => m.PostalCode, new { htmlAttributes = new { @class = "form-control input-air-primary" } })
+                                        </div>
+                                    </div>
+                                    <div class="col-md-12">
+                                        <div class="form-group">
+                                            @Html.LabelFor(m => m.Address, new { @class = "col-form-label pt-0" })
+                                            @Html.ValidationMessageFor(m => m.Address, "", new { @class = "text-danger" })
+                                            @Html.TextAreaFor(m => m.Address, new { @class = "form-control input-air-primary", @rows = "4" })
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="card">
+                            <div class="card-header">
+                                <h5>شبکه های اجتماعی</h5>
+                                <span>اطلاعات شبکه های اجتماعی کاربر را در این قسمت وارد نمایید</span>
+                            </div>
+                            <div class="card-body">
+                                <div class="form-row">
+                                    <div class="col-md-4">
+                                        <div class="form-group">
+                                            @Html.LabelFor(m => m.Telegram, new { @class = "col-form-label pt-0" })
+                                            @Html.ValidationMessageFor(m => m.Telegram, "", new { @class = "text-danger" })
+                                            <div class="input-group">
+                                                @Html.EditorFor(m => m.Telegram, new { htmlAttributes = new { @class = "form-control input-air-primary" } })
+                                                <div class="input-group-append">
+                                                    <span class="input-group-text"><i class="icofont icofont-social-telegram"></i></span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <div class="form-group">
+                                            @Html.LabelFor(m => m.Instagram, new { @class = "col-form-label pt-0" })
+                                            @Html.ValidationMessageFor(m => m.Instagram, "", new { @class = "text-danger" })
+                                            <div class="input-group">
+                                                @Html.EditorFor(m => m.Instagram, new { htmlAttributes = new { @class = "form-control input-air-primary" } })
+                                                <div class="input-group-append">
+                                                    <span class="input-group-text"><i class="icofont icofont-social-instagram"></i></span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <div class="form-group">
+                                            @Html.LabelFor(m => m.Twitter, new { @class = "col-form-label pt-0" })
+                                            @Html.ValidationMessageFor(m => m.Twitter, "", new { @class = "text-danger" })
+                                            <div class="input-group">
+                                                @Html.EditorFor(m => m.Twitter, new { htmlAttributes = new { @class = "form-control input-air-primary" } })
+                                                <div class="input-group-append">
+                                                    <span class="input-group-text"><i class="icofont icofont-social-twitter"></i></span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <div class="form-group">
+                                            @Html.LabelFor(m => m.Facebook, new { @class = "col-form-label pt-0" })
+                                            @Html.ValidationMessageFor(m => m.Facebook, "", new { @class = "text-danger" })
+                                            <div class="input-group">
+                                                @Html.EditorFor(m => m.Facebook, new { htmlAttributes = new { @class = "form-control input-air-primary" } })
+                                                <div class="input-group-append">
+                                                    <span class="input-group-text"><i class="icofont icofont-social-facebook"></i></span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <div class="form-group">
+                                            @Html.LabelFor(m => m.GooglePlus, new { @class = "col-form-label pt-0" })
+                                            @Html.ValidationMessageFor(m => m.GooglePlus, "", new { @class = "text-danger" })
+                                            <div class="input-group">
+                                                @Html.EditorFor(m => m.GooglePlus, new { htmlAttributes = new { @class = "form-control input-air-primary" } })
+                                                <div class="input-group-append">
+                                                    <span class="input-group-text"><i class="icofont icofont-social-google-plus"></i></span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <div class="form-group">
+                                            @Html.LabelFor(m => m.Linkedin, new { @class = "col-form-label pt-0" })
+                                            @Html.ValidationMessageFor(m => m.Linkedin, "", new { @class = "text-danger" })
+                                            <div class="input-group">
+                                                @Html.EditorFor(m => m.Linkedin, new { htmlAttributes = new { @class = "form-control input-air-primary" } })
+                                                <div class="input-group-append">
+                                                    <span class="input-group-text"><i class="icofont icofont-social-linkedin"></i></span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="btn-div">
+                            <button type="submit" class="btn btn-success">ویرایش</button>
+                        </div>
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+@section bottomScripts {
+    <script src="/Content/Layouts/AdminLayout/assets/js/pages/address.js"></script>
+}
+
+

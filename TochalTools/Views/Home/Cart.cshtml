@@ -1,0 +1,55 @@
+﻿@model ProductCartPageViewModel
+@{
+    ViewBag.Title = "سبد خرید";
+    Layout = "~/Views/Shared/_HomeLayout.cshtml";
+}
+<div class="bg-white">
+    <!-- inner page banner -->
+    <div class="dez-bnr-inr overlay-black-middle" style="background-image:url(/Content/Layouts/HomeLayout/assets/images/cart.jpg);">
+        <div class="container">
+            <div class="dez-bnr-inr-entry">
+                <h1 class="text-white">سبد خرید</h1>
+            </div>
+        </div>
+    </div>
+    <!-- inner page banner END -->
+    <!-- Breadcrumb row -->
+    <div class="breadcrumb-row">
+        <div class="container">
+            <ul class="list-inline">
+                <li><a href="#">صفحه نخست</a></li>
+                <li>سبد خرید</li>
+            </ul>
+        </div>
+    </div>
+    <!-- Breadcrumb row END -->
+</div>
+<!-- contact area -->
+<div class="section-full content-inner">
+    <!-- Product details -->
+    <div class="container" id="_Cart">
+        @Html.Partial("/Views/Home/_Cart.cshtml", Model)
+    </div>
+    <!-- Product details -->
+</div>
+<!-- contact area  END -->
+@section bottomScripts{
+    <script>
+        function updateCart() {
+            $.ajax({
+                type: 'Post',
+                url: '/Home/UpdateCart',
+                success: function (data) {
+                    $('#_Cart').html(data);
+                    $.ajax({
+                        type: 'Post',
+                        url: '/Home/UpdateCartCount',
+                        success: function (data) {
+                            $('#layoutCartCount').html(data);
+                        }
+                    });
+                }
+            });
+        }
+    </script>
+}

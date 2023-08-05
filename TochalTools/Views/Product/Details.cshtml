@@ -1,0 +1,727 @@
+﻿@model ProductDetailsViewModel
+@{
+    ViewBag.Title = "جزئیات محصول";
+    Layout = "~/Views/Shared/_HomeLayout.cshtml";
+    ViewBag.Keywords = Model.OptimizationKeywords;
+    ViewBag.Description = Model.OptimizationDescription;
+    var now = DateTime.Now;
+    var staro = 5 - Model.Rate;
+    bool isLoopCarousel = false;
+    if (Model.SimilarProducts.Count > 4)
+    {
+        isLoopCarousel = true;
+    }
+    int pImageIndex = 1;
+}
+
+<div class="bg-white">
+    <!-- inner page banner -->
+    <div class="dez-bnr-inr overlay-black-middle" style="background-image:url(/Content/Images/Product/@(Model.FileId).jpg);">
+        <div class="container">
+            <div class="dez-bnr-inr-entry">
+                <h1 class="text-white">@Model.Title</h1>
+            </div>
+        </div>
+    </div>
+    <!-- inner page banner END -->
+    <!-- Breadcrumb row -->
+    <div class="breadcrumb-row">
+        <div class="container">
+            <ul class="list-inline">
+                <li><a href="/">صفحه نخست</a></li>
+                <li><a href="#">محصولات</a></li>
+                <li>@Model.Title</li>
+            </ul>
+        </div>
+    </div>
+    <!-- Breadcrumb row END -->
+    <!-- contact area -->
+    <div class="content-area">
+        <!-- Product details -->
+        <div class="container woo-entry">
+            <div class="row m-b30">
+                <div class="col-md-5 col-lg-5 m-b30">
+                    @if (Model.Images.Count() > 0)
+                    {
+                        @*<div class="swiper-container">
+                                <div class="swiper-wrapper">
+                                    @foreach (var item in Model.Images)
+                                    {
+                                        <div class="swiper-slide"><a href="/Content/Images/Product/@item"><img src="/Content/Images/Product/@item" onerror="this.src='/Content/Images/Product/Default.jpg'" alt="" style="border:1px solid #dee2e6;"></a></div>
+                                    }
+                                </div>
+                                <div class="swiper-button-next"></div>
+                                <div class="swiper-button-prev"></div>
+                            </div>*@
+                        <div class="pImgContainer">
+                            @foreach (var item in Model.Images)
+                            {
+                                <div class="mySlides">
+                                    <div class="numbertext">@pImageIndex / @Model.Images.Count()</div>
+                                    <img src="/Content/Images/Product/@item" onerror="this.src='/Content/Images/Product/Default.jpg'" style="width:100%">
+                                </div>
+                                pImageIndex++;
+                            }
+                            <a class="prev" onclick="plusSlides(1)">❮</a>
+                            <a class="next" onclick="plusSlides(-1)">❯</a>
+
+                            <div class="caption-container">
+                                <p id="caption" style="margin-bottom:1px;"></p>
+                            </div>
+
+                            <div class="row" style="direction:ltr;">
+                                @{
+                                    pImageIndex = 1;
+                                }
+                                @foreach (var item in Model.Images)
+                                {
+                                    <div class="column">
+                                        <img class="demo cursor" src="/Content/Images/Product/@item" onerror="this.src='/Content/Images/Product/Default.jpg'" style="width:100%" onclick="currentSlide(@pImageIndex)" alt="">
+                                    </div>
+                                    pImageIndex++;
+                                }
+                            </div>
+                        </div>
+                    }
+                    else
+                    {
+                        <div class="swiper-slide"><a href="/Content/Images/Product/Default.jpg"><img src="/Content/Images/Product/Default.jpg" onerror="this.src='/Content/Images/Product/Default.jpg'" alt="" style="border:1px solid #dee2e6;"></a></div>
+                    }
+                </div>
+                <div class="col-md-7 col-lg-7">
+                    <div class="dez-post-title ">
+                        <h3 class="post-title"><a href="/Product/Details/@Model.Id/@Model.Title.Replace(' ', '-')">@Model.Title</a></h3>
+                    </div>
+                    @if (Model.IsSpecial)
+                    {
+                        <div class="sale" style="font-weight:600;font-size:initial;color:#dc3545;">
+                            <span class="">محصول ویژه</span>
+                        </div>
+                    }
+                    @*<h2 class="m-tb15" style="color:green">
+                            @Model.TotalPrice.ToString("N0") تومان
+                            @if (Model.Off > 0 && (Model.OffExpireDate == null || (Model.OffExpireDate >= now)))
+                            {
+                                <del class="m-r10" style="color:black;font-size:20px;">
+                                    <span style="color:#dc3545">@Model.Price.ToString("N0") تومان</span>
+                                </del>
+                            }
+                        </h2>*@
+                    <div class="dez-post-text">
+                        <p class="m-b10">
+                            @if (Model.ShortDescription != null)
+                            {
+                                @Html.Raw(HttpUtility.HtmlDecode(Model.ShortDescription.Replace("<input checked=\"checked\" type=\"checkbox\" />", "<i class=\"fa fa-check\" style=\"color:green\"></i>").Replace("<input type=\"checkbox\" />", "<i class=\"fa fa-close\" style=\"color:red\"></i>")))
+                            }
+                        </p>
+                    </div>
+                    <table class="table table-bordered">
+                        <tr>
+                            <td>قیمت</td>
+                            @if (Model.TotalPrice > 0)
+                            {
+                                <td class="tdvalue">@Model.TotalPrice.ToString("N0") تومان</td>
+                            }
+                            else
+                            {
+                                <td class="tdvalue">تماس بگیرید</td>
+                            }
+                        </tr>
+                        <tr>
+                            <td>کد</td>
+                            <td class="tdvalue">@Model.Code</td>
+                        </tr>
+                        <tr>
+                            <td>برند</td>
+                            <td class="tdvalue">@Model.BrandName</td>
+                        </tr>
+                        <tr>
+                            <td>وضعیت</td>
+                            <td>
+                                @if (Model.IsAvailable)
+                                {
+                                    <span class="badge badge-success tdvalue">موجود</span>
+                                }
+                                else
+                                {
+                                    <span class="badge badge-danger tdvalue">ناموجود</span>
+                                }
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>امتیاز</td>
+                            <td>
+                                <span class="rating-bx">
+                                    @for (int i = 1; i <= staro; i++)
+                                    {
+                                        <i class="fa fa-star-o"></i>
+                                    }
+                                    @for (int i = 1; i <= Model.Rate; i++)
+                                    {
+                                        <i class="fa fa-star"></i>
+                                    }
+                                </span>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>برچسب ها</td>
+                            <td>
+                                <div class="dez-post-tags producttags">
+                                    <div class="post-tags">
+                                        @foreach (var item in Model.Tags)
+                                        {
+                                            <a href="/Tag/Details/@item.Value/@item.Text.Replace(' ', '-')">@item.Text</a>
+                                        }
+                                    </div>
+                                </div>
+                            </td>
+                        </tr>
+                    </table>
+                    <h2 class="m-tb15" style="color:green">
+                        @if (Model.TotalPrice > 0)
+                        {
+                            @Model.TotalPrice.ToString("N0")<span>تومان</span>
+                        }
+                        else
+                        {
+                            <span style="color:black; font-size:24px;">برای کسب اطلاعات قیمت تماس بگیرید</span>
+                        }
+                        @if (Model.Off > 0 && (Model.OffExpireDate == null || (Model.OffExpireDate >= now)))
+                        {
+                            <del class="m-r10" style="color:black;font-size:20px;">
+                                <span style="color:#dc3545">@Model.Price.ToString("N0") تومان</span>
+                            </del>
+                        }
+                    </h2>
+                    @if (Model.IsAvailable)
+                    {
+                        <div class="quantity btn-quantity pull-left m-r10" id="countdiv">
+                            <input id="demo_vertical2" type="text" value="1" name="demo_vertical2" />
+                        </div>
+                        <button class="btn btn-primary site-button pull-left" onclick="addtocart('@Model.Id', '1')"><i class="fa fa-cart-plus"></i><span id="cart-@Model.Id"> افزودن به سبد خرید</span></button>
+                    }
+                </div>
+                <div class="col-md-12 col-lg-12">
+                    <div class="dez-post-text">
+                        <p class="m-b10">
+                            @if (Model.MoreDescription != null)
+                            {
+                                @Html.Raw(HttpUtility.HtmlDecode(Model.MoreDescription.Replace("<input checked=\"checked\" type=\"checkbox\" />", "<i class=\"fa fa-check\" style=\"color:green\"></i>").Replace("<input type=\"checkbox\" />", "<i class=\"fa fa-close\" style=\"color:red\"></i>")))
+                            }
+                        </p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="dez-tabs border-tp product-description bg-tabs">
+                        <ul class="nav nav-tabs">
+                            <li class="nav-item"><a class="nav-link active" data-toggle="tab" href="#web-design-5"><i class="fa fa-info-circle"></i> مشخصات فنی </a></li>
+                            <li class="nav-item"><a class="nav-link" data-toggle="tab" href="#developement-5"><i class="fa fa-comments"></i> نظرات کاربران </a></li>
+                            <li class="nav-item"><a class="nav-link" data-toggle="tab" href="#rate-5"><i class="fa fa-star"></i> امتیاز دهی </a></li>
+                        </ul>
+                        <div class="tab-content">
+                            <div id="web-design-5" class="tab-pane active">
+                                @if (Model.FullDescription != null)
+                                {
+                                    @Html.Raw(HttpUtility.HtmlDecode(Model.FullDescription.Replace("<input checked=\"checked\" type=\"checkbox\" />", "<i class=\"fa fa-check\" style=\"color:green\"></i>").Replace("<input type=\"checkbox\" />", "<i class=\"fa fa-close\" style=\"color:red\"></i>")))
+                                }
+                            </div>
+                            <div id="developement-5" class="tab-pane">
+                                @if (Model.IsCommentsActive)
+                                {
+                                    <div id="comments">
+                                        <ol class="commentlist">
+                                            @foreach (var item in Model.Comments)
+                                            {
+                                                <li class="comment">
+                                                    <div class="comment_container">
+                                                        <img class="avatar avatar-60 photo" src="@Url.Action("ImageResizer", "Base", new { width = 200, height = 200, fileType = "Images", moduleName = "Profile", fileName = item.UserId, fileExtension = "jpg" })" alt="تصویر">
+                                                        <div class="comment-text">
+                                                            <p class="meta"> <strong class="author">@item.Name</strong> <span><i class="fa fa-calendar"></i> @item.Date.Split('-')[0].Split('/')[2] @DateTimeHelper.GetMonthName(item.Date.Split('-')[0].Split('/')[1]) @item.Date.Split('-')[0].Split('/')[0] - @item.Date.Split('-')[1]</span> </p>
+                                                            <div class="description">
+                                                                <p id="cm-@item.Id">@item.Content</p>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </li>
+                                            }
+                                        </ol>
+                                    </div>
+                                }
+                                <div id="review_form_wrapper">
+                                    <div id="review_form">
+                                        <div id="respond" class="comment-respond">
+                                            <h3 class="comment-reply-title" id="reply-title">ثبت نظر</h3>
+                                            @using (Ajax.BeginForm("Create", "Comment", FormMethod.Post, new AjaxOptions { OnSuccess = "CommentCreateSuccess(data)" }, new { @class = "comment-form" }))
+                                            {
+                                                @Html.AntiForgeryToken()
+                                                <input type="hidden" value="Product" name="Group" id="Group" />
+                                                <input type="hidden" value="@Model.Id" name="RefId" id="RefId" />
+                                                if (User.Identity.IsAuthenticated)
+                                                {
+                                                    ApplicationDbContext db = new ApplicationDbContext();
+                                                    var profile = db.Profiles.Find(User.Identity.GetUserId());
+                                                    if (profile != null && profile.Name != null && profile.Name != "")
+                                                    {
+                                                        <input type="hidden" value="@profile.Name" name="Name" id="Name">
+                                                    }
+                                                    else
+                                                    {
+                                                        <div class="comment-form-author">
+                                                            <label>نام و نام خانوادگی <span class="required">*</span> <span class="field-validation-valid text-danger" data-valmsg-for="Name" data-valmsg-replace="true"></span></label>
+                                                            <input type="text" aria-required="true" size="30" value="" name="Name" id="Name" data-val="true" data-val-required="نام و نام خانوادگی خود را وارد نمایید.">
+                                                        </div>
+                                                    }
+                                                }
+                                                else
+                                                {
+                                                    <div class="comment-form-author">
+                                                        <label>نام و نام خانوادگی <span class="required">*</span> <span class="field-validation-valid text-danger" data-valmsg-for="Name" data-valmsg-replace="true"></span></label>
+                                                        <input type="text" aria-required="true" size="30" value="" name="Name" id="Name" data-val="true" data-val-required="نام و نام خانوادگی خود را وارد نمایید.">
+                                                    </div>
+                                                }
+                                                <div class="comment-form-comment">
+                                                    <label>متن نظر <span class="required">*</span> <span class="field-validation-valid text-danger" data-valmsg-for="Content" data-valmsg-replace="true"></span></label>
+                                                    <textarea aria-required="true" rows="8" cols="45" name="Content" id="Content" data-val="true" data-val-required="متن نظر را وارد نمایید."></textarea>
+                                                </div>
+                                                <div class="form-submit" id="messagediv">
+                                                    <input type="submit" value="ثبت" class="site-button" id="submit">
+                                                </div>
+                                            }
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div id="rate-5" class="tab-pane">
+                                <div id="review_form_wrapper">
+                                    <div id="review_form">
+                                        <div id="respond" class="comment-respond">
+                                            <h3 class="comment-reply-title" id="reply-title">ثبت امتیاز</h3>
+                                            @using (Ajax.BeginForm("Rate", "Product", FormMethod.Post, new AjaxOptions { OnSuccess = "RateSuccess(data)" }, new { @class = "comment-form" }))
+                                            {
+                                                <input type="hidden" value="0" name="rate" id="rate" />
+                                                <input type="hidden" value="@Model.Id" name="productId" id="productId" />
+                                                <div class="comment-form-rating">
+                                                    <label class="float-left m-r10">امتیاز شما</label>
+                                                    <div class='starrr'></div>
+                                                    <section class='rating-widget'>
+                                                        <!-- Rating Stars Box -->
+                                                        <div class='rating-stars' id="rv">
+                                                            <ul id='stars' style="direction:ltr">
+                                                                <li class='star' title='1' data-value='1' onclick="setRate(1)">
+                                                                    <i class='fa fa-star fa-fw'></i>
+                                                                </li>
+                                                                <li class='star' title='2' data-value='2' onclick="setRate(2)">
+                                                                    <i class='fa fa-star fa-fw'></i>
+                                                                </li>
+                                                                <li class='star' title='3' data-value='3' onclick="setRate(3)">
+                                                                    <i class='fa fa-star fa-fw'></i>
+                                                                </li>
+                                                                <li class='star' title='4' data-value='4' onclick="setRate(4)">
+                                                                    <i class='fa fa-star fa-fw'></i>
+                                                                </li>
+                                                                <li class='star' title='5' data-value='5' onclick="setRate(5)">
+                                                                    <i class='fa fa-star fa-fw'></i>
+                                                                </li>
+                                                            </ul>
+                                                        </div>
+                                                    </section>
+                                                </div>
+                                                <div class="form-submit" id="rateMessageDiv">
+                                                    <input type="submit" value="ثبت" class="site-button" id="submitRate" disabled>
+                                                </div>
+                                            }
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- Product details -->
+    </div>
+</div>
+@if (Model.SimilarProducts.Count > 0)
+{
+    <div class="section-full  bg-white content-inner" style="padding-top:12.5px;padding-bottom: 1px;">
+        <div class="container">
+            <div class="productmainbox" style="background-color:#fff">
+                <div class="section-head text-center">
+                    <h2 class="text-uppercase">محصولات مشابه</h2>
+                    <div class="dez-separator-outer ">
+                        <div class="dez-separator bg-secondry style-skew"></div>
+                    </div>
+                </div>
+                <div class="section-content productcontentbox">
+                    <div class="similarproduct-carousel mfp-gallery gallery owl-carousel owl-btn-center-lr">
+                        @foreach (var item in Model.SimilarProducts)
+                        {
+                            <div class="product-item card-container boxradious">
+                                <div class="dez-box boxradious">
+                                    <div class="dez-thum-bx  dez-img-effect imgradious">
+                                        <a class="imgradios" href="/Product/Details/@item.Id/@item.Title.Replace(' ', '-')"><img class="imgradious" src="/Content/Images/Product/@(item.FileId).jpg" onerror="this.src='/Content/Images/Product/Default.jpg'" alt="@item.Title"></a>
+                                    </div>
+                                    <div class="dez-info p-a10 text-center price-box priceradious">
+                                        <div class="pricediv">
+                                            <h4 class="dez-title m-t0 text-uppercase small-product-title"><a class="product-title" href="/Product/Details/@item.Id/@item.Title.Replace(' ', '-')">@item.Title</a></h4>
+                                            @if (item.TotalPrice > 0)
+                                            {
+                                                <h2 class="m-b0" style="color:green">
+                                                    @item.TotalPrice.ToString("N0") تومان
+                                                </h2>
+                                            }
+                                            else
+                                            {
+                                                <h3>
+                                                    تماس بگیرید
+                                                </h3>
+                                            }
+                                            @if (item.Off > 0 && (item.OffExpireDate == null || (item.OffExpireDate >= now)))
+                                            {
+                                                <del><span style="color:#dc3545">@item.Price.ToString("N0") تومان</span></del>
+                                                if (item.IsPercentShow)
+                                                {
+                                                    <span class="badge badge-pill badge-danger percentbadge">@item.Percent%</span>
+                                                }
+                                            }
+                                        </div>
+                                    </div>
+                                    @if (item.IsSpecial)
+                                    {
+                                        <div class="sale">
+                                            <span class="site-button button-sm primary specialbutton">ویژه</span>
+                                        </div>
+                                    }
+                                </div>
+                            </div>
+                        }
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+}
+@section bottomStyleSheets{
+    <link rel="stylesheet" href="/Content/Layouts/HomeLayout/assets/plugins/swiper-slider/swiper-bundle.min.css">
+    <link rel="stylesheet" href="/Content/Layouts/HomeLayout/assets/plugins/swiper-slider/swiper-bundle-custom.css">
+    <style>
+        /* Position the image container (needed to position the left and right arrows) */
+        .pImgContainer {
+            position: relative;
+        }
+
+        /* Hide the images by default */
+        .mySlides {
+            display: none;
+        }
+
+        /* Add a pointer when hovering over the thumbnail images */
+        .cursor {
+            cursor: pointer;
+        }
+
+        /* Next & previous buttons */
+        .prev,
+        .next {
+            cursor: pointer;
+            position: absolute;
+            top: 40%;
+            width: auto;
+            padding: 16px;
+            margin-top: -50px;
+            color: white;
+            font-weight: bold;
+            font-size: 20px;
+            border-radius: 0 3px 3px 0;
+            user-select: none;
+            -webkit-user-select: none;
+        }
+
+        /* Position the "next button" to the right */
+        .next {
+            left: 0;
+            border-radius: 3px 0 0 3px;
+        }
+
+        .prev {
+            right: 0;
+            border-radius: 3px 0 0 3px;
+        }
+
+            /* On hover, add a black background color with a little bit see-through */
+            .prev:hover,
+            .next:hover {
+                background-color: rgba(0, 0, 0, 0.8);
+            }
+
+        /* Number text (1/3 etc) */
+        .numbertext {
+            color: #f2f2f2;
+            font-size: 12px;
+            padding: 8px 12px;
+            position: absolute;
+            top: 0;
+        }
+
+        /* Container for image text */
+        .caption-container {
+            text-align: center;
+            background-color: #222;
+            padding: 2px 16px;
+            color: white;
+        }
+
+        .row:after {
+            content: "";
+            display: table;
+            clear: both;
+        }
+
+        /* Six columns side by side */
+        .column {
+            float: left;
+            width: 16.66%;
+        }
+
+        /* Add a transparency effect for thumnbail images */
+        .demo {
+            opacity: 0.6;
+        }
+
+            .active,
+            .demo:hover {
+                opacity: 1;
+            }
+    </style>
+}
+@section bottomScripts{
+    <script src="/Content/Layouts/HomeLayout/assets/plugins/swiper-slider/swiper-bundle.min.js"></script>
+    <script>
+        $(document).ready(function () {
+            var isLoopCarousel = false;
+            if ('@isLoopCarousel' == 'True')
+                isLoopCarousel = true;
+            var swiper = new Swiper('.swiper-container', {
+                navigation: {
+                    nextEl: '.swiper-button-next',
+                    prevEl: '.swiper-button-prev',
+                },
+            });
+            jQuery(".similarproduct-carousel").owlCarousel({
+                loop: isLoopCarousel, autoplaySpeed: 3e3, navSpeed: 3e3, paginationSpeed: 3e3, slideSpeed: 3e3, smartSpeed: 3e3, autoplay: 3e3, margin: 10, rtl: !0, nav: !1, dots: !1, navText: ['<i class="fa fa-chevron-left"></i>', '<i class="fa fa-chevron-right"></i>'], responsive: {
+                    0: {
+                        items: 2
+                    }
+                    , 480: {
+                        items: 2
+                    }
+                    , 991: {
+                        items: 3
+                    }
+                    , 1000: {
+                        items: 4
+                    }
+                }
+            }
+            );
+                if (!isLoopCarousel) {
+                    $(".owl-nav").css("display", "none");
+            }
+            var productId = '@Model.Id';
+            var cook = getCookie('pRate');
+            if (cook != null && cook != '') {
+                var array = cook.split(',');
+                array.forEach(function (item) {
+                    try {
+                            var val = item.split('-');
+                            var index = val.indexOf(productId.toString());
+                            if (index > -1) {
+                                $('#rv').html('');
+                                $('#rateMessageDiv').html('');
+                                var span = '<span class="rating-bx" id="rvi"></span>'
+                                var star = '<i class="fa fa-star"></i>';
+                                var staro = '<i class="fa fa-star-o"></i>';
+                                var i;
+                                var j;
+                                var rate = val[1];
+                                var rateo = 5 - rate;
+                                $('#rv').append(span);
+                                for (j = 1; j <= rateo; j++) {
+                                    $('#rvi').append(staro);
+                                }
+                                for (i = 1; i <= rate; i++) {
+                                    $('#rvi').append(star);
+                                }
+                            }
+                    } catch (e) {}
+                });
+            }
+            var cook2 = getCookie('cart');
+            if (cook2 != null && cook2 != '') {
+                var array = cook2.split(',');
+                $.each(array, function (index, value) {
+                    try {
+                        var prd = value.split('-');
+                        if (prd[0] == '@Model.Id') {
+                            $('#cart-' + prd[0]).html(' حذف از سبد خرید');
+                            $('#countdiv').hide();
+                        }
+                    } catch (e) {}
+                });
+            }
+        });
+        function getCookie(cname) {
+            var name = cname + '=';
+            var decodedCookie = decodeURIComponent(document.cookie);
+            var ca = decodedCookie.split(';');
+            for (var i = 0; i < ca.length; i++) {
+                var c = ca[i];
+                while (c.charAt(0) == ' ') {
+                    c = c.substring(1);
+                }
+                if (c.indexOf(name) == 0) {
+                    return c.substring(name.length, c.length);
+                }
+            }
+            return '';
+        }
+        function setCookie(cname, cvalue, exdays) {
+            var d = new Date();
+            d.setTime(d.getTime() + (exdays * 24 * 60 * 60 * 1000));
+            var expires = 'expires=' + d.toUTCString();
+            document.cookie = cname + '=' + cvalue + ';' + expires + ';path=/';
+        }
+        function CommentCreateSuccess(data) {
+            if (data == true) {
+                $('#messagediv').attr('style', 'color:green;');
+                $('#messagediv').html('نظر شما با موفقیت ثبت شد و پس از تایید نمایش داده خواهد شد.');
+            }
+            else {
+                alert('متاسفانه نظر شما ثبت نشد، لطفا دوباره سعی نمایید.')
+            }
+        }
+        function setRate(value) {
+            $('#rate').val(value);
+            $('#submitRate').removeAttr('disabled');
+        }
+        function RateSuccess(data) {
+            if (data == true) {
+                var productId = $('#productId').val();
+                var rate = $('#rate').val();
+                var rateo = 5 - rate;
+                var cook = getCookie('pRate');
+                if (cook == null || cook == '') {
+                    cook = productId + '-' + rate;
+                    setCookie('pRate', cook, 3650);
+                }
+                else {
+                    cook += ',' + productId + '-' + rate;
+                    setCookie('pRate', cook, 365);
+                }
+                $('#rv').html('');
+                $('#rateMessageDiv').html('');
+                var span = '<span class="rating-bx" id="rvi"></span>'
+                var star = '<i class="fa fa-star"></i>';
+                var staro = '<i class="fa fa-star-o"></i>';
+                var i;
+                var j;
+                $('#rv').append(span);
+                for (j = 1; j <= rateo; j++) {
+                    $('#rvi').append(staro);
+                }
+                for (i = 1; i <= rate; i++) {
+                    $('#rvi').append(star);
+                }
+                $('#rateMessageDiv').attr('style', 'color:green;');
+                $('#rateMessageDiv').html('امتیاز شما با موفقیت ثبت شد.');
+            }
+            else {
+                alert('متاسفانه امتیاز شما ثبت نشد، لطفا دوباره سعی نمایید.')
+            }
+        }
+
+        function addtocart(id, count) {
+            var cook = getCookie('cart');
+            count = $('#demo_vertical2').val();
+            if (cook == null || cook == '') {
+                if (count > 0) {
+                    cook = id + '-' + count;
+                    setCookie('cart', cook, 365);
+                    $('#cart-' + id).html(' حذف از سبد خرید');
+                    $('#countdiv').hide();
+                }
+            }
+            else {
+                var include = false;
+                var array = cook.split(',');
+                $.each(array, function (index, value) {
+                    try {
+                        var prd = value.split('-');
+                        if (prd[0] == id) {
+                            array.splice(index, 1);
+                            setCookie('cart', array.toString(), 365);
+                            include = true;
+                            $('#cart-' + id).html(' افزودن به سبد خرید');
+                            $('#demo_vertical2').val('1');
+                            $('#countdiv').show();
+                        }
+                    } catch (e) {}
+                });
+                if (include == false && count > 0) {
+                    cook += "," + id + '-' + count;
+                    setCookie('cart', cook, 365);
+                    $('#cart-' + id).html(' حذف از سبد خرید');
+                    $('#countdiv').hide();
+                }
+            }
+            $.ajax({
+                type: 'Post',
+                url: '/Home/UpdateCartCount',
+                success: function (data) {
+                    $('#layoutCartCount').html(data);
+                }
+            });
+        }
+    </script>
+    <script>
+        var slideIndex = 1;
+        showSlides(slideIndex);
+
+        function plusSlides(n) {
+            showSlides(slideIndex += n);
+        }
+
+        function currentSlide(n) {
+            showSlides(slideIndex = n);
+        }
+
+        function showSlides(n) {
+            var i;
+            var slides = document.getElementsByClassName("mySlides");
+            var dots = document.getElementsByClassName("demo");
+            var captionText = document.getElementById("caption");
+            if (n > slides.length) { slideIndex = 1 }
+            if (n < 1) { slideIndex = slides.length }
+            for (i = 0; i < slides.length; i++) {
+                slides[i].style.display = "none";
+            }
+            for (i = 0; i < dots.length; i++) {
+                dots[i].className = dots[i].className.replace(" active", "");
+            }
+            slides[slideIndex - 1].style.display = "block";
+            dots[slideIndex - 1].className += " active";
+            //captionText.innerHTML = dots[slideIndex - 1].alt;
+        }
+    </script>
+    <style>
+        .row::after{
+            content:none;
+            display:none !important;
+        }
+    </style>
+}
+

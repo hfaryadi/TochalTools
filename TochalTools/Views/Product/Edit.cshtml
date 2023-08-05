@@ -1,0 +1,426 @@
+﻿@model ProductEditViewModel
+@{
+    ViewBag.Title = "ویرایش محصول";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+    var publicationActive = "";
+    var atHomeActive = "";
+    var commentActive = "";
+    var special = "";
+    var proposal = "";
+    var percentShow = "";
+    if (Model.IsPublicationActive)
+    {
+        publicationActive = "checked";
+    }
+    if (Model.IsAtHomeActive)
+    {
+        atHomeActive = "checked";
+    }
+    if (Model.IsCommentsActive)
+    {
+        commentActive = "checked";
+    }
+    if (Model.IsSpecial)
+    {
+        special = "checked";
+    }
+    if (Model.IsProposal)
+    {
+        proposal = "checked";
+    }
+    if (Model.IsPercentShow)
+    {
+        percentShow = "checked";
+    }
+}
+
+<!-- Container-fluid starts -->
+<div class="container-fluid">
+    <div class="page-header">
+        <div class="row">
+            <div class="col-lg-6">
+                <h3>
+                    @ViewBag.Title
+                    <small>ویرایش محصول انتخابی</small>
+                </h3>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- Container-fluid Ends -->
+
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-sm-12 col-xl-12">
+            <div class="row">
+                <div class="col-sm-12">
+                    @using (Html.BeginForm("Edit", "Product", FormMethod.Post, new { @class = "theme-form", enctype = "multipart/form-data" }))
+                    {
+                        @Html.AntiForgeryToken()
+                        @Html.HiddenFor(m => m.Id)
+                        @Html.HiddenFor(m => m.FileId)
+                        @Html.HiddenFor(m => m.Categories)
+                        @Html.HiddenFor(m => m.Tags)
+                        <div class="card">
+                            <div class="card-header">
+                                <h5>اطلاعات محصول</h5>
+                                <span>اطلاعات محصول را در این قسمت وارد نمایید.</span>
+                            </div>
+                            <div class="card-body">
+                                <div class="form-row">
+                                    <div class="col-md-6">
+                                        <div class="form-group">
+                                            @Html.LabelFor(m => m.Title, new { @class = "col-form-label pt-0" })
+                                            @Html.ValidationMessageFor(m => m.Title, "", new { @class = "text-danger" })
+                                            @Html.EditorFor(m => m.Title, new { htmlAttributes = new { @class = "form-control input-air-primary" } })
+                                        </div>
+                                    </div>
+                                    <div class="col-md-2">
+                                        <div class="form-group">
+                                            @Html.LabelFor(m => m.Code, new { @class = "col-form-label pt-0" })
+                                            @Html.ValidationMessageFor(m => m.Code, "", new { @class = "text-danger" })
+                                            @Html.EditorFor(m => m.Code, new { htmlAttributes = new { @class = "form-control input-air-primary" } })
+                                        </div>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <div class="form-group">
+                                            <label class="col-form-label pt-0">تصویر اصلی</label>
+                                            <input class="form-control input-air-primary" id="File" name="File" type="file">
+                                        </div>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <div class="form-group select2-drpdwn">
+                                            @Html.LabelFor(m => m.Categories, new { @class = "col-form-label pt-0" })
+                                            @Html.ValidationMessage("mCategories", "", new { @class = "text-danger" })
+                                            @Html.DropDownList("mCategories", Model.CategoriesList, new { @class = "js-example-rtl col-sm-12", @multiple = "multiple", @id = "mCategories", @data_val = "true", @data_val_required = "لطفا دسته بندی را انتخاب نمایید." })
+                                        </div>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <div class="form-group select2-drpdwn">
+                                            @Html.LabelFor(m => m.Tags, new { @class = "col-form-label pt-0" })
+                                            @Html.ValidationMessage("mTags", "", new { @class = "text-danger" })
+                                            @Html.DropDownList("mTags", Model.TagsList, new { @class = "js-example-rtl col-sm-12", @multiple = "multiple", @id = "mTags" })
+                                        </div>
+                                    </div>
+                                    <div class="col-md-2">
+                                        <div class="form-group">
+                                            @Html.LabelFor(m => m.BrandId, new { @class = "col-form-label pt-0" })
+                                            @Html.ValidationMessageFor(m => m.BrandId, "", new { @class = "text-danger" })
+                                            @Html.DropDownListFor(m => m.BrandId, Model.BrandsList, "انتخاب کنید", new { @class = "form-control input-air-primary" })
+                                        </div>
+                                    </div>
+                                    <div class="col-md-2">
+                                        <div class="form-group">
+                                            @Html.LabelFor(m => m.Language, new { @class = "col-form-label pt-0" })
+                                            @Html.ValidationMessageFor(m => m.Language, "", new { @class = "text-danger" })
+                                            @Html.DropDownListFor(m => m.Language, LanguageHelper.ReadAllLanguagesForSelect(), new { @class = "form-control input-air-primary" })
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="card">
+                            <div class="card-header">
+                                <h5> محتوای محصول</h5>
+                                <span>محتوای محصول را در این قسمت وارد نمایید.</span>
+                            </div>
+                            <div class="card-body">
+                                <div class="form-row">
+                                    <div class="col-md-12">
+                                        <div class="form-group">
+                                            @Html.LabelFor(m => m.ShortDescription, new { @class = "col-form-label pt-0" })
+                                            @Html.ValidationMessageFor(m => m.ShortDescription, "", new { @class = "text-danger" })
+                                            @Html.TextAreaFor(m => m.ShortDescription, new { @class = "form-control input-air-primary ckeditor", @rows = "3" })
+                                        </div>
+                                    </div>
+                                    <div class="col-md-12">
+                                        <div class="form-group">
+                                            @Html.LabelFor(m => m.MoreDescription, new { @class = "col-form-label pt-0" })
+                                            @Html.ValidationMessageFor(m => m.MoreDescription, "", new { @class = "text-danger" })
+                                            @Html.TextAreaFor(m => m.MoreDescription, new { @class = "form-control input-air-primary ckeditor", @rows = "6" })
+                                        </div>
+                                    </div>
+                                    <div class="col-md-12">
+                                        <div class="form-group">
+                                            @Html.LabelFor(m => m.FullDescription, new { @class = "col-form-label pt-0" })
+                                            @Html.ValidationMessageFor(m => m.FullDescription, "", new { @class = "text-danger" })
+                                            @Html.TextAreaFor(m => m.FullDescription, new { @class = "form-control input-air-primary ckeditor", @rows = "6" })
+                                        </div>
+                                    </div>
+                                    <div class="col-md-12">
+                                        <div class="form-group">
+                                            <label class="col-form-label pt-0">سایر تصاویر</label>
+                                            <input type="file" name="Files" id="Files" multiple="multiple">
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="card">
+                            <div class="card-header">
+                                <h5> تنظیمات قیمت</h5>
+                                <span>تنظیمات قیمت را در این قسمت انجام نمایید.</span>
+                            </div>
+                            <div class="card-body">
+                                <div class="form-row">
+                                    <div class="col-md-3">
+                                        <div class="form-group">
+                                            @Html.LabelFor(m => m.Price, new { @class = "col-form-label pt-0" })
+                                            @Html.ValidationMessageFor(m => m.Price, "", new { @class = "text-danger" })
+                                            @Html.TextBoxFor(m => m.Price, new { @class = "form-control input-air-primary", @maxlength = "18" })
+                                        </div>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <div class="form-group">
+                                            @Html.LabelFor(m => m.Off, new { @class = "col-form-label pt-0" })
+                                            @Html.ValidationMessageFor(m => m.Off, "", new { @class = "text-danger" })
+                                            @Html.TextBoxFor(m => m.Off, new { @class = "form-control input-air-primary", @maxlength = "18" })
+                                        </div>
+                                    </div>
+                                    <div class="col-md-2">
+                                        <div class="form-group">
+                                            @Html.LabelFor(m => m.QT, new { @class = "col-form-label pt-0" })
+                                            @Html.ValidationMessageFor(m => m.QT, "", new { @class = "text-danger" })
+                                            @Html.TextBoxFor(m => m.QT, new { @class = "form-control input-air-primary" })
+                                        </div>
+                                    </div>
+                                    <div class="col-md-2">
+                                        <div class="form-group">
+                                            @Html.LabelFor(m => m.OffExpireDate, new { @class = "col-form-label pt-0" })
+                                            @Html.ValidationMessageFor(m => m.OffExpireDate, "", new { @class = "text-danger" })
+                                            @Html.EditorFor(m => m.OffExpireDate, new { htmlAttributes = new { @class = "form-control input-air-primary" } })
+                                        </div>
+                                    </div>
+                                    <div class="col-md-2">
+                                        <div class="form-group">
+                                            @Html.LabelFor(m => m.OffExpireTime, new { @class = "col-form-label pt-0" })
+                                            @Html.ValidationMessageFor(m => m.OffExpireTime, "", new { @class = "text-danger" })
+                                            @Html.EditorFor(m => m.OffExpireTime, new { htmlAttributes = new { @class = "form-control input-air-primary timepicker", @style = "direction:ltr;text-align:right" } })
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="card">
+                            <div class="card-header">
+                                <h5>تنظیمات محصول</h5>
+                                <span>تنظیمات محصول را در این قسمت انجام نمایید.</span>
+                            </div>
+                            <div class="card-body">
+                                <div class="form-row">
+                                    <div class="col-md-2">
+                                        <div class="form-group">
+                                            <div class="checkbox checkbox-success">
+                                                <input id="IsPublicationActive" type="checkbox" name="IsPublicationActive" value="true" @publicationActive>
+                                                <label for="IsPublicationActive">انتشار</label>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-2">
+                                        <div class="form-group">
+                                            <div class="checkbox checkbox-success">
+                                                <input id="IsAtHomeActive" type="checkbox" name="IsAtHomeActive" value="true" @atHomeActive>
+                                                <label for="IsAtHomeActive">صفحه نخست</label>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-2">
+                                        <div class="form-group">
+                                            <div class="checkbox checkbox-success">
+                                                <input id="IsCommentsActive" type="checkbox" name="IsCommentsActive" value="true" @commentActive>
+                                                <label for="IsCommentsActive">نمایش نظرات</label>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-2">
+                                        <div class="form-group">
+                                            <div class="checkbox checkbox-success">
+                                                <input id="IsSpecial" type="checkbox" name="IsSpecial" value="true" @special>
+                                                <label for="IsSpecial">محصول ویژه</label>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-2">
+                                        <div class="form-group">
+                                            <div class="checkbox checkbox-success">
+                                                <input id="IsProposal" type="checkbox" name="IsProposal" value="true" @proposal>
+                                                <label for="IsProposal">پیشنهاد شگفت انگیز</label>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-2">
+                                        <div class="form-group">
+                                            <div class="checkbox checkbox-success">
+                                                <input id="IsPercentShow" type="checkbox" name="IsPercentShow" value="true" @percentShow>
+                                                <label for="IsPercentShow">نمایش درصد تخفیف</label>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="card">
+                            <div class="card-header">
+                                <h5>بهینه سازی</h5>
+                                <span>اطلاعات بهینه سازی محصول را در این قسمت وارد نمایید.</span>
+                            </div>
+                            <div class="card-body">
+                                <div class="form-row">
+                                    <div class="col-md-4">
+                                        <div class="form-group">
+                                            @Html.LabelFor(m => m.OptimizationTitle, new { @class = "col-form-label pt-0" })
+                                            @Html.ValidationMessageFor(m => m.OptimizationTitle, "", new { @class = "text-danger" })
+                                            @Html.EditorFor(m => m.OptimizationTitle, new { htmlAttributes = new { @class = "form-control input-air-primary" } })
+                                        </div>
+                                    </div>
+                                    <div class="col-md-8">
+                                        <div class="form-group">
+                                            @Html.LabelFor(m => m.OptimizationKeywords, new { @class = "col-form-label pt-0" })
+                                            @Html.ValidationMessageFor(m => m.OptimizationKeywords, "", new { @class = "text-danger" })
+                                            @Html.EditorFor(m => m.OptimizationKeywords, new { htmlAttributes = new { @class = "form-control tagsinput-boxshadow-primary", @data_role = "tagsinput" } })
+                                        </div>
+                                    </div>
+                                    <div class="col-md-12">
+                                        <div class="form-group">
+                                            @Html.LabelFor(m => m.OptimizationDescription, new { @class = "col-form-label pt-0" })
+                                            @Html.ValidationMessageFor(m => m.OptimizationDescription, "", new { @class = "text-danger" })
+                                            @Html.TextAreaFor(m => m.OptimizationDescription, new { @class = "form-control input-air-primary", @rows = "4" })
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="btn-div">
+                            <button type="submit" class="btn btn-success" onclick="beforeSubmit()">ویرایش</button>
+                        </div>
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+@section bottomStyleSheets{
+    <link href="/Content/Layouts/AdminLayout/assets/plugins/filer/css/jquery.filer.css" rel="stylesheet" />
+    <link href="/Content/Layouts/AdminLayout/assets/plugins/filer/css/themes/jquery.filer-dragdropbox-theme.css" rel="stylesheet" />
+}
+@section bottomScripts {
+    <script src="/Content/Layouts/AdminLayout/assets/plugins/filer/js/jquery.filer.min.js"></script>
+    <script>
+        $(document).ready(function () {
+            var fileId = '@Model.FileId';
+            $('#Price').val(numFormat('@Model.Price.ToString()'));
+            $('#Off').val(numFormat('@Model.Off.ToString()'));
+            getFromInput('#Categories', '#mCategories');
+            getFromInput('#Tags', '#mTags');
+            kamaDatepicker('OffExpireDate', customOptions);
+            $('.timepicker').wickedpicker();
+            if ('@Model.OffExpireDate' != null && '@Model.OffExpireDate' != '') {
+                $('#OffExpireTime').val('@Model.OffExpireTime');
+            }
+            else {
+                $('#OffExpireTime').val('');
+            }
+            $('#Files').fileuploader({
+            changeInput: '<div class="fileuploader-input">' +
+            '<div class="fileuploader-input-inner">' +
+            '<img src="/Content/Layouts/AdminLayout/assets/plugins/filer/assets/filer-dragdrop-icon.png">' +
+            '<h3 class="fileuploader-input-caption"><span>تصاویر خود را میتوانید در اینجا رها کنید</span></h3>' +
+            '<p>یا</p>' +
+            '<div class="fileuploader-input-button"><span>تصاویر خود را انتخاب کنید</span></div>' +
+            '</div>' +
+            '</div>',
+            theme: 'dragdrop',
+            upload: {
+                url: '/Base/UploadFileByFiler',
+                data: {
+                    fileType: "Images",
+                    moduleName: "Product",
+                    fileName: fileId,
+                    fileExtension: ".jpg"
+                },
+                type: 'POST',
+                dataType: 'json',
+                enctype: 'multipart/form-data',
+                start: true,
+                synchron: true,
+                title: 'A',
+                beforeSend: function (item) {
+                },
+                onSuccess: function (result, item) {
+                    item.name = result;
+                    item.html.find('.column-actions').append('<a class="fileuploader-action fileuploader-action-remove fileuploader-action-success" title="Remove"><i></i></a>');
+                    setTimeout(function () {
+                        item.html.find('.column-title div').attr('title', item.name).text(item.name).animate({ opacity: 1 }, 400);
+                        item.html.find('.progress-bar2').fadeOut(400);
+                    }, 400);
+                },
+                onError: function (item) {
+                    var progressBar = item.html.find('.progress-bar2');
+
+                    // make HTML changes
+                    if (progressBar.length > 0) {
+                        progressBar.find('span').html(0 + "%");
+                        progressBar.find('.fileuploader-progressbar .bar').width(0 + "%");
+                        item.html.find('.progress-bar2').fadeOut(400);
+                    }
+
+                    item.upload.status != 'cancelled' && item.html.find('.fileuploader-action-retry').length == 0 ? item.html.find('.column-actions').prepend(
+                        '<a class="fileuploader-action fileuploader-action-retry" title="Retry"><i></i></a>'
+                    ) : null;
+                },
+                onProgress: function (data, item) {
+                    var progressBar = item.html.find('.progress-bar2');
+
+                    // make HTML changes
+                    if (progressBar.length > 0) {
+                        progressBar.show();
+                        progressBar.find('span').html(data.percentage + "%");
+                        progressBar.find('.fileuploader-progressbar .bar').width(data.percentage + "%");
+                    }
+                },
+                onComplete: null,
+            },
+            onRemove: function (item) {
+                // send POST request
+                    $.post('/Base/DeleteFile', {
+                        fileType: "Images",
+                        moduleName: "Product",
+                        fileName: fileId,
+                        fileExtension: ".jpg",
+                        counter: item.name
+                    });
+            },
+            files: [
+            @{
+                int count = 1;
+                foreach (var item in Model.ImagesList)
+                {
+                    count++;
+                <text>{ name: '@item.Text.Split('_')[1]', type: 'image/jpg', file: '/Content/Images/Product/@(item.Text).jpg' }, </text>
+                    }
+                }
+            ],
+        });
+        });
+        function beforeSubmit() {
+            comma();
+            addToInput('#Categories', '#mCategories');
+            addToInput('#Tags', '#mTags');
+        }
+        $('#Price').change(function () {
+            $('#Price').val(numFormat($('#Price').val()));
+        });
+        $('#Price').keyup(function () {
+            $('#Price').blur();
+            $('#Price').focus();
+        });
+        $('#Off').change(function () {
+            $('#Off').val(numFormat($('#Off').val()));
+        });
+        $('#Off').keyup(function () {
+            $('#Off').blur();
+            $('#Off').focus();
+        });
+    </script>
+}
+

@@ -1,0 +1,177 @@
+﻿@model HomeContactUsViewModel
+@{
+    ViewBag.Title = "تماس با ما";
+    Layout = "~/Views/Shared/_HomeLayout.cshtml";
+}
+
+<!-- inner page banner -->
+<div class="dez-bnr-inr overlay-black-middle" style="background-image:url(/Content/Layouts/HomeLayout/assets/images/contactus.png);">
+    <div class="container">
+        <div class="dez-bnr-inr-entry">
+            <h1 class="text-white">تماس با ما</h1>
+        </div>
+    </div>
+</div>
+<!-- inner page banner END -->
+<!-- Breadcrumb row -->
+<div class="breadcrumb-row">
+    <div class="container">
+        <ul class="list-inline">
+            <li><a href="/">صفحه نخست</a></li>
+            <li>تماس با ما</li>
+        </ul>
+    </div>
+</div>
+<!-- Breadcrumb row END -->
+<!-- contact area -->
+<div class="section-full content-inner bg-white contact-style-1">
+    <div class="container">
+        <div class="row">
+            <!-- Left part start -->
+            <div class="col-lg-8">
+                <div class="p-a30 bg-gray clearfix m-b30 ">
+                    <h2>پیام خود را ارسال نمایید</h2>
+                    <div class="dzFormMsg"></div>
+                    @using (Ajax.BeginForm("CustomCreate", "Inbox", FormMethod.Post, new AjaxOptions { OnSuccess = "InboxCreateSuccess(data)" }))
+                    {
+                        @Html.AntiForgeryToken()
+                        <input type="hidden" value="ContactUs" name="Group" id="Group" />
+                        <div class="row">
+                            @if (!User.Identity.IsAuthenticated)
+                            {
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <div class="input-group">
+                                            <input name="Name" type="text" required class="form-control" placeholder="نام و نام خانوادگی">
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <div class="input-group">
+                                            <input name="Tell" type="text" class="form-control" placeholder="شماره تماس">
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <div class="input-group">
+                                            <input name="Email" type="email" class="form-control" placeholder="ایمیل">
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <div class="input-group">
+                                            <input name="Website" type="text" class="form-control" placeholder="آدرس وب سایت">
+                                        </div>
+                                    </div>
+                                </div>
+                            }
+                            else
+                            {
+                                ApplicationDbContext db = new ApplicationDbContext();
+                                var profile = db.Profiles.Find(User.Identity.GetUserId());
+                                if (profile != null && profile.Name != null && profile.Name != "")
+                                {
+                                    <input type="hidden" name="Name" id="Name" value="@profile.Name">
+                                }
+                                else
+                                {
+                                    <div class="col-md-12">
+                                        <div class="form-group">
+                                            <div class="input-group">
+                                                <input name="Name" type="text" required class="form-control" placeholder="نام و نام خانوادگی">
+                                            </div>
+                                        </div>
+                                    </div>
+                                }
+                            }
+                            <div class="col-md-12">
+                                <div class="form-group">
+                                    <div class="input-group">
+                                        <input name="Subject" type="text" required class="form-control" placeholder="موضوع">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-12">
+                                <div class="form-group">
+                                    <div class="input-group">
+                                        <textarea name="Content" rows="4" class="form-control" required placeholder="پیام شما ..."></textarea>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-12" id="messagediv">
+                                <button type="submit" value="Submit" class="site-button "> <span>ارسال</span> </button>
+                            </div>
+                        </div>
+                    }
+                </div>
+            </div>
+            <!-- Left part END -->
+            <!-- right part start -->
+            <div class="col-lg-4 d-lg-flex">
+                <div class="p-a30 m-b30 border-1 contact-area align-self-stretch">
+                    <h2 class="m-b10">تماس سریع</h2>
+                    <p>در صورت داشتن هرگونه سوال میتوانید با اطلاعات زیر تماس حاصل نمایید.</p>
+                    <ul class="no-margin">
+                        <li class="icon-bx-wraper left m-b30">
+                            <div class="icon-bx-xs bg-primary"> <a href="#" class="icon-cell"><i class="fa fa-phone" style="padding-top:10px;"></i></a> </div>
+                            <div class="icon-content">
+                                <h6 class="text-uppercase m-tb0 dez-tilte">شماره تماس</h6>
+                                <p style="font-family:'IranYekan', IranSens">@Model.Info.FirstTell</p>
+                            </div>
+                        </li>
+                        <li class="icon-bx-wraper left  m-b30">
+                            <div class="icon-bx-xs bg-primary"> <a href="#" class="icon-cell"><i class="fa fa-envelope" style="padding-top:10px;"></i></a> </div>
+                            <div class="icon-content">
+                                <h6 class="text-uppercase m-tb0 dez-tilte">ایمیل</h6>
+                                <p style="font-family:'IranYekan', IranSens">@Model.Info.Email</p>
+                            </div>
+                        </li>
+                        <li class="icon-bx-wraper left">
+                            <div class="icon-bx-xs bg-primary"> <a href="#" class="icon-cell"><i class="fa fa-map-marker" style="padding-top:10px;"></i></a> </div>
+                            <div class="icon-content">
+                                <h6 class="text-uppercase m-tb0 dez-tilte">آدرس</h6>
+                                <p style="font-family:'IranYekan', IranSens">@Model.Info.Address</p>
+                            </div>
+                        </li>
+                    </ul>
+                    <div class="m-t20">
+                        <ul class="dez-social-icon dez-social-icon-lg">
+                            <li><a href="@Model.Info.Telegram" target="_blank" class="fa fa-telegram bg-primary"></a></li>
+                            <li><a href="@Model.Info.Instagram" target="_blank" class="fa fa-instagram bg-primary"></a></li>
+                            <li><a href="tel:@Model.Info.Twitter" class="fa fa-whatsapp bg-primary"></a></li>
+                            @*<li><a href="@Model.Info.Facebook" target="_blank" class="fa fa-facebook bg-primary not-show"></a></li>
+                            <li><a href="@Model.Info.GooglePlus" target="_blank" class="fa fa-google-plus bg-primary not-show"></a></li>
+                            <li><a href="@Model.Info.Linkedin" target="_blank" class="fa fa-linkedin bg-primary not-show"></a></li>*@
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            <!-- right part END -->
+        </div>
+        <div class="row">
+            <div class="col-md-12">
+                <!-- Map part start -->
+                <h2>لوکیشن ما</h2>
+                <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3240.6757264734315!2d51.4084493!3d35.68498579999999!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3f8e017fc0239fb7%3A0x83736702abeab269!2z2KrZiNqG2KfZhCDYqtmI2YTYsg!5e0!3m2!1sen!2s!4v1586901818514!5m2!1sen!2s" style="border:0; width:100%; height:400px;" allowfullscreen></iframe>
+                <!-- Map part END -->
+            </div>
+        </div>
+    </div>
+</div>
+<!-- contact area  END -->
+@section bottomScripts{
+    <script>
+        function InboxCreateSuccess(data) {
+            if (data == true) {
+                $('#messagediv').attr('style', 'color:green;');
+                $('#messagediv').html('پیام شما با موفقیت ثبت شد و به اطلاع کارشناسان خواهد رسید.');
+            }
+            else {
+                alert('متاسفانه پیام شما ثبت نشد، لطفا دوباره سعی نمایید.')
+            }
+        }
+    </script>
+}
