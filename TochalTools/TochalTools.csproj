@@ -295,7 +295,6 @@
   <ItemGroup>
     <Content Include="534847.txt" />
     <Content Include="941589.txt" />
-    <Content Include="bin\TochalTools.dll" />
     <Content Include="Content\bootstrap-theme.css" />
     <Content Include="Content\bootstrap-theme.min.css" />
     <Content Include="Content\bootstrap.css" />
