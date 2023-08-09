@@ -2661,6 +2661,9 @@
     <Content Include="Content\Layouts\HomeLayout\assets\scripts\jquery.validate.unobtrusive.min.js" />
     <Content Include="Content\Layouts\HomeLayout\assets\scripts\modernizr-2.8.3.js" />
     <Content Include="Content\Layouts\HomeLayout\assets\Version\index.html" />
+    <Content Include="Dlls\NReco.PdfGenerator.dll" />
+    <Content Include="Dlls\PagedList.dll" />
+    <Content Include="Dlls\PARSGREEN.dll" />
     <Content Include="favicon.ico" />
     <Content Include="fonts\glyphicons-halflings-regular.svg" />
     <Content Include="Global.asax" />
